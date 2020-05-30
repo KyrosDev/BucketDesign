@@ -1,0 +1,14 @@
+<h1 class="mt-4">Dashboard</h1>
+<p class="lead mb-3">Welcome <%= user.username %></p>
+<img src="http://localhost:5000/images/asd.png" alt="logo">
+<form ref='uploadForm' 
+	id='uploadForm' 
+	action='/profile/upload'
+    encType="multipart/form-data"
+    method="POST"
+>
+    <input type="hidden" name="_method" value="put">
+	<input type="file" name="avatar">
+	<input type='submit' value='Upload!'>
+</form>
+<a href="/users/logout" class="btn btn-secondary">Logout</a>

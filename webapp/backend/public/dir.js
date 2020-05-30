@@ -1,3 +1,3 @@
-const dirname = __dirname + '/images/';
-
-module.exports = dirname
+exports.pictures = __dirname + '/pictures/users/profile/';
+exports.public = __dirname + '/';
+exports.posts = __dirname + '/pictures/users/posts/';

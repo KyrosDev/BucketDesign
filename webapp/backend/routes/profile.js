@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const dirname = require('../public/dir.js');
-const HOST = "localhost:5000/uploads/"
+const pictures = require('../public/dir.js');
+const HOST = "http://localhost:5000/pictures/users/profile/"
 
 const Designer = require('../models/Designer');
 
@@ -20,7 +20,8 @@ router.post('/upload', (req, res) => {
     console.log(avatar)
     const fileName = req.user.username + "." + avatar.mimetype.split("/")[1]
   
-    uploadPath = dirname + fileName;
+    uploadPath = pictures.pictures + fileName;
+    console.log(HOST + fileName);
   
     avatar.mv(uploadPath, (err) => {
         Designer.findById(req.user._id).then( user => {
@@ -32,7 +33,7 @@ router.post('/upload', (req, res) => {
             }, (err) => {
                 if (err)
                     console.log(err)
-                else
+                else 
                     console.log(user)
             });
             res.render("dashboard", {user: req.user})

@@ -4,7 +4,7 @@ module.exports = {
         return next();
       }
       req.flash('error_msg', 'Please log in to view that resource');
-      res.redirect('/users/login');
+      res.redirect('/admin/login');
     },
     forwardAuthenticated: function(req, res, next) {
       if (!req.isAuthenticated()) {
@@ -12,4 +12,4 @@ module.exports = {
       }
       res.redirect('/dashboard');      
     }
-  };
+};

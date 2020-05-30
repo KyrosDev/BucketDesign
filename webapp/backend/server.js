@@ -5,13 +5,16 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const fileUpload = require('express-fileupload');
 const session = require('express-session');
-const fs = require('fs');
 const path = require('path')
-
-const Designer = require('./models/Designer');
+const bodyParser = require("body-parser");
 
 const app = express();
 app.use(fileUpload());
+
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
 
 // Passport Config
 require('./config/passport')(passport);
@@ -25,7 +28,8 @@ mongoose
     db,
     {
       useUnifiedTopology: true,
-      useNewUrlParser: true
+      useNewUrlParser: true,
+      useFindAndModify: false
     }
   )
   .then(() => {
@@ -65,9 +69,12 @@ app.use(function(req, res, next) {
   next();
 });
 
+require('./routes/designers.routes.js')(app);
+require('./routes/post.routes.js')(app);
+
 // Routes
 app.use('/', require('./routes/index.js'));
-app.use('/users', require('./routes/admins.js'));
+app.use('/admin', require('./routes/admins.js'));
 app.use('/profile', require('./routes/profile.js'));
 
 const PORT = process.env.PORT || 5000;

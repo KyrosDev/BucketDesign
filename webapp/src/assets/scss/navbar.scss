@@ -1,0 +1,17 @@
+@import './variables.scss';
+
+nav {
+    position: fixed;
+    height: 100px;
+    width: 100vw;
+    margin: -80px 0;
+    background: linear-gradient(180.24deg, #191919 0.66%, rgba(25, 25, 25, 0) 99.34%);
+
+    .image-container{
+        width: 200px;
+        margin: 20px auto;
+        img {
+            width: 100%;
+        }
+    }
+}

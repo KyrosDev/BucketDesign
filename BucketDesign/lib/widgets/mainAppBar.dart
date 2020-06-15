@@ -21,9 +21,7 @@ class _MainAppBarState extends State<MainAppBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(
-        top: 20.0
-      ),
+      padding: EdgeInsets.only(top: 20.0),
       child: Container(
         padding: EdgeInsets.only(left: 30, right: 30),
         child: Row(
@@ -34,9 +32,9 @@ class _MainAppBarState extends State<MainAppBar> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/images/icons/icon.png'),
-                  fit: BoxFit.contain
+                  fit: BoxFit.contain,
                 ),
-              )
+              ),
             ),
             GestureDetector(
               onTap: widget.callback,
@@ -45,6 +43,15 @@ class _MainAppBarState extends State<MainAppBar> {
                 height: 30,
                 radius: 5,
                 color: CustomTheme().white,
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/images/ui.png"),
+                      fit: BoxFit.contain,
+                      alignment: Alignment.center,
+                    ),
+                  ),
+                ),
               ),
             ),
           ],

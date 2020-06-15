@@ -12,9 +12,7 @@ class ProfileAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        vertical: 20.0
-      ),
+      padding: EdgeInsets.symmetric(vertical: 20.0),
       child: Container(
         margin: EdgeInsets.only(top: 20),
         padding: EdgeInsets.only(left: 30, right: 30, top: 5),
@@ -25,7 +23,7 @@ class ProfileAppBar extends StatelessWidget {
             GestureDetector(
               onTap: callback,
               child: Icon(
-                Icons.arrow_back,
+                Icons.arrow_back_ios,
                 color: CustomTheme().white,
               ),
             ),
@@ -33,13 +31,13 @@ class ProfileAppBar extends StatelessWidget {
               "Your Profile",
               style: TextStyle(
                 color: CustomTheme().white,
-                fontSize: 20
+                fontSize: 20,
               ),
             ),
             Icon(
               Icons.settings,
               color: CustomTheme().white,
-            )
+            ),
           ],
         ),
       ),

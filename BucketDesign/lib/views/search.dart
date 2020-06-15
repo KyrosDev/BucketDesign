@@ -2,8 +2,9 @@
 import 'package:flutter/material.dart';
 
 // Widgets
+import '../widgets/searchBar.dart';
 import '../widgets/recommended_tag_listview.dart';
-import '../widgets/search_engine_input.dart';
+import '../widgets/searchResults.dart';
 
 class SearchView extends StatefulWidget {
   @override
@@ -11,13 +12,32 @@ class SearchView extends StatefulWidget {
 }
 
 class _SearchViewState extends State<SearchView> {
+  final TextEditingController _textController = TextEditingController();
+  String _text = "";
+  String _profession = "";
+
+  void _sendText(String val) {
+    setState(() {
+      _text = _textController.text;
+    });
+  }
+
+  void _filterByTag(String profession) {
+    setState(() {
+      _profession = profession;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(20),
+      height: double.infinity,
+      padding: EdgeInsets.only(left: 20, right: 20),
+      child: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Column(
           children: <Widget>[
-            SearchEngineInput(),
+            SearchBar(_sendText, _textController),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -45,10 +65,13 @@ class _SearchViewState extends State<SearchView> {
                     ),
                   ),
                 ),
-                TagsListView(),
+                TagsListView(_filterByTag),
+                SearchResult(_text, _profession),
               ],
             ),
           ],
-        ));
+        ),
+      ),
+    );
   }
 }

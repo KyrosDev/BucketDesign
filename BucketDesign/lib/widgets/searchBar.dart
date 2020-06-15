@@ -1,16 +1,18 @@
 // Packages
 import 'package:flutter/material.dart';
 
-class SearchEngineInput extends StatelessWidget {
+class SearchBar extends StatelessWidget {
+  final Function _callback;
+  final TextEditingController _controller;
 
-  final TextEditingController _textController = TextEditingController();
+  SearchBar(this._callback, this._controller);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, bottom: 40),
+      margin: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 40),
       child: TextField(
-        controller: _textController,
+        controller: _controller,
         style: TextStyle(
           color: Colors.white,
           fontSize: 18,
@@ -31,7 +33,8 @@ class SearchEngineInput extends StatelessWidget {
             fontSize: 18,
           ),
         ),
-        onSubmitted: (value) => print(_textController.text),
+        onChanged: (value) => _callback(value),
+        onSubmitted: (value) => _callback(value),
       ),
     );
   }

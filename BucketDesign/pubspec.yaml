@@ -34,7 +34,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_launcher_icon: "^0.0.1"
+  flutter_launcher_icons: "^0.7.3"
 
 flutter_icons:
   image_path: "icons/icon.png"
@@ -47,11 +47,10 @@ flutter_icons:
 # The following section is specific to Flutter.
 flutter:
   assets:
-   - assets/images/icons/icon.svg
+   - assets/images/icons/icon.png
    - assets/user/kyros.svg
    - assets/user/mds.svg
    - assets/user/morgan.svg
-   - assets/images/icons/home.svg
 
 
   # The following line ensures that the Material Icons font is

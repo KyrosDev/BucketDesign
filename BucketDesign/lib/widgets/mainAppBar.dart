@@ -1,6 +1,5 @@
 // Packages
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 // Utils
 import '../utils/Theme.dart';
@@ -32,10 +31,12 @@ class _MainAppBarState extends State<MainAppBar> {
           children: <Widget>[
             Container(
               width: 200.0,
-              child: SvgPicture.asset(
-                'assets/images/icons/icon.svg',
-                fit: BoxFit.contain
-              ),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/icons/icon.png'),
+                  fit: BoxFit.contain
+                ),
+              )
             ),
             GestureDetector(
               onTap: widget.callback,

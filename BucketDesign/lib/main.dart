@@ -52,6 +52,7 @@ class _MyAppState extends State<MyApp> {
       title: "Bucket Design",
       theme: ThemeData(
         fontFamily: "Sailec",
+        canvasColor: Colors.transparent,
       ),
       home: Scaffold(
         appBar: PreferredSize(

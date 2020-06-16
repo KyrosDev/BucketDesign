@@ -6,7 +6,8 @@ class Tag {
   String shortcode;
   Color color;
   String id;
+  bool tapped;
   
-  Tag({this.name, this.color, this.shortcode, this.id});
+  Tag({this.name, this.tapped, this.color, this.shortcode, this.id});
 
 }

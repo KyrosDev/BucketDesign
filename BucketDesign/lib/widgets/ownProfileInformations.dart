@@ -33,10 +33,9 @@ class OwnProfileInformations extends StatelessWidget {
               Text(
                 "UI Designer",
                 style: TextStyle(
-                  color: CustomTheme().gray,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w100
-                ),
+                    color: CustomTheme().gray,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w100),
               ),
               Container(
                 width: 250,
@@ -44,7 +43,7 @@ class OwnProfileInformations extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      "LoremLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.",
+                      "📱 The app for every Digital Designer. Create 🎨, Share 🗣️ and have fun with Designers 👩‍🎨 from all the world 🌐.",
                       style: TextStyle(
                         color: CustomTheme().gray,
                       ),
@@ -55,6 +54,27 @@ class OwnProfileInformations extends StatelessWidget {
                       postsCounter: 263,
                       likesCounter: 642,
                     ),
+                  ],
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                    fontFamily: "Sailec",
+                    color: CustomTheme().white,
+                    fontSize: CustomTheme().titleSize,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  children: <InlineSpan>[
+                    TextSpan(
+                      text: "Posts",
+                    ),
+                    TextSpan(
+                      text: ".",
+                      style: TextStyle(
+                        color: CustomTheme().mainColor,
+                      )
+                    )
                   ],
                 ),
               ),

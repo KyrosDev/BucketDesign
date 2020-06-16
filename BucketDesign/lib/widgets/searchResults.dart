@@ -4,8 +4,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 // Utils
 import '../utils/Theme.dart';
-import '../utils/Designer.dart';
 import '../utils/roundRect.dart';
+
+// Models
+import '../models/Designer.dart';
+
+// Widgets
+import './userModal.dart';
 
 class SearchResult extends StatefulWidget {
   final String res;
@@ -25,7 +30,7 @@ class _SearchResultState extends State<SearchResult> {
       followers: 234,
       follows: 20,
       likes: 257,
-      images: 34,
+      posts: 34,
       profession: "UI Designer",
       professionShortcode: "ui_design",
       color: Colors.red,
@@ -33,10 +38,10 @@ class _SearchResultState extends State<SearchResult> {
     Designer(
       username: "Media Design",
       id: DateTime.now().toString(),
-      followers: 234,
+      followers: 2684,
       follows: 20,
       likes: 257,
-      images: 34,
+      posts: 34,
       profession: "Industrial Product Designer",
       professionShortcode: "industrial_product_design",
       color: Colors.orange,
@@ -44,10 +49,10 @@ class _SearchResultState extends State<SearchResult> {
     Designer(
       username: "Mark",
       id: DateTime.now().toString(),
-      followers: 234,
+      followers: 49523,
       follows: 20,
       likes: 257,
-      images: 34,
+      posts: 34,
       profession: "Graphic Designer",
       professionShortcode: "graphic_design",
       color: Colors.blue,
@@ -55,10 +60,10 @@ class _SearchResultState extends State<SearchResult> {
     Designer(
       username: "Giorgio Des",
       id: DateTime.now().toString(),
-      followers: 234,
+      followers: 3,
       follows: 20,
       likes: 257,
-      images: 34,
+      posts: 34,
       profession: "Motion Designer",
       professionShortcode: "motion_design",
       color: Colors.brown,
@@ -66,15 +71,26 @@ class _SearchResultState extends State<SearchResult> {
     Designer(
       username: "Franco Martinez",
       id: DateTime.now().toString(),
-      followers: 234,
+      followers: 86234,
       follows: 20,
       likes: 257,
-      images: 34,
+      posts: 34,
       profession: "Animation Graphic Designer",
       professionShortcode: "animation_graphic_design",
       color: Colors.green,
     )
   ];
+
+  bool following = false;
+
+  void _showModal(Designer t) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return UserModal(t);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +130,8 @@ class _SearchResultState extends State<SearchResult> {
           }).map((user) {
             return GestureDetector(
               onTap: () => print(user.username),
-                child: RoundedRect(
+              onLongPress: () => _showModal(user),
+              child: RoundedRect(
                 radius: 10,
                 margin: EdgeInsets.symmetric(vertical: 10),
                 width: double.infinity,

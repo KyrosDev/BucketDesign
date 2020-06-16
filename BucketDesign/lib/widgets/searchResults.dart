@@ -121,11 +121,11 @@ class _SearchResultState extends State<SearchResult> {
               ],
             ),
           ),
-          ...designers.where((element) {
+          ...designers.where((u) {
             if (widget.shortcode != "") {
-              return element.professionShortcode.contains(widget.shortcode);
+              return u.professionShortcode.contains(widget.shortcode);
             } else {
-              return element.username.toLowerCase().contains(widget.res);
+              return u.username.toLowerCase().contains(widget.res);
             }
           }).map((user) {
             return GestureDetector(

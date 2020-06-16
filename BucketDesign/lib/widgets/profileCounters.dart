@@ -83,7 +83,7 @@ class ProfileCounters extends StatelessWidget {
                 margin: EdgeInsets.only(top: 30, bottom: 10),
                 child: Center(
                   child: Icon(
-                    Icons.arrow_drop_down_circle,
+                    Icons.favorite,
                     size: 40,
                     color: CustomTheme().mainColor,
                   ),

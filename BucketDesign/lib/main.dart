@@ -23,20 +23,37 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool isVisible = false;
-  int viewIndex = 0;
+  List<Map<String, Object>> _pages;
+  int _page = 0;
   bool profile = false;
 
-  void rotate() {
-    setState(() {
-      isVisible = !isVisible;
-    });
+  @override
+  void initState() {
+    _pages = [
+      {
+        "page": MainPage(),
+        "title": "Home",
+      },
+      {
+        "page": SearchView(),
+        "title": "Search",
+      },
+      {
+        "page": ChatView(),
+        "title": "Chat",
+      },
+      {
+        "page": UploadView(),
+        "title": "Upload",
+      }
+    ];
+    super.initState();
   }
 
-  void changeView(i) {
+  void _selectPage(int i) {
     setState(() {
       if (profile) profile = false;
-      viewIndex = i;
+      _page = i;
     });
   }
 
@@ -62,15 +79,7 @@ class _MyAppState extends State<MyApp> {
           preferredSize: new Size(double.infinity, 60.0),
         ),
         backgroundColor: CustomTheme().darkGray,
-        body: profile
-            ? ProfileView()
-            : !profile && viewIndex == 0
-                ? MainPage()
-                : viewIndex == 1
-                    ? SearchView()
-                    : viewIndex == 2
-                        ? ChatView()
-                        : viewIndex == 3 ? UploadView() : null,
+        body: profile ? ProfileView() : _pages[_page]["page"],
         floatingActionButton: profile ? null : FloatingActionButton(
           onPressed: () {},
           tooltip: "Upload an image",
@@ -85,10 +94,10 @@ class _MyAppState extends State<MyApp> {
             : BottomNavigationBar(
                 selectedItemColor: CustomTheme().mainColor,
                 unselectedItemColor: Colors.white,
-                onTap: (index) => changeView(index),
+                onTap: (page) => _selectPage(page),
                 backgroundColor: CustomTheme().darkGray,
                 type: BottomNavigationBarType.fixed,
-                currentIndex: viewIndex,
+                currentIndex: _page,
                 selectedLabelStyle: TextStyle(fontSize: 15),
                 unselectedFontSize: 15,
                 items: const <BottomNavigationBarItem>[

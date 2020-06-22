@@ -26,14 +26,14 @@ class OwnProfileInformations extends StatelessWidget {
               Text(
                 "Kyros Design",
                 style: TextStyle(
-                  color: CustomTheme().white,
-                  fontSize: CustomTheme().titleSize,
+                  color: CustomTheme.white,
+                  fontSize: CustomTheme.titleSize,
                 ),
               ),
               Text(
                 "UI Designer",
                 style: TextStyle(
-                    color: CustomTheme().gray,
+                    color: CustomTheme.gray,
                     fontSize: 18,
                     fontWeight: FontWeight.w100),
               ),
@@ -45,7 +45,7 @@ class OwnProfileInformations extends StatelessWidget {
                     Text(
                       "📱 The app for every Digital Designer. Create 🎨, Share 🗣️ and have fun with Designers 👩‍🎨 from all the world 🌐.",
                       style: TextStyle(
-                        color: CustomTheme().gray,
+                        color: CustomTheme.gray,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -61,8 +61,8 @@ class OwnProfileInformations extends StatelessWidget {
                 text: TextSpan(
                   style: TextStyle(
                     fontFamily: "Sailec",
-                    color: CustomTheme().white,
-                    fontSize: CustomTheme().titleSize,
+                    color: CustomTheme.white,
+                    fontSize: CustomTheme.titleSize,
                     fontWeight: FontWeight.bold,
                   ),
                   children: <InlineSpan>[
@@ -72,7 +72,7 @@ class OwnProfileInformations extends StatelessWidget {
                     TextSpan(
                       text: ".",
                       style: TextStyle(
-                        color: CustomTheme().mainColor,
+                        color: CustomTheme.mainColor,
                       )
                     )
                   ],

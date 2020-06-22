@@ -42,7 +42,7 @@ class _MainAppBarState extends State<MainAppBar> {
                 width: 30,
                 height: 30,
                 radius: 5,
-                color: CustomTheme().white,
+                color: CustomTheme.white,
                 child: Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
@@ -58,7 +58,7 @@ class _MainAppBarState extends State<MainAppBar> {
         ),
       ),
       decoration: BoxDecoration(
-        color: CustomTheme().darkGray,
+        color: CustomTheme.darkGray,
       ),
     );
   }

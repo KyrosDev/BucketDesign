@@ -4,45 +4,52 @@ import 'package:flutter/material.dart';
 // Utils
 import '../utils/Theme.dart';
 
-class ProfileAppBar extends StatelessWidget {
-  final Function callback;
+class ProfileAppBar extends StatefulWidget {
+  final Function navigatorBack;
 
-  ProfileAppBar(this.callback);
+  ProfileAppBar(this.navigatorBack);
 
+  @override
+  _ProfileAppBarState createState() => _ProfileAppBarState();
+}
+
+class _ProfileAppBarState extends State<ProfileAppBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 20.0),
+      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       child: Container(
-        margin: EdgeInsets.only(top: 20),
-        padding: EdgeInsets.only(left: 30, right: 30, top: 5),
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             GestureDetector(
-              onTap: callback,
+              onTap: widget.navigatorBack,
               child: Icon(
                 Icons.arrow_back_ios,
-                color: CustomTheme().white,
+                color: CustomTheme.white,
               ),
             ),
             Text(
               "Your Profile",
               style: TextStyle(
-                color: CustomTheme().white,
+                color: CustomTheme.white,
                 fontSize: 20,
               ),
             ),
-            Icon(
-              Icons.settings,
-              color: CustomTheme().white,
+            GestureDetector(
+              onTap: () => Navigator.pushNamed(context, "/profile/edit"),
+              child: Icon(
+                Icons.settings,
+                color: CustomTheme.white,
+              ),
             ),
           ],
         ),
       ),
       decoration: BoxDecoration(
-        color: CustomTheme().darkGray,
+        color: CustomTheme.darkGray,
       ),
     );
   }

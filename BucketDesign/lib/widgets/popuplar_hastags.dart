@@ -19,7 +19,7 @@ class HastagsSection extends StatelessWidget {
           child: RichText(
             text: TextSpan(
               style: TextStyle(
-                color: CustomTheme().white,
+                color: CustomTheme.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 35,
               ),
@@ -30,7 +30,7 @@ class HastagsSection extends StatelessWidget {
                 TextSpan(
                   text: "#",
                   style: TextStyle(
-                    color: CustomTheme().mainColor,
+                    color: CustomTheme.mainColor,
                   ),
                 ),
                 TextSpan(
@@ -39,8 +39,8 @@ class HastagsSection extends StatelessWidget {
                 TextSpan(
                   text: ".",
                   style: TextStyle(
-                    color: CustomTheme().mainColor,
-                    fontSize: CustomTheme().titleSize,
+                    color: CustomTheme.mainColor,
+                    fontSize: CustomTheme.titleSize,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

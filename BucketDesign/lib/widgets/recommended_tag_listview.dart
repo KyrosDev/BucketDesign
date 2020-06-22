@@ -113,7 +113,7 @@ class _TagsListViewState extends State<TagsListView> {
                           child: t.tapped
                               ? Icon(
                                   Icons.close,
-                                  color: CustomTheme().white,
+                                  color: CustomTheme.white,
                                   size: 18,
                                 )
                               : null,

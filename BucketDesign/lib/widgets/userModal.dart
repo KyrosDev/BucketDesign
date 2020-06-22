@@ -31,7 +31,7 @@ class _UserModalState extends State<UserModal> {
   Widget build(BuildContext context) {
     return RoundedRect(
       radius: 30,
-      color: CustomTheme().darkGray,
+      color: CustomTheme.darkGray,
       height: 350,
       padding: EdgeInsets.all(30),
       child: Container(
@@ -61,8 +61,8 @@ class _UserModalState extends State<UserModal> {
                         Text(
                           widget.t.profession,
                           style: TextStyle(
-                            color: CustomTheme().white,
-                            fontSize: CustomTheme().professionSize,
+                            color: CustomTheme.white,
+                            fontSize: CustomTheme.professionSize,
                           ),
                         ),
                         Text(
@@ -70,8 +70,8 @@ class _UserModalState extends State<UserModal> {
                               ? widget.t.username.split(" ")[0] + "..."
                               : widget.t.username,
                           style: TextStyle(
-                            color: CustomTheme().white,
-                            fontSize: CustomTheme().titleSize,
+                            color: CustomTheme.white,
+                            fontSize: CustomTheme.titleSize,
                           ),
                         ),
                       ],
@@ -95,7 +95,7 @@ class _UserModalState extends State<UserModal> {
                     height: 70,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
-                      color: CustomTheme().darkGray,
+                      color: CustomTheme.darkGray,
                     ),
                     child: Center(
                       child: Column(
@@ -104,7 +104,7 @@ class _UserModalState extends State<UserModal> {
                           Icon(
                             Icons.group,
                             size: 30,
-                            color: CustomTheme().white,
+                            color: CustomTheme.white,
                           ),
                           Text(
                             widget.t.followers >= 1000
@@ -113,8 +113,8 @@ class _UserModalState extends State<UserModal> {
                                     ? "${widget.t.followers.toString()[0]}${widget.t.followers.toString()[1]}k"
                                     : "${widget.t.followers}",
                             style: TextStyle(
-                              color: CustomTheme().white,
-                              fontSize: CustomTheme().subtitleSize,
+                              color: CustomTheme.white,
+                              fontSize: CustomTheme.subtitleSize,
                             ),
                           ),
                         ],
@@ -126,7 +126,7 @@ class _UserModalState extends State<UserModal> {
                     height: 70,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
-                      color: CustomTheme().darkGray,
+                      color: CustomTheme.darkGray,
                     ),
                     child: Center(
                       child: Column(
@@ -135,13 +135,13 @@ class _UserModalState extends State<UserModal> {
                           Icon(
                             Icons.image,
                             size: 30,
-                            color: CustomTheme().white,
+                            color: CustomTheme.white,
                           ),
                           Text(
                             "${widget.t.posts}",
                             style: TextStyle(
-                              color: CustomTheme().white,
-                              fontSize: CustomTheme().subtitleSize,
+                              color: CustomTheme.white,
+                              fontSize: CustomTheme.subtitleSize,
                             ),
                           ),
                         ],
@@ -153,7 +153,7 @@ class _UserModalState extends State<UserModal> {
                     height: 70,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
-                      color: CustomTheme().darkGray,
+                      color: CustomTheme.darkGray,
                     ),
                     child: Center(
                       child: Column(
@@ -162,13 +162,13 @@ class _UserModalState extends State<UserModal> {
                           Icon(
                             Icons.favorite,
                             size: 30,
-                            color: CustomTheme().white,
+                            color: CustomTheme.white,
                           ),
                           Text(
                             "${widget.t.likes}",
                             style: TextStyle(
-                              color: CustomTheme().white,
-                              fontSize: CustomTheme().subtitleSize,
+                              color: CustomTheme.white,
+                              fontSize: CustomTheme.subtitleSize,
                             ),
                           ),
                         ],
@@ -186,14 +186,14 @@ class _UserModalState extends State<UserModal> {
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 color: following
                     ? Color.fromRGBO(50, 50, 50, 1)
-                    : CustomTheme().mainColor,
+                    : CustomTheme.mainColor,
               ),
               child: GestureDetector(
                 onTap: _followHandler,
                 child: Text(
                   following == true ? "Unfollow" : "Follow",
                   style: TextStyle(
-                    color: CustomTheme().white,
+                    color: CustomTheme.white,
                     fontSize: 20,
                   ),
                   textAlign: TextAlign.center,

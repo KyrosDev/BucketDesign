@@ -66,8 +66,8 @@ class HastagCard extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                color: CustomTheme().white,
-                fontSize: CustomTheme().titleSize,
+                color: CustomTheme.white,
+                fontSize: CustomTheme.titleSize,
                 fontWeight: FontWeight.bold
               )
             ),
@@ -83,15 +83,15 @@ class HastagCard extends StatelessWidget {
                         margin: EdgeInsets.only(bottom: 10),
                         child: Icon(
                           FontAwesomeIcons.users,
-                          color: CustomTheme().white,
+                          color: CustomTheme.white,
                           size: 30.0,
                         ),
                       ),
                       Text(
                         "100K",
                         style: TextStyle(
-                          color: CustomTheme().white,
-                          fontSize: CustomTheme().subtitleSize,
+                          color: CustomTheme.white,
+                          fontSize: CustomTheme.subtitleSize,
                           fontWeight: FontWeight.bold
                         ),
                       ),
@@ -107,7 +107,7 @@ class HastagCard extends StatelessWidget {
                         margin: EdgeInsets.only(bottom: 10),
                         child: Icon(
                           FontAwesomeIcons.tint,
-                          color: CustomTheme().white,
+                          color: CustomTheme.white,
                           size: 30.0,
                         ),
                       ),
@@ -115,7 +115,7 @@ class HastagCard extends StatelessWidget {
                         "432K",
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: CustomTheme().subtitleSize,
+                          fontSize: CustomTheme.subtitleSize,
                           fontWeight: FontWeight.bold
                         ),
                       ),

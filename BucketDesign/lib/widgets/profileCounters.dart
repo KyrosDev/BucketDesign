@@ -23,7 +23,7 @@ class ProfileCounters extends StatelessWidget {
             Container(
               child: RoundedRect(
                 radius: 15,
-                color: CustomTheme().mainColorDarker,
+                color: CustomTheme.mainColorDarker,
                 width: 70,
                 height: 70,
                 margin: EdgeInsets.only(top: 30, bottom: 10),
@@ -31,7 +31,7 @@ class ProfileCounters extends StatelessWidget {
                   child: Icon(
                     Icons.group,
                     size: 40,
-                    color: CustomTheme().mainColor,
+                    color: CustomTheme.mainColor,
                   ),
                 ),
               ),
@@ -39,8 +39,8 @@ class ProfileCounters extends StatelessWidget {
             Text(
               "$followersCounter",
               style: TextStyle(
-                color: CustomTheme().white,
-                fontSize: CustomTheme().subtitleSize,
+                color: CustomTheme.white,
+                fontSize: CustomTheme.subtitleSize,
               ),
             ),
           ],
@@ -50,7 +50,7 @@ class ProfileCounters extends StatelessWidget {
             Container(
               child: RoundedRect(
                 radius: 15,
-                color: CustomTheme().mainColorDarker,
+                color: CustomTheme.mainColorDarker,
                 width: 70,
                 height: 70,
                 margin: EdgeInsets.only(top: 30, bottom: 10),
@@ -58,7 +58,7 @@ class ProfileCounters extends StatelessWidget {
                   child: Icon(
                     Icons.image,
                     size: 40,
-                    color: CustomTheme().mainColor,
+                    color: CustomTheme.mainColor,
                   ),
                 ),
               ),
@@ -66,8 +66,8 @@ class ProfileCounters extends StatelessWidget {
             Text(
               "$postsCounter",
               style: TextStyle(
-                color: CustomTheme().white,
-                fontSize: CustomTheme().subtitleSize,
+                color: CustomTheme.white,
+                fontSize: CustomTheme.subtitleSize,
               ),
             ),
           ],
@@ -77,7 +77,7 @@ class ProfileCounters extends StatelessWidget {
             Container(
               child: RoundedRect(
                 radius: 15,
-                color: CustomTheme().mainColorDarker,
+                color: CustomTheme.mainColorDarker,
                 width: 70,
                 height: 70,
                 margin: EdgeInsets.only(top: 30, bottom: 10),
@@ -85,7 +85,7 @@ class ProfileCounters extends StatelessWidget {
                   child: Icon(
                     Icons.favorite,
                     size: 40,
-                    color: CustomTheme().mainColor,
+                    color: CustomTheme.mainColor,
                   ),
                 ),
               ),
@@ -93,8 +93,8 @@ class ProfileCounters extends StatelessWidget {
             Text(
               "$likesCounter",
               style: TextStyle(
-                color: CustomTheme().white,
-                fontSize: CustomTheme().subtitleSize,
+                color: CustomTheme.white,
+                fontSize: CustomTheme.subtitleSize,
               ),
             ),
           ],

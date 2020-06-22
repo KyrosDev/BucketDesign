@@ -19,7 +19,7 @@ class RecommendedDesigners extends StatelessWidget {
           child: RichText(
             text: TextSpan(
               style: TextStyle(
-                color: CustomTheme().white,
+                color: CustomTheme.white,
                 fontSize: 35,
                 fontWeight: FontWeight.bold
               ),
@@ -30,7 +30,7 @@ class RecommendedDesigners extends StatelessWidget {
                 TextSpan(
                   text: ".",
                   style: TextStyle(
-                    color: CustomTheme().mainColor,
+                    color: CustomTheme.mainColor,
                   ),
                 ),
               ],

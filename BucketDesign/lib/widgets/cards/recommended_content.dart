@@ -104,16 +104,16 @@ class Content extends StatelessWidget {
                     Text(
                       profession,
                       style: TextStyle(
-                        color: CustomTheme().white,
+                        color: CustomTheme.white,
                         fontWeight: FontWeight.normal,
                       ),
                     ),
                     Text(
                       author,
                       style: TextStyle(
-                        color: CustomTheme().white,
+                        color: CustomTheme.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: CustomTheme().cardAuthorSize,
+                        fontSize: CustomTheme.cardAuthorSize,
                       ),
                     ),
                   ],

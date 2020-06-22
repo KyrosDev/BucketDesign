@@ -158,13 +158,13 @@ class _SearchResultState extends State<SearchResult> {
                         Text(
                           user.profession,
                           style: TextStyle(
-                              color: CustomTheme().white, fontSize: 14),
+                              color: CustomTheme.white, fontSize: 14),
                           textAlign: TextAlign.start,
                         ),
                         Text(
                           user.username,
                           style: TextStyle(
-                            color: CustomTheme().white,
+                            color: CustomTheme.white,
                             fontSize: 20,
                           ),
                           textAlign: TextAlign.start,

@@ -22,6 +22,8 @@ class Post {
   final String author;
   final List<String> imageUrl;
   final MediaType mediaType;
+  final int likes;
+  final int comments;
 
   Post({
     @required this.id,
@@ -32,6 +34,8 @@ class Post {
     @required this.time,
     @required this.title,
     @required this.mediaType,
+    this.comments = 0,
+    this.likes = 0,
   });
 
 }

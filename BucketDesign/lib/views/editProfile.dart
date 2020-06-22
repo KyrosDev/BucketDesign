@@ -21,3 +21,4 @@ class EditProfileView extends StatelessWidget {
     );
   }
 }
+

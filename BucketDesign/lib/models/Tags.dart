@@ -7,7 +7,12 @@ class Tag {
   Color color;
   String id;
   bool tapped;
-  
-  Tag({this.name, this.tapped, this.color, this.shortcode, this.id});
 
+  Tag({
+    @required this.name,
+    this.tapped,
+    this.color = Colors.green,
+    @required this.shortcode,
+    @required this.id,
+  });
 }

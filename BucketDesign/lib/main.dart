@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 // Views
 import './views/home.dart';
 import './views/editProfile.dart';
-
+import './views/postDetails.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,6 +27,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         "/": (context) => Home(),
         EditProfileView.routeName: (context) => EditProfileView(),
+        PostPage.routeName: (context) => PostPage(),
       }
     );
   }

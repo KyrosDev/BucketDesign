@@ -43,86 +43,83 @@ class Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: "asd",
-      child: Stack(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              color: _colors[index],
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 15.0,
-                  color: _shadow[index],
-                  offset: Offset.fromDirection(0, 0),
-                ),
-              ],
-            ),
-            alignment: Alignment.bottomLeft,
-            padding: EdgeInsets.all(30),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              image: DecorationImage(
-                alignment: Alignment.centerRight,
-                fit: BoxFit.contain,
-                image: AssetImage("assets/images/ui.png"),
+    return Stack(
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            color: _colors[index],
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 15.0,
+                color: _shadow[index],
+                offset: Offset.fromDirection(0, 0),
               ),
-            ),
-            margin: EdgeInsets.only(right: 0),
+            ],
           ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              gradient: LinearGradient(
-                colors: [_lighter[index], _darker[index]],
-                begin: const FractionalOffset(0.0, 0.0),
-                end: const FractionalOffset(0.0, 1.0),
-                stops: [0.0, 1.0],
-                tileMode: TileMode.clamp,
+          alignment: Alignment.bottomLeft,
+          padding: EdgeInsets.all(30),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            image: DecorationImage(
+              alignment: Alignment.centerRight,
+              fit: BoxFit.contain,
+              image: AssetImage("assets/images/ui.png"),
+            ),
+          ),
+          margin: EdgeInsets.only(right: 0),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            gradient: LinearGradient(
+              colors: [_lighter[index], _darker[index]],
+              begin: const FractionalOffset(0.0, 0.0),
+              end: const FractionalOffset(0.0, 1.0),
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp,
+            ),
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.all(30),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 10),
+                width: 60,
+                height: 60,
+                child: SvgPicture.asset(_icons[index]),
               ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(30),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(right: 10),
-                  width: 60,
-                  height: 60,
-                  child: SvgPicture.asset(_icons[index]),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Text(
-                      profession,
-                      style: TextStyle(
-                        color: CustomTheme.white,
-                        fontWeight: FontWeight.normal,
-                      ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                    profession,
+                    style: TextStyle(
+                      color: CustomTheme.white,
+                      fontWeight: FontWeight.normal,
                     ),
-                    Text(
-                      author,
-                      style: TextStyle(
-                        color: CustomTheme.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: CustomTheme.cardAuthorSize,
-                      ),
+                  ),
+                  Text(
+                    author,
+                    style: TextStyle(
+                      color: CustomTheme.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: CustomTheme.cardAuthorSize,
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

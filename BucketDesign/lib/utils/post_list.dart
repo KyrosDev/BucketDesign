@@ -15,12 +15,27 @@ List<Post> posts = [
     date: DateTime.now(),
     attachments: [
       "https://instagram.fcia1-1.fna.fbcdn.net/v/t51.2885-15/e35/99435530_688882545270142_7984536088211009073_n.jpg?_nc_ht=instagram.fcia1-1.fna.fbcdn.net&_nc_cat=110&_nc_ohc=fJIgQobqAOsAX_BgaHo&oh=5b0be728646f442dcd2db3ae258c1a8b&oe=5F1961EE",
-      "https://scontent-otp1-1.cdninstagram.com/v/t51.2885-15/e35/100781760_248063826413324_7965022550723737566_n.jpg?_nc_ht=scontent-otp1-1.cdninstagram.com&_nc_cat=108&_nc_ohc=jWCuoIyextkAX-gYPnv&oh=75208f8c44db75e56427ed181f9194e1&oe=5F1E0B36"
+      "https://scontent-otp1-1.cdninstagram.com/v/t51.2885-15/e35/100781760_248063826413324_7965022550723737566_n.jpg?_nc_ht=scontent-otp1-1.cdninstagram.com&_nc_cat=108&_nc_ohc=jWCuoIyextkAX-gYPnv&oh=75208f8c44db75e56427ed181f9194e1&oe=5F1E0B36",
+      "https://instagram.fcia1-1.fna.fbcdn.net/v/t51.2885-15/e35/99435530_688882545270142_7984536088211009073_n.jpg?_nc_ht=instagram.fcia1-1.fna.fbcdn.net&_nc_cat=110&_nc_ohc=fJIgQobqAOsAX_BgaHo&oh=5b0be728646f442dcd2db3ae258c1a8b&oe=5F1961EE",
+      "https://scontent-otp1-1.cdninstagram.com/v/t51.2885-15/e35/100781760_248063826413324_7965022550723737566_n.jpg?_nc_ht=scontent-otp1-1.cdninstagram.com&_nc_cat=108&_nc_ohc=jWCuoIyextkAX-gYPnv&oh=75208f8c44db75e56427ed181f9194e1&oe=5F1E0B36",
+      "https://instagram.fcia1-1.fna.fbcdn.net/v/t51.2885-15/e35/99435530_688882545270142_7984536088211009073_n.jpg?_nc_ht=instagram.fcia1-1.fna.fbcdn.net&_nc_cat=110&_nc_ohc=fJIgQobqAOsAX_BgaHo&oh=5b0be728646f442dcd2db3ae258c1a8b&oe=5F1961EE",
+      "https://scontent-otp1-1.cdninstagram.com/v/t51.2885-15/e35/100781760_248063826413324_7965022550723737566_n.jpg?_nc_ht=scontent-otp1-1.cdninstagram.com&_nc_cat=108&_nc_ohc=jWCuoIyextkAX-gYPnv&oh=75208f8c44db75e56427ed181f9194e1&oe=5F1E0B36",
     ],
     preview:
         "https://instagram.fcia1-1.fna.fbcdn.net/v/t51.2885-15/e35/99435530_688882545270142_7984536088211009073_n.jpg?_nc_ht=instagram.fcia1-1.fna.fbcdn.net&_nc_cat=110&_nc_ohc=fJIgQobqAOsAX_BgaHo&oh=5b0be728646f442dcd2db3ae258c1a8b&oe=5F1961EE",
     mediaType: MediaType.Photo,
     tags: [
+      Tag(
+        name: "Graphic Design",
+        shortcode: "graphic_design",
+        id: "124dgs",
+      ),
+      Tag(
+        name: "Web Design",
+        shortcode: "web_design",
+        id: "34652",
+        color: Colors.red,
+      ),
       Tag(
         name: "Graphic Design",
         shortcode: "graphic_design",

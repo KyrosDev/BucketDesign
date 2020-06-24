@@ -4,7 +4,10 @@ import 'package:timeago/timeago.dart' as timeago;
 
 // Utils
 import '../utils/Theme.dart';
+
+// Models
 import '../models/Post.dart';
+import '../models/Comment.dart';
 
 class PostPage extends StatefulWidget {
   static const routeName = "/post/";
@@ -17,6 +20,8 @@ class _PostPageState extends State<PostPage> {
   int _currentIndex = 0;
   int _likes = 0;
   bool _liked = false;
+  TextEditingController _commentController = TextEditingController();
+  List<Comment> _comments;
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +29,7 @@ class _PostPageState extends State<PostPage> {
         ModalRoute.of(context).settings.arguments;
     final Post post = routeArgs["post"];
 
-    @protected
-    @mustCallSuper
+    @override
     void initState() {
       setState(() {
         _likes = post.likes;
@@ -63,17 +67,17 @@ class _PostPageState extends State<PostPage> {
       if (details.velocity.pixelsPerSecond.dx <= 0) {
         setState(() {
           if (_currentIndex == (post.attachments.length - 1)) {
-            _currentIndex--;
+            _currentIndex = 0;
           } else {
             _currentIndex++;
           }
         });
       } else if (details.velocity.pixelsPerSecond.dx >= 0) {
         setState(() {
-          if (_currentIndex == (post.attachments.length - 1)) {
-            _currentIndex--;
+          if (_currentIndex == 0) {
+            _currentIndex = post.attachments.length - 1;
           } else {
-            _currentIndex++;
+            _currentIndex--;
           }
         });
       }
@@ -125,6 +129,7 @@ class _PostPageState extends State<PostPage> {
             ),
             SingleChildScrollView(
               physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.only(top: 20),
               child: Row(
                 children: <Widget>[
@@ -148,24 +153,35 @@ class _PostPageState extends State<PostPage> {
                 ],
               ),
             ),
-            GestureDetector(
-              onDoubleTap: _liked ? () => {} : _like,
-              onHorizontalDragEnd: (DragEndDetails details) =>
-                  _changeImageByScroll(details),
-              child: Container(
-                margin: const EdgeInsets.only(top: 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.transparent,
-                  image: DecorationImage(
-                    image: NetworkImage(post.attachments[_currentIndex]),
-                    fit: BoxFit.cover,
+            Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                GestureDetector(
+                  onDoubleTap: _liked ? () => {} : _like,
+                  onHorizontalDragEnd: (DragEndDetails details) =>
+                      _changeImageByScroll(details),
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.transparent,
+                      image: DecorationImage(
+                        image: NetworkImage(post.attachments[_currentIndex]),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: AspectRatio(
+                      aspectRatio: 16 / 9,
+                    ),
                   ),
                 ),
-                child: AspectRatio(
-                  aspectRatio: 16 / 9,
-                ),
-              ),
+                if (_liked)
+                  Icon(
+                    Icons.favorite,
+                    size: 50,
+                    color: Colors.white,
+                  ),
+              ],
             ),
             Container(
               margin: const EdgeInsets.only(top: 20),
@@ -232,30 +248,92 @@ class _PostPageState extends State<PostPage> {
                 ),
               ),
             ),
-            Row(
-              children: <Widget>[
-                ...(post.attachments).asMap().entries.map((val) {
-                  int index = val.key;
-                  String image = val.value;
-                  return GestureDetector(
-                    onTap: () => _changeImageByIndex(index),
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 10),
-                      width: 70,
-                      height: 70,
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(5),
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(image),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: BouncingScrollPhysics(),
+              child: Row(
+                children: <Widget>[
+                  ...(post.attachments).asMap().entries.map((val) {
+                    int index = val.key;
+                    String image = val.value;
+                    return Stack(
+                      alignment: Alignment.center,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () => _changeImageByIndex(index),
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 10),
+                            width: 65,
+                            height: 65,
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(5),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(image),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        if (_currentIndex == index)
+                          Container(
+                            width: 65,
+                            height: 65,
+                            color: Colors.black38,
+                          )
+                      ],
+                    );
+                  }).toList()
+                ],
+              ),
+            ),
+            RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  color: CustomTheme.white,
+                  fontSize: CustomTheme.titleSize,
+                  fontFamily: "Sailec",
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: "Comments",
+                  ),
+                  TextSpan(
+                    text: ".",
+                    style: TextStyle(
+                      color: CustomTheme.mainColor,
                     ),
-                  );
-                }).toList()
-              ],
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              child: TextField(
+                controller: _commentController,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: const BorderRadius.all(
+                      const Radius.circular(10.0),
+                    ),
+                  ),
+                  filled: true,
+                  fillColor: Color(0xFF4D4D4D),
+                  hintText: "Add a comment...",
+                  contentPadding:
+                      EdgeInsets.only(left: 30, top: 10, bottom: 10),
+                  hintStyle: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
             ),
           ],
         ),

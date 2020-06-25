@@ -92,18 +92,21 @@ class _PostPageState extends State<PostPage> {
     }
 
     void _submitComment(value) {
+      if (value == "") {
+        return;
+      }
       _commentController.clear();
-                  setState(() {
-                    _commented = true;
-                    _comments.add(
-                      Comment(
-                        author: "Kyros Design",
-                        text: value,
-                        id: "newisad",
-                        date: DateTime.now(),
-                      ),
-                    );
-                  });
+      setState(() {
+        _commented = true;
+        _comments.add(
+          Comment(
+            author: "Kyros Design",
+            text: value,
+            id: "newisad",
+            date: DateTime.now(),
+          ),
+        );
+      });
     }
 
     return Scaffold(

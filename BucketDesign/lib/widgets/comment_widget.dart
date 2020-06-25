@@ -39,11 +39,13 @@ class CommentWidget extends StatelessWidget {
                 width: 50,
                 height: 50,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    image: DecorationImage(
-                      image: NetworkImage(
-                          "https://instagram.fcia1-1.fna.fbcdn.net/v/t51.2885-15/e35/99435530_688882545270142_7984536088211009073_n.jpg?_nc_ht=instagram.fcia1-1.fna.fbcdn.net&_nc_cat=110&_nc_ohc=fJIgQobqAOsAX_BgaHo&oh=5b0be728646f442dcd2db3ae258c1a8b&oe=5F1961EE"),
-                    )),
+                  borderRadius: BorderRadius.circular(30),
+                  image: DecorationImage(
+                    image: NetworkImage(
+                      "https://instagram.fcia1-1.fna.fbcdn.net/v/t51.2885-15/e35/99435530_688882545270142_7984536088211009073_n.jpg?_nc_ht=instagram.fcia1-1.fna.fbcdn.net&_nc_cat=110&_nc_ohc=fJIgQobqAOsAX_BgaHo&oh=5b0be728646f442dcd2db3ae258c1a8b&oe=5F1961EE",
+                    ),
+                  ),
+                ),
               ),
               Container(
                 width: 190,

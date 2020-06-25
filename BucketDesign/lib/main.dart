@@ -6,6 +6,7 @@ import './views/home.dart';
 import './views/editProfile.dart';
 import './views/postDetails.dart';
 import './views/fullPhoto.dart';
+import './views/user_chat.dart';
 
 void main() => runApp(MyApp());
 
@@ -30,6 +31,7 @@ class _MyAppState extends State<MyApp> {
         EditProfileView.routeName: (context) => EditProfileView(),
         PostPage.routeName: (context) => PostPage(),
         FullImageViewer.routeName: (context) => FullImageViewer(),
+        UserChat.routeName: (context) => UserChat(),
       }
     );
   }

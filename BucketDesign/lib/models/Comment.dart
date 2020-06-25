@@ -8,7 +8,7 @@ class Comment {
 
   final String text;
   final String id;
-  final Designer author; 
+  final String author; 
   final int likes;
   final DateTime date;
 

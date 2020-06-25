@@ -1,4 +1,5 @@
 // Packages
+import 'package:BucketDesign/views/fullPhoto.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -8,6 +9,9 @@ import '../utils/Theme.dart';
 // Models
 import '../models/Post.dart';
 import '../models/Comment.dart';
+
+// Widgets
+import '../widgets/comment_widget.dart';
 
 class PostPage extends StatefulWidget {
   static const routeName = "/post/";
@@ -21,7 +25,8 @@ class _PostPageState extends State<PostPage> {
   int _likes = 0;
   bool _liked = false;
   TextEditingController _commentController = TextEditingController();
-  List<Comment> _comments;
+  List<Comment> _comments = [];
+  bool _commented = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +37,9 @@ class _PostPageState extends State<PostPage> {
     @override
     void initState() {
       setState(() {
+        if (_comments.length > 0) {
+          _commented = true;
+        }
         _likes = post.likes;
       });
       super.initState();
@@ -81,6 +89,21 @@ class _PostPageState extends State<PostPage> {
           }
         });
       }
+    }
+
+    void _submitComment(value) {
+      _commentController.clear();
+                  setState(() {
+                    _commented = true;
+                    _comments.add(
+                      Comment(
+                        author: "Kyros Design",
+                        text: value,
+                        id: "newisad",
+                        date: DateTime.now(),
+                      ),
+                    );
+                  });
     }
 
     return Scaffold(
@@ -157,6 +180,11 @@ class _PostPageState extends State<PostPage> {
               alignment: Alignment.center,
               children: <Widget>[
                 GestureDetector(
+                  onTap: () => Navigator.of(context)
+                      .pushNamed(FullImageViewer.routeName, arguments: {
+                    "title": post.title,
+                    "url": post.attachments[_currentIndex]
+                  }),
                   onDoubleTap: _liked ? () => {} : _like,
                   onHorizontalDragEnd: (DragEndDetails details) =>
                       _changeImageByScroll(details),
@@ -220,7 +248,7 @@ class _PostPageState extends State<PostPage> {
                         Container(
                           margin: const EdgeInsets.only(left: 10),
                           child: Text(
-                            "${post.comments}",
+                            "${_comments.length}",
                             style: TextStyle(
                               color: Colors.white54,
                               fontSize: 16,
@@ -280,8 +308,11 @@ class _PostPageState extends State<PostPage> {
                           Container(
                             width: 65,
                             height: 65,
-                            color: Colors.black38,
-                          )
+                            decoration: BoxDecoration(
+                              color: Colors.black38,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
                       ],
                     );
                   }).toList()
@@ -317,6 +348,10 @@ class _PostPageState extends State<PostPage> {
                   fontSize: 18,
                 ),
                 decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.send),
+                    onPressed: () => _submitComment(_commentController.text),
+                  ),
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none,
                     borderRadius: const BorderRadius.all(
@@ -333,8 +368,23 @@ class _PostPageState extends State<PostPage> {
                     fontSize: 18,
                   ),
                 ),
+                onSubmitted: _submitComment,
               ),
             ),
+            if (_commented)
+              ...(_comments).reversed.map((comment) {
+                return CommentWidget(comment);
+              }).toList(),
+            if (!_commented)
+              Center(
+                child: Text(
+                  "No comments yet!",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
           ],
         ),
       ),

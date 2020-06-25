@@ -15,7 +15,7 @@ class FullImageViewer extends StatelessWidget {
     String title = arguments["title"];
     return Scaffold(
       appBar: AppBar(
-        title: Text(title + " Image"),
+        title: Text("$title Image"),
         backgroundColor: CustomTheme.darkGray,
       ),
       body: Container(

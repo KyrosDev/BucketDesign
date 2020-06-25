@@ -114,6 +114,9 @@ class _PostPageState extends State<PostPage> {
       appBar: AppBar(
         title: Text(
           post.title,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         actions: <Widget>[
           IconButton(
@@ -143,6 +146,7 @@ class _PostPageState extends State<PostPage> {
               style: TextStyle(
                 color: CustomTheme.white,
                 fontSize: CustomTheme.titleSize,
+                fontWeight: FontWeight.bold,
               ),
             ),
             Text(
@@ -172,6 +176,7 @@ class _PostPageState extends State<PostPage> {
                         tag.name,
                         style: TextStyle(
                           color: CustomTheme.white,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     );
@@ -328,6 +333,7 @@ class _PostPageState extends State<PostPage> {
                   color: CustomTheme.white,
                   fontSize: CustomTheme.titleSize,
                   fontFamily: "Sailec",
+                  fontWeight: FontWeight.bold,
                 ),
                 children: <TextSpan>[
                   TextSpan(
@@ -364,6 +370,9 @@ class _PostPageState extends State<PostPage> {
                   filled: true,
                   fillColor: Color(0xFF4D4D4D),
                   hintText: "Add a comment...",
+                  labelStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                   contentPadding:
                       EdgeInsets.only(left: 30, top: 10, bottom: 10),
                   hintStyle: TextStyle(

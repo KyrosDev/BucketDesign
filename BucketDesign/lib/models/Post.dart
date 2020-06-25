@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 // Models
 import 'Tags.dart';
 
-enum Difficulty{
+enum Difficulty {
   Simple,
   Intermediate,
   Hard,
@@ -18,7 +18,6 @@ enum MediaType {
 }
 
 class Post {
-
   final String title;
   final String id;
   final String description;
@@ -46,5 +45,4 @@ class Post {
     this.comments = 0,
     this.likes = 0,
   });
-
 }

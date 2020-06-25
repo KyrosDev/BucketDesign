@@ -55,12 +55,14 @@ class CommentWidget extends StatelessWidget {
                       style: TextStyle(
                         color: CustomTheme.white,
                         fontSize: 16,
+                        fontWeight: FontWeight.w100,
                       ),
                     ),
                     Text(
                       comment.text,
                       style: TextStyle(
                         color: Colors.white70,
+                        fontWeight: FontWeight.w300,
                       ),
                     ),
                   ],

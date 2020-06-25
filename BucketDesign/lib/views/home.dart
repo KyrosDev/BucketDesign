@@ -55,7 +55,7 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void viewProfile() {  
+  void viewProfile() {
     setState(() {
       profile = !profile;
     });
@@ -92,7 +92,13 @@ class _HomeState extends State<Home> {
               backgroundColor: CustomTheme.darkGray,
               type: BottomNavigationBarType.fixed,
               currentIndex: _page,
-              selectedLabelStyle: TextStyle(fontSize: 15),
+              selectedLabelStyle: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+              unselectedLabelStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
               unselectedFontSize: 15,
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(

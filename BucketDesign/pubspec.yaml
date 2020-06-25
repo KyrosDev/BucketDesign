@@ -81,7 +81,7 @@ flutter:
       fonts:
         - asset: assets/fonts/Sailec_Medium.ttf
         - asset: assets/fonts/Sailec_Bold.ttf
-          weight: 800
+          weight: 700
         - asset: assets/fonts/Sailec_Thin.ttf
           weight: 100
         - asset: assets/fonts/Sailec_Light.ttf

@@ -60,6 +60,7 @@ class PostPreview extends StatelessWidget {
                   style: TextStyle(
                     color: CustomTheme.white,
                     fontSize: CustomTheme.titleSize,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
                 Text(

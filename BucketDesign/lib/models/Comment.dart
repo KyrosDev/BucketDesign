@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Models
-import './Designer.dart';
+//import './Designer.dart';
 
 class Comment {
 

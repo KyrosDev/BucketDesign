@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 class Designer {
-
   String id;
   String username;
   String profession;
@@ -13,6 +12,15 @@ class Designer {
   int likes;
   Color color;
 
-  Designer({this.username, this.followers, this.follows, this.id, this.posts, this.likes, this.profession, this.professionShortcode, this.color});
-
+  Designer({
+    this.username,
+    this.followers,
+    this.follows,
+    this.id,
+    this.posts,
+    this.likes,
+    this.profession,
+    this.professionShortcode,
+    this.color
+  });
 }

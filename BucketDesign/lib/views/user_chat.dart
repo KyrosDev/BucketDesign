@@ -21,13 +21,63 @@ class _UserChatState extends State<UserChat> {
     MediaQueryData mq = MediaQuery.of(context);
 
     AppBar appBar = AppBar(
-      title: Text(arguments["user"]),
+      title: Row(
+        children: <Widget>[
+          Stack(
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(right: 10),
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: Colors.red,
+                ),
+              ),
+              Positioned(
+                right: 8,
+                bottom: 0,
+                child: Container(
+                  width: 10,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: Colors.lightGreen,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(arguments["user"]),
+              Text(
+                "Online",
+                style: TextStyle(
+                  color: CustomTheme.white.withOpacity(.5),
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
       leading: IconButton(
         icon: Icon(
           Icons.arrow_back_ios,
         ),
         onPressed: () => Navigator.of(context).pop(),
       ),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(
+            Icons.more_horiz,
+            color: Colors.white,
+          ),
+          onPressed: () => {},
+        ),
+      ],
       backgroundColor: CustomTheme.darkGray,
     );
 
@@ -35,6 +85,7 @@ class _UserChatState extends State<UserChat> {
       appBar: appBar,
       body: Container(
         height: (mq.size.height - mq.padding.top),
+        width: double.infinity,
         color: CustomTheme.darkGray,
         child: SingleChildScrollView(
           child: Column(
@@ -43,9 +94,11 @@ class _UserChatState extends State<UserChat> {
             children: <Widget>[
               MessagesList(appBar),
               Container(
+                color: Colors.transparent,
                 height: (mq.size.height -
                         mq.padding.top -
-                        appBar.preferredSize.height) *
+                        appBar.preferredSize.height -
+                        115) *
                     0.1,
                 child: TextField(
                   decoration: InputDecoration(

@@ -17,32 +17,48 @@ class _MessagesListState extends State<MessagesList> {
   Widget build(BuildContext context) {
     MediaQueryData mq = MediaQuery.of(context);
     return Container(
-      constraints: BoxConstraints(maxWidth: mq.size.width * 0.6),
       height: (mq.size.height -
               widget.appBar.preferredSize.height -
-              mq.padding.top) *
+              mq.padding.bottom -
+              20) *
           0.9,
       child: ListView.builder(
         physics: BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
-        itemCount: 100,
+        itemCount: 2,
         itemBuilder: (BuildContext context, int index) {
-          return Container(
-            margin: const EdgeInsets.symmetric(
-              vertical: 10,
-              horizontal: 20,
-            ),
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: CustomTheme.mainColor,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              "How are you?",
-              style: TextStyle(
-                color: Colors.white,
+          return Row(
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(left: 10),
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: Colors.red,
+                ),
               ),
-            ),
+              Container(
+                margin: const EdgeInsets.symmetric(
+                  vertical: 5,
+                  horizontal: 10,
+                ),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: CustomTheme.mainColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Container(
+                  constraints: BoxConstraints(maxWidth: mq.size.width * 0.6),
+                  child: Text(
+                    "How are you? i'm fine and you? how are you?",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           );
         },
       ),

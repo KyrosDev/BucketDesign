@@ -60,6 +60,7 @@ class _ChatPreviewWidgetState extends State<ChatPreviewWidget> {
                       border: Border.all(
                         color: CustomTheme.darkGray,
                         width: 3,
+                        style: BorderStyle.solid,
                       ),
                     ),
                     child: Text(

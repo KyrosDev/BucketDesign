@@ -94,10 +94,6 @@ class _HomeState extends State<Home> {
               currentIndex: _page,
               selectedLabelStyle: TextStyle(
                 fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
-              unselectedLabelStyle: TextStyle(
-                fontWeight: FontWeight.bold,
               ),
               unselectedFontSize: 15,
               items: const <BottomNavigationBarItem>[

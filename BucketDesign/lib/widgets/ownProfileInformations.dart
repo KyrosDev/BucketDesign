@@ -1,9 +1,9 @@
 // Packages
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 // Utils
 import '../utils/Theme.dart';
+import '../utils/me.dart';
 
 // Widgets
 import '../widgets/profileCounters.dart';
@@ -12,50 +12,73 @@ class OwnProfileInformations extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Container(
-          width: 70,
-          height: 70,
-          child: SvgPicture.asset("assets/user/kyros.svg"),
+        Row(
+          children: <Widget>[
+            Container(
+              margin: const EdgeInsets.only(right: 20),
+              width: 70,
+              height: 70,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                image: DecorationImage(
+                  image: NetworkImage(me.profileImage),
+                ),
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  me.username,
+                  style: TextStyle(
+                    color: CustomTheme.white,
+                    fontSize: CustomTheme.titleSize,
+                  ),
+                ),
+                Text(
+                  me.profession,
+                  style: TextStyle(
+                    color: CustomTheme.gray,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w100,
+                  ),
+                ),
+              ],
+            )
+          ],
         ),
         Container(
           margin: EdgeInsets.symmetric(vertical: 20),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                "Kyros Design",
-                style: TextStyle(
-                  color: CustomTheme.white,
-                  fontSize: CustomTheme.titleSize,
-                ),
-              ),
-              Text(
-                "UI Designer",
-                style: TextStyle(
-                    color: CustomTheme.gray,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w100),
-              ),
               Container(
                 width: 250,
                 padding: EdgeInsets.symmetric(vertical: 20),
                 child: Column(
                   children: <Widget>[
                     Text(
-                      "📱 The app for every Digital Designer. Create 🎨, Share 🗣️ and have fun with Designers 👩‍🎨 from all the world 🌐.",
+                      me.biography,
                       style: TextStyle(
                         color: CustomTheme.gray,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    ProfileCounters(
-                      followersCounter: 342,
-                      postsCounter: 263,
-                      likesCounter: 642,
+                      textAlign: TextAlign.left,
                     ),
                   ],
                 ),
+              ),
+              Container(
+                width: double.infinity,
+                child: ProfileCounters(
+                  followersCounter: me.followers,
+                  postsCounter: me.postsCounter,
+                  likesCounter: me.likes,
+                ),
+              ),
+              SizedBox(
+                height: 20,
               ),
               RichText(
                 text: TextSpan(
@@ -73,11 +96,26 @@ class OwnProfileInformations extends StatelessWidget {
                       text: ".",
                       style: TextStyle(
                         color: CustomTheme.mainColor,
-                      )
-                    )
+                      ),
+                    ),
                   ],
                 ),
               ),
+              /* GridView.count(
+                primary: false,
+                padding: const EdgeInsets.all(20),
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                crossAxisCount: 3,
+                childAspectRatio: 1 / 1,
+                children: <Widget>[
+                  ...(me.posts).map((post) {
+                    return Container(
+                      color: Colors.red,
+                    );
+                  }).toList()
+                ],
+              ), */
             ],
           ),
         ),

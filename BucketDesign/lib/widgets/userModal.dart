@@ -138,7 +138,7 @@ class _UserModalState extends State<UserModal> {
                             color: CustomTheme.white,
                           ),
                           Text(
-                            "${widget.t.posts}",
+                            "${widget.t.postsCounter}",
                             style: TextStyle(
                               color: CustomTheme.white,
                               fontSize: CustomTheme.subtitleSize,

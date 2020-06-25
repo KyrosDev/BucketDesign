@@ -52,10 +52,15 @@ class _ChatPreviewWidgetState extends State<ChatPreviewWidget> {
                 Positioned(
                   right: 0,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 4),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 3, horizontal: 4),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       color: CustomTheme.mainColor,
+                      border: Border.all(
+                        color: CustomTheme.darkGray,
+                        width: 3,
+                      ),
                     ),
                     child: Text(
                       "10",
@@ -75,11 +80,23 @@ class _ChatPreviewWidgetState extends State<ChatPreviewWidget> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    "Kyros Design",
-                    style: TextStyle(
-                      color: CustomTheme.white,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        "Kyros Design",
+                        style: TextStyle(
+                          color: CustomTheme.white,
+                        ),
+                      ),
+                      Text(
+                        "2 Day Ago",
+                        style: TextStyle(
+                          color: CustomTheme.white.withOpacity(.6),
+                          fontSize: 10,
+                        ),
+                      )
+                    ],
                   ),
                   Text(
                     "Hello, how are you?asd asd asd ags gsfd ",

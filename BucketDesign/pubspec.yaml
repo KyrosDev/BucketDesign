@@ -54,6 +54,7 @@ flutter:
    - assets/user/mds.svg
    - assets/user/morgan.svg
    - assets/images/ui.png
+   - assets/images/logo.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

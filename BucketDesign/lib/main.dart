@@ -32,7 +32,23 @@ class _MyAppState extends State<MyApp> {
         PostPage.routeName: (context) => PostPage(),
         FullImageViewer.routeName: (context) => FullImageViewer(),
         UserChat.routeName: (context) => UserChat(),
-      }
+      },
+      onUnknownRoute: (RouteSettings settings) {
+        return MaterialPageRoute<void>(
+          settings: settings,
+          builder: (BuildContext context) => Scaffold(
+            body: Center(
+              child: Text(
+                'Not Found\n go back',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

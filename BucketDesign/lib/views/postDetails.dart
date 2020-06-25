@@ -190,24 +190,27 @@ class _PostPageState extends State<PostPage> {
                 GestureDetector(
                   onTap: () => Navigator.of(context)
                       .pushNamed(FullImageViewer.routeName, arguments: {
-                    "title": post.title,
+                    "post": post,
                     "url": post.attachments[_currentIndex]
                   }),
                   onDoubleTap: _liked ? () => {} : _like,
                   onHorizontalDragEnd: (DragEndDetails details) =>
                       _changeImageByScroll(details),
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.transparent,
-                      image: DecorationImage(
-                        image: NetworkImage(post.attachments[_currentIndex]),
-                        fit: BoxFit.cover,
+                  child: Hero(
+                    tag: "image${post.id}",
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.transparent,
+                        image: DecorationImage(
+                          image: NetworkImage(post.attachments[_currentIndex]),
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                    child: AspectRatio(
-                      aspectRatio: 16 / 9,
+                      child: AspectRatio(
+                        aspectRatio: 16 / 9,
+                      ),
                     ),
                   ),
                 ),

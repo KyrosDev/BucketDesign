@@ -42,11 +42,18 @@ class _MainAppBarState extends State<MainAppBar> {
                 width: 30,
                 height: 30,
                 radius: 5,
-                color: CustomTheme.white,
+                color: Colors.transparent,
+                shadow: [
+                  BoxShadow(
+                    blurRadius: 10,
+                    offset: const Offset(0,0),
+                    color: Colors.black,
+                  )
+                ],
                 child: Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("assets/images/ui.png"),
+                      image: AssetImage("assets/images/logo.png"),
                       fit: BoxFit.contain,
                       alignment: Alignment.center,
                     ),

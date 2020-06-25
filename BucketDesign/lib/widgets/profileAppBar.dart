@@ -17,9 +17,13 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 90,
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+        padding: EdgeInsets.symmetric(
+          horizontal: 30,
+          vertical: 10,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Utils
 import '../utils/Theme.dart';
+import '../utils/me.dart';
 
 // Widgets
 import '../utils/roundRect.dart';
@@ -21,7 +22,8 @@ class _MainAppBarState extends State<MainAppBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 20.0),
+      height: 90,
+      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       child: Container(
         padding: EdgeInsets.only(left: 30, right: 30),
         child: Row(
@@ -46,14 +48,14 @@ class _MainAppBarState extends State<MainAppBar> {
                 shadow: [
                   BoxShadow(
                     blurRadius: 10,
-                    offset: const Offset(0,0),
+                    offset: const Offset(0, 0),
                     color: Colors.black,
-                  )
+                  ),
                 ],
                 child: Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("assets/images/logo.png"),
+                      image: NetworkImage(me.profileImage),
                       fit: BoxFit.contain,
                       alignment: Alignment.center,
                     ),
@@ -63,9 +65,6 @@ class _MainAppBarState extends State<MainAppBar> {
             ),
           ],
         ),
-      ),
-      decoration: BoxDecoration(
-        color: CustomTheme.darkGray,
       ),
     );
   }

@@ -1,16 +1,16 @@
 // Packages
-import 'package:BucketDesign/widgets/chat_preview_widget.dart';
+import '../widgets/chat_preview_widget.dart';
 import 'package:flutter/material.dart';
 
 // Utils
-import '../utils/Theme.dart';
+import '../../utils/Theme.dart';
 
-class ChatView extends StatefulWidget {
+class ChatRoomsView extends StatefulWidget {
   @override
-  _ChatViewState createState() => _ChatViewState();
+  _ChatRoomsViewState createState() => _ChatRoomsViewState();
 }
 
-class _ChatViewState extends State<ChatView> {
+class _ChatRoomsViewState extends State<ChatRoomsView> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

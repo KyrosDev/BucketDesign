@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../utils/Theme.dart';
 
 // Widgets
-import '../widgets/messages_list.dart';
+import '../chat/widgets/messages_list.dart';
 
 class UserChat extends StatefulWidget {
   static const routeName = "/chat/";

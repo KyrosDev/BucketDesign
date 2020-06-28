@@ -7,7 +7,7 @@ import '../utils/Theme.dart';
 // Views
 import './search.dart';
 import './upload.dart';
-import './chat.dart';
+import '../chat/views/chatRooms.dart';
 import './profile.dart';
 
 // Widgets
@@ -37,7 +37,7 @@ class _HomeState extends State<Home> {
         "title": "Search",
       },
       {
-        "page": ChatView(),
+        "page": ChatRoomsView(),
         "title": "Chat",
       },
       {

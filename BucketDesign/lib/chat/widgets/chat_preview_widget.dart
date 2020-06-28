@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 
 // Utils
-import '../utils/Theme.dart';
+import '../../utils/Theme.dart';
 
 // Views
-import '../views/user_chat.dart';
+import '../../views/user_chat.dart';
 
 class ChatPreviewWidget extends StatefulWidget {
   @override

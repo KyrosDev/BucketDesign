@@ -11,6 +11,8 @@ class ChatRoomsView extends StatefulWidget {
 }
 
 class _ChatRoomsViewState extends State<ChatRoomsView> {
+  bool search = false;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -55,16 +57,23 @@ class _ChatRoomsViewState extends State<ChatRoomsView> {
                     ),
                     IconButton(
                       icon: Icon(
-                        Icons.add,
+                        Icons.search,
                         color: Colors.white,
                       ),
-                      onPressed: () => {},
+                      onPressed: () => setState(() {
+                        search = !search;
+                      }),
                     ),
                   ],
                 ),
               ],
             ),
           ),
+          if (search)
+            Text(
+              "Helo",
+              style: TextStyle(color: Colors.white),
+            ),
           for (int i = 0; i < 4; i++) ChatPreviewWidget(),
         ],
       ),

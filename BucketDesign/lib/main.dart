@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 // Views
 import './views/home.dart';
-import './views/editProfile.dart';
+import 'settings/views/settings.dart';
 import './views/postDetails.dart';
 import './views/fullPhoto.dart';
 import './views/user_chat.dart';
@@ -29,7 +29,7 @@ class _MyAppState extends State<MyApp> {
       ),
       routes: {
         "/": (context) => Home(),
-        EditProfileView.routeName: (context) => EditProfileView(),
+        Settings.routeName: (context) => Settings(),
         PostPage.routeName: (context) => PostPage(),
         FullImageViewer.routeName: (context) => FullImageViewer(),
         UserChat.routeName: (context) => UserChat(),

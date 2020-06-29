@@ -1,4 +1,5 @@
 // Packages
+import 'package:BucketDesign/helper/helperFunctions.dart';
 import 'package:flutter/material.dart';
 
 // Views
@@ -19,6 +20,19 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  bool userIsLoggedIn;
+
+  @override
+  void initState() {
+    Future value = HelperFunctions.getUserLoggedInSharedPreference();
+    value.then((v) {
+      setState(() {
+        userIsLoggedIn = v;
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,6 +42,7 @@ class _MyAppState extends State<MyApp> {
         fontFamily: "Sailec",
         canvasColor: Colors.transparent,
       ),
+      initialRoute: userIsLoggedIn ? Home.routeName : "/",
       routes: {
         "/": (context) => Authenticate(),
         Home.routeName: (context) => Home(),

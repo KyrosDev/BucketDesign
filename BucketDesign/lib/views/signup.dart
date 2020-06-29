@@ -8,6 +8,9 @@ import '../utils/Theme.dart';
 import '../services/auth.dart';
 import '../services/database.dart';
 
+// Helper
+import '../helper/helperFunctions.dart';
+
 // Views
 import 'home.dart';
 
@@ -46,6 +49,10 @@ class _SignUpState extends State<SignUp> {
               "username": _usernameController.text,
               "email": _emailController.text,
             };
+
+            HelperFunctions.saveUserEmailSharedPreference(_emailController.text);
+            HelperFunctions.saveUsernameSharedPreference(_usernameController.text);
+
             dbMethods.uploadUserInfo(newDesigner);
             Navigator.pushReplacementNamed(context, Home.routeName);
           });

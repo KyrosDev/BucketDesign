@@ -1,16 +1,15 @@
 // Packages
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 // Utils
-import '../utils/Theme.dart';
-import '../utils/roundRect.dart';
+//import '../utils/Theme.dart';
+//import '../utils/roundRect.dart';
 
 // Models
-import '../models/Designer.dart';
+//import '../models/Designer.dart';
 
 // Widgets
-import './userModal.dart';
+//import './userModal.dart';
 
 class SearchResult extends StatefulWidget {
   final String res;
@@ -83,14 +82,14 @@ class _SearchResultState extends State<SearchResult> {
 
   bool following = false;
 
-  void _showModal(Designer t) {
+  /* void _showModal(Designer t) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
         return UserModal(t);
       },
     );
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {

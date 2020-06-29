@@ -1,4 +1,5 @@
 // Packages
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 // Utils
@@ -6,6 +7,10 @@ import '../utils/Theme.dart';
 
 // Services
 import '../services/auth.dart';
+import '../services/database.dart';
+
+// Helper
+import '../helper/helperFunctions.dart';
 
 // Views
 import '../views/home.dart';
@@ -25,24 +30,35 @@ class _SignInState extends State<SignIn> {
 
   bool _obscurePass = true;
   bool _isLoading = false;
+  QuerySnapshot snapshotUserInfo;
 
   AuthMethods authMethods = AuthMethods();
+  DBMethods dbMethods = DBMethods();
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
   signMeIn() {
     if (formKey.currentState.validate()) {
+      HelperFunctions.saveUserEmailSharedPreference(_emailController.text);
       setState(() {
         _isLoading = true;
       });
 
-      authMethods
-          .signUpWithEmailAndPassword(
-              _emailController.text, _passwordController.text)
-          .then((val) {
-        Navigator.pushReplacementNamed(context, Home.routeName);
+      dbMethods.getUserByUserEmail(_emailController.text).then((designer) {
+        snapshotUserInfo = designer;
+        HelperFunctions.saveUserEmailSharedPreference(
+            snapshotUserInfo.documents[0].data["email"]);
       });
+
+      authMethods
+          .signInWithEmailAndPassword(_emailController.text, _passwordController.text)
+          .then((val) {
+        if (val != null) {
+          HelperFunctions.saveUserLoggedInSharedPreference(true);
+          Navigator.pushReplacementNamed(context, Home.routeName);
+        }
+      }).catchError((e) => print(e.toString()));
     }
   }
 

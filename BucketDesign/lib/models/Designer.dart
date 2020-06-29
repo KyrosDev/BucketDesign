@@ -27,6 +27,8 @@ class Designer {
   final int postsCounter;
   final int likes;
   final Color color;
+  final String email;
+  final String password;
 
   String get profession {
     String val = "";
@@ -63,9 +65,16 @@ class Designer {
     this.follows = 0,
     this.posts,
     this.likes = 0,
-    @required this.userProfession,
+    this.userProfession,
     this.postsCounter,
     this.professionShortcode,
-    this.color
+    this.color,
+    @required this.email,
+    @required this.password
   });
+}
+
+class TestDesigner{
+  final String id;
+  TestDesigner(this.id);
 }

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Views
+import './helper/authenticate.dart';
 import './views/home.dart';
 import 'settings/views/settings.dart';
 import './views/postDetails.dart';
@@ -28,7 +29,8 @@ class _MyAppState extends State<MyApp> {
         canvasColor: Colors.transparent,
       ),
       routes: {
-        "/": (context) => Home(),
+        "/": (context) => Authenticate(),
+        Home.routeName: (context) => Home(),
         Settings.routeName: (context) => Settings(),
         PostPage.routeName: (context) => PostPage(),
         FullImageViewer.routeName: (context) => FullImageViewer(),

@@ -16,6 +16,8 @@ import '../widgets/mainAppBar.dart';
 import '../widgets/profileAppBar.dart';
 
 class Home extends StatefulWidget {
+  static const routeName = "/home";
+
   @override
   _HomeState createState() => _HomeState();
 }

@@ -32,7 +32,7 @@ class _MainAppBarState extends State<MainAppBar> {
               width: 200.0,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/icons/icon.png'),
+                  image: AssetImage('assets/images/icons/long_main_color_text_logo.png'),
                   fit: BoxFit.contain,
                 ),
               ),

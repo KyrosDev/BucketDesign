@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "880077369467",
+    "firebase_url": "https://bucketdesign-app.firebaseio.com",
+    "project_id": "bucketdesign-app",
+    "storage_bucket": "bucketdesign-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:880077369467:android:bf0ada7dd57a1e5b16f2de",
+        "android_client_info": {
+          "package_name": "com.example.BucketDesign"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "880077369467-sgblijteogk8rf023bta81ghpr46d3q0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhTIaJTEPBTFactOgElzrX3FLwyLdjSd8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "880077369467-sgblijteogk8rf023bta81ghpr46d3q0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

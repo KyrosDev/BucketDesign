@@ -23,7 +23,7 @@ class SearchResult extends StatefulWidget {
 }
 
 class _SearchResultState extends State<SearchResult> {
-  final List<Designer> designers = [
+  /* final List<Designer> designers = [
     Designer(
       username: "Kyros Design",
       id: DateTime.now().toString(),
@@ -79,7 +79,7 @@ class _SearchResultState extends State<SearchResult> {
       professionShortcode: "animation_graphic_design",
       color: Colors.green,
     )
-  ];
+  ]; */
 
   bool following = false;
 
@@ -121,7 +121,7 @@ class _SearchResultState extends State<SearchResult> {
               ],
             ),
           ),
-          ...designers.where((u) {
+          /* ...designers.where((u) {
             if (widget.shortcode != "") {
               return u.professionShortcode.contains(widget.shortcode);
             } else {
@@ -175,7 +175,7 @@ class _SearchResultState extends State<SearchResult> {
                 ),
               ),
             );
-          }).toList(),
+          }).toList(), */
         ],
       ),
     );

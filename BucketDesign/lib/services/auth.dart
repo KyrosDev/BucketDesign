@@ -1,4 +1,6 @@
 // Packages
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 // Models
@@ -11,6 +13,7 @@ class AuthMethods {
     return designer != null ? TestDesigner(designer.uid) : null;
   }
 
+  // LOGIN AUTHENTICATION
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
       AuthResult result = await _auth.signInWithEmailAndPassword(
@@ -19,19 +22,40 @@ class AuthMethods {
       );
       FirebaseUser firebaseDesigner = result.user;
       return _designerFromFirebaseDesigner(firebaseDesigner);
-    } catch (e) {
-      print(e.toString());
+    } catch (err) {
+      if (err is PlatformException) {
+        if (err.code == "ERROR_USER_NOT_FOUND") {
+          return {"error": "User doesn't found. Try again."};
+        } else if (err.code == "ERROR_WRONG_PASSWORD") {
+          return {"error": "The password is invalid. Try again."};
+        } else {
+          print("$err, ${err.code}");
+        }
+      }
     }
   }
 
-  Future signUpWithEmailAndPassword(String email, String password) async {
+  // REGISTER AUTHENTICATION
+  Future signUpWithEmailAndPassword(
+      String username, String email, String password) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
+        email: email,
+        password: password,
+      );
       FirebaseUser firebaseDesigner = result.user;
       return _designerFromFirebaseDesigner(firebaseDesigner);
-    } catch (e) {
-      print(e.toString());
+    } catch (signUpError) {
+      dynamic snap = await Firestore.instance
+          .collection("designers")
+          .where("name", isEqualTo: username)
+          .getDocuments();
+      print(snap);
+      if (signUpError is PlatformException) {
+        if (signUpError.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
+          return {"error": "Email already in use. Try Again."};
+        }
+      }
     }
   }
 

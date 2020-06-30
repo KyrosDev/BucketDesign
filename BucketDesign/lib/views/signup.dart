@@ -16,7 +16,9 @@ import 'home.dart';
 
 class SignUp extends StatefulWidget {
   final Function callback;
-  SignUp(this.callback);
+  SignUp({
+    this.callback,
+  });
 
   @override
   _SignUpState createState() => _SignUpState();
@@ -26,6 +28,7 @@ class _SignUpState extends State<SignUp> {
   final formKey = GlobalKey<FormState>();
   bool _obscurePass = true;
   bool _isLoading = false;
+  String _error;
 
   AuthMethods authMethods = AuthMethods();
   DBMethods dbMethods = DBMethods();
@@ -41,21 +44,29 @@ class _SignUpState extends State<SignUp> {
       });
 
       authMethods
-          .signUpWithEmailAndPassword(
+          .signUpWithEmailAndPassword(_usernameController.text,
               _emailController.text, _passwordController.text)
           .then((val) {
-
-            Map<String, String> newDesigner = {
-              "username": _usernameController.text,
-              "email": _emailController.text,
-            };
-
-            HelperFunctions.saveUserEmailSharedPreference(_emailController.text);
-            HelperFunctions.saveUsernameSharedPreference(_usernameController.text);
-
-            dbMethods.uploadUserInfo(newDesigner);
-            Navigator.pushReplacementNamed(context, Home.routeName);
+        try {
+          print(val["error"]);
+          setState(() {
+            _error = val["error"];
+            _isLoading = false;
           });
+        } catch (e) {
+          Map<String, String> newDesigner = {
+            "username": _usernameController.text,
+            "email": _emailController.text,
+          };
+
+          HelperFunctions.saveUserEmailSharedPreference(_emailController.text);
+          HelperFunctions.saveUsernameSharedPreference(
+              _usernameController.text);
+
+          dbMethods.uploadUserInfo(newDesigner);
+          Navigator.pushReplacementNamed(context, Home.routeName);
+        }
+      });
     }
   }
 
@@ -97,7 +108,16 @@ class _SignUpState extends State<SignUp> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      SizedBox(height: 40),
+                      SizedBox(height: 20),
+                      if (_error != null)
+                        Text(
+                          _error,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 24,
+                          ),
+                        ),
+                      SizedBox(height: 20),
                       Form(
                         key: formKey,
                         child: Column(

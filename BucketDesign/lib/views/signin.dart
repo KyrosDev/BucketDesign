@@ -31,6 +31,7 @@ class _SignInState extends State<SignIn> {
   bool _obscurePass = true;
   bool _isLoading = false;
   QuerySnapshot snapshotUserInfo;
+  String _error;
 
   AuthMethods authMethods = AuthMethods();
   DBMethods dbMethods = DBMethods();
@@ -41,22 +42,37 @@ class _SignInState extends State<SignIn> {
   signMeIn() {
     if (formKey.currentState.validate()) {
       HelperFunctions.saveUserEmailSharedPreference(_emailController.text);
+
       setState(() {
         _isLoading = true;
       });
 
-      dbMethods.getUserByUserEmail(_emailController.text).then((designer) {
-        snapshotUserInfo = designer;
+      dbMethods.getUserByUserEmail(_emailController.text).then((val) {
+        setState(() {
+          snapshotUserInfo = val;
+        });
         HelperFunctions.saveUserEmailSharedPreference(
             snapshotUserInfo.documents[0].data["email"]);
       });
 
       authMethods
-          .signInWithEmailAndPassword(_emailController.text, _passwordController.text)
+          .signInWithEmailAndPassword(
+              _emailController.text, _passwordController.text)
           .then((val) {
         if (val != null) {
-          HelperFunctions.saveUserLoggedInSharedPreference(true);
-          Navigator.pushReplacementNamed(context, Home.routeName);
+          try {
+            if (val["error"] is String) {
+              setState(() {
+                _error = val["error"];
+                _isLoading = false;
+                _emailController.clear();
+                _passwordController.clear();
+              });
+            }
+          } catch (NoSuchMethodError) {
+            HelperFunctions.saveUserLoggedInSharedPreference(true);
+            Navigator.pushReplacementNamed(context, Home.routeName);
+          }
         }
       }).catchError((e) => print(e.toString()));
     }
@@ -100,7 +116,16 @@ class _SignInState extends State<SignIn> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      SizedBox(height: 40),
+                      SizedBox(height: 20),
+                      if (_error != null)
+                        Text(
+                          _error,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 20,
+                          ),
+                        ),
+                      SizedBox(height: 20),
                       Form(
                         key: formKey,
                         child: Column(
@@ -162,7 +187,7 @@ class _SignInState extends State<SignIn> {
                                     ),
                                   ),
                                   FlatButton(
-                                    onPressed: () => {},
+                                    onPressed: () => print("porcoddio"),
                                     child: Text(
                                       "Forget Password?",
                                       style: TextStyle(
@@ -220,7 +245,7 @@ class _SignInState extends State<SignIn> {
                             ),
                             SizedBox(height: 50),
                             GestureDetector(
-                              onTap: () => signMeIn(),
+                              onTap: signMeIn,
                               child: Container(
                                 width: 350,
                                 padding:

@@ -1,12 +1,19 @@
 // Packages
 import 'dart:io';
-//import 'dart:convert';
-//import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 
 // Utils
 import '../../utils/Theme.dart';
+
+// Services
+import '../../services/auth.dart';
+
+// Helper
+import '../../helper/helperFunctions.dart';
+
+// Views
+import '../../helper/authenticate.dart';
 
 class Settings extends StatefulWidget {
   static const routeName = "/profile/edit";
@@ -20,6 +27,7 @@ class _SettingsState extends State<Settings> {
 
   File _file;
   final picker = ImagePicker();
+  AuthMethods authMethods = AuthMethods();
 
   void choose() async {
     final PickedFile _picked =
@@ -57,7 +65,8 @@ class _SettingsState extends State<Settings> {
                   ),
                   child: _file == null
                       ? Center(
-                          child: Text("No image Selected", style: TextStyle(color: Colors.white)),
+                          child: Text("No image Selected",
+                              style: TextStyle(color: Colors.white)),
                         )
                       : Image.file(
                           _file,
@@ -83,6 +92,19 @@ class _SettingsState extends State<Settings> {
                   ),
                 ),
               ],
+            ),
+            RaisedButton(
+              onPressed: () async {
+                await authMethods.signOut();
+                await HelperFunctions.saveUserLoggedInSharedPreference(false);
+                Navigator.of(context)
+                    .pushReplacementNamed(Authenticate.routeName);
+              },
+              color: CustomTheme.mainColor,
+              child: Text(
+                "Log Out",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),

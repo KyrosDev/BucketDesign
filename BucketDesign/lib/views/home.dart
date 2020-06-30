@@ -74,17 +74,6 @@ class _HomeState extends State<Home> {
       ),
       backgroundColor: CustomTheme.darkGray,
       body: profile ? ProfileView() : _pages[_page]["page"],
-      floatingActionButton: profile
-          ? null
-          : FloatingActionButton(
-              onPressed: () {},
-              tooltip: "Upload an image",
-              child: Icon(
-                Icons.add,
-                color: CustomTheme.white,
-                size: 30,
-              ),
-            ),
       bottomNavigationBar: profile
           ? null
           : BottomNavigationBar(
@@ -133,7 +122,6 @@ class _HomeState extends State<Home> {
                 ),
               ],
             ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

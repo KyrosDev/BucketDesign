@@ -6,6 +6,7 @@ enum MessageType {
   MediaMessage,
   VoiceMessage,
   LinkMessage,
+  ReplyiedMessage,
 }
 
 class Message {
@@ -15,9 +16,6 @@ class Message {
   final DateTime date;
   final String message;
   final MessageType messageType;
-  final bool viewed;
-  final DateTime editTime;
-  final bool editedText;
 
   Message({
     @required this.id,
@@ -26,8 +24,5 @@ class Message {
     @required this.date,
     @required this.message,
     this.messageType,
-    this.viewed,
-    this.editTime,
-    this.editedText,
   });
 }

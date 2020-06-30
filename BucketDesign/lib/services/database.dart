@@ -3,9 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DBMethods {
   getUserByUsername(String username) async {
-    return await Firestore.instance
+    return Firestore.instance
         .collection("designers")
-        .where("name", isEqualTo: username)
+        .where("username", isEqualTo: username)
         .getDocuments();
   }
 
@@ -22,5 +22,31 @@ class DBMethods {
         .add(designer)
         .then((e) => print("Registred Succesuly. $e"))
         .catchError((e) => print(e.toString()));
+  }
+
+  sendMessage(String chatroomId, Map<String, dynamic> message) async {
+    return await Firestore.instance
+        .collection("chatrooms")
+        .document(chatroomId)
+        .collection("chats")
+        .add(message)
+        .catchError((e) => print(e.toString()));
+  }
+
+  createRoom(String chatRoomId, Map<String, dynamic> chatRoomMap) {
+    Firestore.instance
+        .collection("chatrooms")
+        .document(chatRoomId)
+        .setData(chatRoomMap)
+        .catchError((e) => print(e.toString()));
+  }
+
+  getMessages(String chatroomId) async {
+    return await Firestore.instance
+        .collection("chatrooms")
+        .document(chatroomId)
+        .collection("chats")
+        .orderBy("date", descending: false)
+        .snapshots();
   }
 }

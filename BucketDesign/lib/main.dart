@@ -1,14 +1,19 @@
 // Packages
-import 'package:BucketDesign/helper/helperFunctions.dart';
 import 'package:flutter/material.dart';
 
 // Views
 import './helper/authenticate.dart';
 import './views/home.dart';
-import 'settings/views/settings.dart';
+import './settings/views/settings.dart';
 import './views/postDetails.dart';
 import './views/fullPhoto.dart';
 import './views/user_chat.dart';
+
+// Chat View
+import './chat/views/conversation.dart';
+
+// Helper
+import './helper/helperFunctions.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,17 +25,38 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool userIsLoggedIn;
+  bool userIsLoggedIn = false;
+  int index;
+  List<Map<String, dynamic>> routes = [
+    {
+      "path": Home.routeName,
+      "view": Home(),
+    },
+    {
+      "path": Authenticate.routeName,
+      "view": Authenticate(),
+    },
+  ];
 
   @override
   void initState() {
-    Future value = HelperFunctions.getUserLoggedInSharedPreference();
-    value.then((v) {
-      setState(() {
-        userIsLoggedIn = v;
-      });
-    });
+    getLoggedInState();
     super.initState();
+  }
+
+  getLoggedInState() async {
+    await HelperFunctions.getUserLoggedInSharedPreference().then((value) {
+      setState(() {
+        userIsLoggedIn = value;
+        if (userIsLoggedIn == true && value == true)
+          index = 0;
+        else
+          index = 1;
+      });
+      print("userIsLoggedIn $userIsLoggedIn");
+      print("value $value");
+      setState(() {});
+    }).catchError((e) => print(e.toString()));
   }
 
   @override
@@ -42,14 +68,13 @@ class _MyAppState extends State<MyApp> {
         fontFamily: "Sailec",
         canvasColor: Colors.transparent,
       ),
-      initialRoute: userIsLoggedIn ? Home.routeName : "/",
+      initialRoute: routes[index]["path"],
       routes: {
-        "/": (context) => Authenticate(),
         Home.routeName: (context) => Home(),
+        Authenticate.routeName: (context) => Authenticate(),
         Settings.routeName: (context) => Settings(),
         PostPage.routeName: (context) => PostPage(),
         FullImageViewer.routeName: (context) => FullImageViewer(),
-        UserChat.routeName: (context) => UserChat(),
       },
       onUnknownRoute: (RouteSettings settings) {
         return MaterialPageRoute<void>(

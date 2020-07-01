@@ -1,9 +1,14 @@
 // Packages
-import 'package:BucketDesign/chat/models/Message.dart';
-import 'package:BucketDesign/helper/constants.dart';
-import 'package:BucketDesign/services/database.dart';
-import 'package:BucketDesign/utils/Theme.dart';
 import 'package:flutter/material.dart';
+
+// Utils
+import '../../utils/Theme.dart';
+
+// Helper
+import '../../helper/constants.dart';
+
+// Services
+import '../../services/database.dart';
 
 class Converastion extends StatefulWidget {
   final String chatroomId;
@@ -19,18 +24,20 @@ class _ConverastionState extends State<Converastion> {
 
   Stream chatMessagesStream;
 
-  Widget ChatMessagesList() {
+  Widget chatMessagesList() {
     return StreamBuilder(
       stream: chatMessagesStream,
       builder: (context, snapshot) {
         return snapshot.hasData
             ? ListView.builder(
+                physics: BouncingScrollPhysics(),
                 itemCount: snapshot.data.documents.length,
                 itemBuilder: (context, index) {
                   print(snapshot.data.documents[index].data["text"]);
                   return MessageTile(
                     snapshot.data.documents[index].data["text"],
                     snapshot.data.documents[index].data["fromUsername"],
+                    snapshot.data.documents[index].data["date"],
                   );
                 },
               )
@@ -56,6 +63,11 @@ class _ConverastionState extends State<Converastion> {
     dbMethods.getMessages(widget.chatroomId).then((value) {
       setState(() {
         chatMessagesStream = value;
+      });
+    }).catchError((e) => print(e.toString()));
+    dbMethods.getChatRooms(Constants.myUsername).then((val) {
+      setState(() {
+        chatMessagesStream = val;
       });
     }).catchError((e) => print(e.toString()));
     super.initState();
@@ -85,7 +97,7 @@ class _ConverastionState extends State<Converastion> {
       backgroundColor: CustomTheme.darkGray,
       body: Stack(
         children: <Widget>[
-          ChatMessagesList(),
+          chatMessagesList(),
           Container(
             alignment: Alignment.bottomCenter,
             child: TextField(
@@ -130,10 +142,31 @@ class _ConverastionState extends State<Converastion> {
   }
 }
 
-class MessageTile extends StatelessWidget {
+class MessageTile extends StatefulWidget {
   final String text;
   final String myMessage;
-  MessageTile(this.text, this.myMessage);
+  final int date;
+  MessageTile(this.text, this.myMessage, this.date);
+
+  @override
+  _MessageTileState createState() => _MessageTileState();
+}
+
+class _MessageTileState extends State<MessageTile> {
+  String time;
+
+  @override
+  void initState() {
+    getTimeMessage();
+    super.initState();
+  }
+
+  getTimeMessage() {
+    setState(() {
+      time =
+          "${DateTime.fromMillisecondsSinceEpoch(widget.date).hour.toString()}:${DateTime.fromMillisecondsSinceEpoch(widget.date).minute.toString()}";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +175,7 @@ class MessageTile extends StatelessWidget {
         horizontal: 20,
         vertical: 5,
       ),
-      alignment: myMessage == Constants.myUsername
+      alignment: widget.myMessage == Constants.myUsername
           ? Alignment.centerRight
           : Alignment.centerLeft,
       child: Container(
@@ -153,10 +186,10 @@ class MessageTile extends StatelessWidget {
           horizontal: 16,
         ),
         decoration: BoxDecoration(
-          color: myMessage == Constants.myUsername
+          color: widget.myMessage == Constants.myUsername
               ? CustomTheme.mainColor
               : Colors.white12,
-          borderRadius: myMessage == Constants.myUsername
+          borderRadius: widget.myMessage == Constants.myUsername
               ? BorderRadius.only(
                   bottomLeft: Radius.circular(10),
                   topLeft: Radius.circular(10),
@@ -168,11 +201,22 @@ class MessageTile extends StatelessWidget {
                   topRight: Radius.circular(10),
                 ),
         ),
-        child: Text(
-          text,
-          style: TextStyle(
-            color: Colors.white,
-          ),
+        child: Column(
+          children: <Widget>[
+            Text(
+              widget.text,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            Text(
+              time,
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                color: Colors.white.withOpacity(.6),
+              ),
+            ),
+          ],
         ),
       ),
     );

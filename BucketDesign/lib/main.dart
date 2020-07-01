@@ -1,4 +1,5 @@
 // Packages
+import 'package:BucketDesign/views/initial_loading.dart';
 import 'package:flutter/material.dart';
 
 // Views
@@ -7,10 +8,6 @@ import './views/home.dart';
 import './settings/views/settings.dart';
 import './views/postDetails.dart';
 import './views/fullPhoto.dart';
-import './views/user_chat.dart';
-
-// Chat View
-import './chat/views/conversation.dart';
 
 // Helper
 import './helper/helperFunctions.dart';
@@ -26,15 +23,16 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool userIsLoggedIn = false;
-  int index;
+  int index = 0;
   List<Map<String, dynamic>> routes = [
     {
+      "path": Loading.routeName,
+    },
+    {
       "path": Home.routeName,
-      "view": Home(),
     },
     {
       "path": Authenticate.routeName,
-      "view": Authenticate(),
     },
   ];
 
@@ -48,14 +46,14 @@ class _MyAppState extends State<MyApp> {
     await HelperFunctions.getUserLoggedInSharedPreference().then((value) {
       setState(() {
         userIsLoggedIn = value;
-        if (userIsLoggedIn == true && value == true)
-          index = 0;
-        else
-          index = 1;
       });
-      print("userIsLoggedIn $userIsLoggedIn");
-      print("value $value");
-      setState(() {});
+      setState(() {
+        if (userIsLoggedIn == true && value == true)
+          index = 1;
+        else
+          index = 2;
+      });
+      print(index);
     }).catchError((e) => print(e.toString()));
   }
 
@@ -70,6 +68,7 @@ class _MyAppState extends State<MyApp> {
       ),
       initialRoute: routes[index]["path"],
       routes: {
+        Loading.routeName: (context) => Loading(),
         Home.routeName: (context) => Home(),
         Authenticate.routeName: (context) => Authenticate(),
         Settings.routeName: (context) => Settings(),

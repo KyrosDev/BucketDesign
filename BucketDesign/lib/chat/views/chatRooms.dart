@@ -1,13 +1,19 @@
 // Packages
-import 'package:BucketDesign/chat/views/conversation.dart';
-import 'package:BucketDesign/helper/constants.dart';
-import 'package:BucketDesign/helper/helperFunctions.dart';
-import 'package:BucketDesign/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 // Utils
 import '../../utils/Theme.dart';
+
+// Views
+import '../../chat/views/conversation.dart';
+
+// Helper
+import '../../helper/constants.dart';
+import '../../helper/helperFunctions.dart';
+
+// Services
+import '../../services/database.dart';
 
 class SearchList extends StatefulWidget {
   final QuerySnapshot snapshot;
@@ -26,7 +32,8 @@ class _SearchListState extends State<SearchList> {
             itemCount: widget.snapshot.documents.length,
             itemBuilder: (context, index) {
               return ChatTile(
-                  widget.snapshot.documents[index].data["username"]);
+                widget.snapshot.documents[index].data["username"],
+              );
             },
           )
         : Container();
@@ -43,6 +50,24 @@ class _ChatRoomsViewState extends State<ChatRoomsView> {
   QuerySnapshot snapshot;
 
   DBMethods dbMethods = new DBMethods();
+
+  Stream chatRooms;
+
+  Widget chatRoomsList() {
+    return StreamBuilder(
+      stream: chatRooms,
+      builder: (context, snapshot) {
+        return ListView.builder(
+          itemCount: snapshot.data.documents.length,
+          itemBuilder: (context, index) {
+            return ChatTile(
+              snapshot.data.documents[index].data["username"],
+            );
+          },
+        );
+      },
+    );
+  }
 
   searchResults(String username) {
     dbMethods.getUserByUsername(username).then((val) {

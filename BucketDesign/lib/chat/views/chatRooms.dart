@@ -15,6 +15,58 @@ import '../../helper/helperFunctions.dart';
 // Services
 import '../../services/database.dart';
 
+class ChatRoomsList extends StatefulWidget {
+  final String chatroomId;
+  ChatRoomsList(this.chatroomId);
+
+  @override
+  _ChatRoomsListState createState() => _ChatRoomsListState();
+}
+
+class _ChatRoomsListState extends State<ChatRoomsList> {
+  Stream chatRoomsStream;
+  DBMethods dbMethods = DBMethods();
+
+  @override
+  void initState() {
+    loadChats();
+    super.initState();
+  }
+
+  loadChats() {
+    dbMethods.getChatRooms(Constants.myUsername).then((val) {
+      setState(() {
+        chatRoomsStream = val;
+      });
+    });
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: chatRoomsStream,
+      builder: (context, snap) {
+        if (!snap.hasData)
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: snap.data.documents.length,
+          itemBuilder: (context, index) {
+            return ChatTile(
+              snap.data.documents[index].data["users"][0].toString(),
+              lastMessage: snap.data.documents[index].data["lastMessage"].toString(),
+              timeAgo: snap.data.documents[index].data["lastTime"],
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
 class SearchList extends StatefulWidget {
   final QuerySnapshot snapshot;
   SearchList(this.snapshot);
@@ -33,6 +85,8 @@ class _SearchListState extends State<SearchList> {
             itemBuilder: (context, index) {
               return ChatTile(
                 widget.snapshot.documents[index].data["username"],
+                lastMessage: "Nevere type with this user.",
+                timeAgo: 0,
               );
             },
           )
@@ -47,32 +101,15 @@ class ChatRoomsView extends StatefulWidget {
 
 class _ChatRoomsViewState extends State<ChatRoomsView> {
   bool search = false;
-  QuerySnapshot snapshot;
+  QuerySnapshot searchSnapshot;
+  String chatroomId;
 
-  DBMethods dbMethods = new DBMethods();
-
-  Stream chatRooms;
-
-  Widget chatRoomsList() {
-    return StreamBuilder(
-      stream: chatRooms,
-      builder: (context, snapshot) {
-        return ListView.builder(
-          itemCount: snapshot.data.documents.length,
-          itemBuilder: (context, index) {
-            return ChatTile(
-              snapshot.data.documents[index].data["username"],
-            );
-          },
-        );
-      },
-    );
-  }
+  DBMethods dbMethods = DBMethods();
 
   searchResults(String username) {
     dbMethods.getUserByUsername(username).then((val) {
       setState(() {
-        snapshot = val;
+        searchSnapshot = val;
       });
     }).catchError((e) => print(e.toString()));
   }
@@ -80,7 +117,18 @@ class _ChatRoomsViewState extends State<ChatRoomsView> {
   @override
   void initState() {
     getUserInfo();
+    getId();
+    print("chat id: $chatroomId");
     super.initState();
+  }
+
+  getId() async {
+    await dbMethods.getChatRoomId(Constants.myUsername).then((val) {
+      setState(() {
+        chatroomId = "KyrosDesign_porco";
+      });
+    }).catchError((e) => print(e.toString()));
+    print("secondo $chatroomId");
   }
 
   getUserInfo() async {
@@ -176,7 +224,8 @@ class _ChatRoomsViewState extends State<ChatRoomsView> {
               ),
             ),
           ),
-        SearchList(snapshot),
+        if (search == true) SearchList(searchSnapshot),
+        if (search == false) ChatRoomsList(chatroomId),
       ],
     );
   }
@@ -184,7 +233,9 @@ class _ChatRoomsViewState extends State<ChatRoomsView> {
 
 class ChatTile extends StatefulWidget {
   final String username;
-  ChatTile(this.username);
+  final String lastMessage;
+  final int timeAgo;
+  ChatTile(this.username, {this.lastMessage, this.timeAgo});
 
   @override
   _ChatTileState createState() => _ChatTileState();
@@ -196,10 +247,12 @@ class _ChatTileState extends State<ChatTile> {
   createChatRoom(String username) {
     if (username != Constants.myUsername) {
       List<String> users = [username, Constants.myUsername];
-      String chatRoomId = users.join("_");
+      String chatRoomId = getChatRoomId(username, Constants.myUsername);
       Map<String, dynamic> chatRoomMap = {
         "users": users,
         "chatroomId": chatRoomId,
+        "lastMessage": "",
+        "lastTime": DateTime.now().millisecondsSinceEpoch,
       };
       dbMethods.createRoom(chatRoomId, chatRoomMap);
       Navigator.push(
@@ -210,6 +263,11 @@ class _ChatTileState extends State<ChatTile> {
       );
     } else
       print("you can't chat with urself");
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -245,7 +303,7 @@ class _ChatTileState extends State<ChatTile> {
                     ),
                   ),
                 ),
-                Positioned(
+                /* Positioned(
                   right: 0,
                   child: Container(
                     padding:
@@ -268,7 +326,7 @@ class _ChatTileState extends State<ChatTile> {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                ),
+                ), */
               ],
             ),
             Container(
@@ -290,7 +348,7 @@ class _ChatTileState extends State<ChatTile> {
                       ),
                       if (widget.username != Constants.myUsername)
                         Text(
-                          "2 Day Ago",
+                          widget.timeAgo == 0 ? "Never" : "${DateTime.fromMillisecondsSinceEpoch(widget.timeAgo).hour.toString()}:${DateTime.fromMillisecondsSinceEpoch(widget.timeAgo).minute.toString()}",
                           style: TextStyle(
                             color: CustomTheme.white.withOpacity(.6),
                             fontSize: 10,
@@ -299,13 +357,14 @@ class _ChatTileState extends State<ChatTile> {
                     ],
                   ),
                   if (widget.username != Constants.myUsername)
-                    Text(
-                      "Hello, how are you?asd asd asd ags gsfd ",
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: CustomTheme.white.withOpacity(.6),
+                    if (widget.lastMessage != null)
+                      Text(
+                        widget.lastMessage,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: CustomTheme.white.withOpacity(.6),
+                        ),
                       ),
-                    ),
                 ],
               ),
             ),
@@ -314,4 +373,11 @@ class _ChatTileState extends State<ChatTile> {
       ),
     );
   }
+}
+
+getChatRoomId(String a, String b) {
+  if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0))
+    return "$b\_$a";
+  else
+    return "$a\_$b";
 }

@@ -34,7 +34,7 @@ class _PostPageState extends State<PostPage> {
         ModalRoute.of(context).settings.arguments;
     final Post post = routeArgs["post"];
 
-    void initState() {
+    initState() {
       setState(() {
         _comments.length > 0 ? _commented = true : _commented = false;
         _likes = post.likes;

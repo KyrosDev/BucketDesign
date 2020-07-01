@@ -51,9 +51,33 @@ class DBMethods {
   }
 
   getChatRooms(String username) async {
-    return Future.value(Firestore.instance
+    return await Firestore.instance
         .collection("chatrooms")
         .where("users", arrayContains: username)
-        .snapshots());
+        .orderBy("lastTime", descending: true)
+        .snapshots();
+  }
+
+  getLastMessage(String chatroomId) async {
+    return await Firestore.instance
+        .collection("chatrooms")
+        .document(chatroomId)
+        .collection("chats")
+        .snapshots()
+        .last;
+  }
+
+  getChatRoomId(String username) async {
+    return await Firestore.instance
+        .collection("chatrooms")
+        .where("users", arrayContains: username)
+        .snapshots();
+  }
+
+  updateLastMessage(Map<String, dynamic> mapMessage, String chatroomId) async {
+    return await Firestore.instance
+        .collection("chatrooms")
+        .document(chatroomId)
+        .updateData(mapMessage);
   }
 }

@@ -22,30 +22,6 @@ class _ConverastionState extends State<Converastion> {
   TextEditingController _textController = TextEditingController();
   DBMethods dbMethods = DBMethods();
 
-  Stream chatMessagesStream;
-
-  Widget chatMessagesList() {
-    return StreamBuilder(
-      stream: chatMessagesStream,
-      builder: (context, snapshot) {
-        return snapshot.hasData
-            ? ListView.builder(
-                physics: BouncingScrollPhysics(),
-                itemCount: snapshot.data.documents.length,
-                itemBuilder: (context, index) {
-                  print(snapshot.data.documents[index].data["text"]);
-                  return MessageTile(
-                    snapshot.data.documents[index].data["text"],
-                    snapshot.data.documents[index].data["fromUsername"],
-                    snapshot.data.documents[index].data["date"],
-                  );
-                },
-              )
-            : Container();
-      },
-    );
-  }
-
   sendMessage(String chatId, String message) {
     if (message.isNotEmpty) {
       Map<String, dynamic> messageMap = {
@@ -55,22 +31,11 @@ class _ConverastionState extends State<Converastion> {
       };
       dbMethods.sendMessage(chatId, messageMap);
       _textController.clear();
+      dbMethods
+          .updateLastMessage({"lastMessage": messageMap["text"], "lastTime": messageMap["date"]}, chatId)
+          .then((r) => print(r.toString()))
+          .catchError((e) => print(e.toString()));
     }
-  }
-
-  @override
-  void initState() {
-    dbMethods.getMessages(widget.chatroomId).then((value) {
-      setState(() {
-        chatMessagesStream = value;
-      });
-    }).catchError((e) => print(e.toString()));
-    dbMethods.getChatRooms(Constants.myUsername).then((val) {
-      setState(() {
-        chatMessagesStream = val;
-      });
-    }).catchError((e) => print(e.toString()));
-    super.initState();
   }
 
   @override
@@ -97,7 +62,10 @@ class _ConverastionState extends State<Converastion> {
       backgroundColor: CustomTheme.darkGray,
       body: Stack(
         children: <Widget>[
-          chatMessagesList(),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.81,
+            child: MessagesList(widget.chatroomId),
+          ),
           Container(
             alignment: Alignment.bottomCenter,
             child: TextField(
@@ -186,6 +154,19 @@ class _MessageTileState extends State<MessageTile> {
           horizontal: 16,
         ),
         decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: widget.myMessage == Constants.myUsername
+                ? [
+                    CustomTheme.mainColor.withOpacity(.7),
+                    CustomTheme.mainColor,
+                  ]
+                : [
+                    Colors.white12.withOpacity(0.7),
+                    Colors.white12,
+                  ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
           color: widget.myMessage == Constants.myUsername
               ? CustomTheme.mainColor
               : Colors.white12,
@@ -202,6 +183,9 @@ class _MessageTileState extends State<MessageTile> {
                 ),
         ),
         child: Column(
+          crossAxisAlignment: widget.myMessage == Constants.myUsername
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
           children: <Widget>[
             Text(
               widget.text,
@@ -209,16 +193,70 @@ class _MessageTileState extends State<MessageTile> {
                 color: Colors.white,
               ),
             ),
-            Text(
-              time,
-              textAlign: TextAlign.end,
-              style: TextStyle(
-                color: Colors.white.withOpacity(.6),
+            Container(
+              width: 30,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Spacer(),
+                  Text(
+                    time,
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(.6),
+                    ),
+                  ),
+                ],
               ),
-            ),
+            )
           ],
         ),
       ),
+    );
+  }
+}
+
+class MessagesList extends StatefulWidget {
+  final String chatroomId;
+  MessagesList(this.chatroomId);
+
+  @override
+  _MessagesListState createState() => _MessagesListState();
+}
+
+class _MessagesListState extends State<MessagesList> {
+  Stream chatMessagesStream;
+  DBMethods dbMethods = DBMethods();
+
+  @override
+  void initState() {
+    dbMethods.getMessages(widget.chatroomId).then((value) {
+      setState(() {
+        chatMessagesStream = value;
+      });
+    }).catchError((e) => print(e.toString()));
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: chatMessagesStream,
+      builder: (context, snapshot) {
+        return snapshot.hasData
+            ? ListView.builder(
+                physics: BouncingScrollPhysics(),
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (context, index) {
+                  print(snapshot.data.documents[index].data["text"]);
+                  return MessageTile(
+                    snapshot.data.documents[index].data["text"],
+                    snapshot.data.documents[index].data["fromUsername"],
+                    snapshot.data.documents[index].data["date"],
+                  );
+                },
+              )
+            : Container();
+      },
     );
   }
 }

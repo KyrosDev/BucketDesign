@@ -23,11 +23,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool userIsLoggedIn = false;
-  int index = 0;
+  int index;
   List<Map<String, dynamic>> routes = [
-    {
-      "path": Loading.routeName,
-    },
     {
       "path": Home.routeName,
     },
@@ -39,6 +36,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     getLoggedInState();
+    setState(() {});
     super.initState();
   }
 
@@ -49,11 +47,11 @@ class _MyAppState extends State<MyApp> {
       });
       setState(() {
         if (userIsLoggedIn == true && value == true)
-          index = 1;
+          index = 0;
         else
-          index = 2;
+          index = 1;
       });
-      print(index);
+      print(userIsLoggedIn);
     }).catchError((e) => print(e.toString()));
   }
 

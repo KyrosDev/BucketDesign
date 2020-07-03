@@ -1,5 +1,4 @@
 // Packages
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -46,11 +45,6 @@ class AuthMethods {
       FirebaseUser firebaseDesigner = result.user;
       return _designerFromFirebaseDesigner(firebaseDesigner);
     } catch (signUpError) {
-      dynamic snap = await Firestore.instance
-          .collection("designers")
-          .where("name", isEqualTo: username)
-          .getDocuments();
-      print(snap);
       if (signUpError is PlatformException) {
         if (signUpError.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
           return {"error": "Email already in use. Try Again."};

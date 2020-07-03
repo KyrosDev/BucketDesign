@@ -19,8 +19,8 @@ class DBMethods {
   uploadUserInfo(Map<String, String> designer) {
     Firestore.instance
         .collection("designers")
-        .add(designer)
-        .then((e) => print("Registred Succesuly. $e"))
+        .document(designer["email"])
+        .setData(designer)
         .catchError((e) => print(e.toString()));
   }
 
@@ -79,5 +79,13 @@ class DBMethods {
         .collection("chatrooms")
         .document(chatroomId)
         .updateData(mapMessage);
+  }
+
+  updateUserInformations(Map<String, dynamic> userMap, String email) async {
+    return await Firestore.instance
+        .collection("designers")
+        .document(email)
+        .updateData(userMap)
+        .catchError((e) => print(e.toString()));
   }
 }

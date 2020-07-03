@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import './recommended_content.dart';
 
 class RecommendedCard extends StatelessWidget {
-
   final int index;
   final String author, profession;
 
@@ -14,7 +13,6 @@ class RecommendedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => print("Tapped"),
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(20)),
         child: Container(
@@ -23,8 +21,8 @@ class RecommendedCard extends StatelessWidget {
           height: 250.0,
           margin: EdgeInsets.all(20),
           child: Content(index, author, profession),
-        )
-      )
+        ),
+      ),
     );
   }
 }

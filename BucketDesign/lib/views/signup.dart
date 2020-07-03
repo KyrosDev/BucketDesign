@@ -1,4 +1,5 @@
 // Packages
+import 'package:BucketDesign/views/profile_setup/loadPicture.dart';
 import 'package:flutter/material.dart';
 
 // Utils
@@ -10,9 +11,6 @@ import '../services/database.dart';
 
 // Helper
 import '../helper/helperFunctions.dart';
-
-// Views
-import 'home.dart';
 
 class SignUp extends StatefulWidget {
   final Function callback;
@@ -46,27 +44,30 @@ class _SignUpState extends State<SignUp> {
       authMethods
           .signUpWithEmailAndPassword(_usernameController.text,
               _emailController.text, _passwordController.text)
-          .then((val) {
-        try {
-          print(val["error"]);
-          setState(() {
-            _error = val["error"];
-            _isLoading = false;
-          });
-        } catch (e) {
-          Map<String, String> newDesigner = {
-            "username": _usernameController.text,
-            "email": _emailController.text,
-          };
+          .then(
+        (val) {
+          try {
+            print(val["error"]);
+            setState(() {
+              _error = val["error"];
+              _isLoading = false;
+            });
+          } catch (e) {
+            Map<String, String> newDesigner = {
+              "username": _usernameController.text,
+              "email": _emailController.text,
+            };
 
-          HelperFunctions.saveUserEmailSharedPreference(_emailController.text);
-          HelperFunctions.saveUsernameSharedPreference(
-              _usernameController.text);
+            HelperFunctions.saveUserEmailSharedPreference(
+                _emailController.text);
+            HelperFunctions.saveUsernameSharedPreference(
+                _usernameController.text);
 
-          dbMethods.uploadUserInfo(newDesigner);
-          Navigator.pushReplacementNamed(context, Home.routeName);
-        }
-      });
+            dbMethods.uploadUserInfo(newDesigner);
+            Navigator.pushReplacementNamed(context, LoadPicture.routeName);
+          }
+        },
+      );
     }
   }
 
@@ -302,24 +303,34 @@ class _SignUpState extends State<SignUp> {
                               ),
                             ),
                             Container(
-                              child: Text(
-                                "Already have an account?",
-                                style: TextStyle(
-                                  color: CustomTheme.white,
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: widget.callback,
-                              child: Container(
-                                child: Text(
-                                  "Log In",
-                                  style: TextStyle(
-                                    color: CustomTheme.white,
+                              width: 350,
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Container(
+                                    child: Text(
+                                      "Already have an account?",
+                                      style: TextStyle(
+                                        color: CustomTheme.white,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  GestureDetector(
+                                    onTap: widget.callback,
+                                    child: Container(
+                                      child: Text(
+                                        "Log In",
+                                        style: TextStyle(
+                                          color: CustomTheme.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
+                            )
                           ],
                         ),
                       ),

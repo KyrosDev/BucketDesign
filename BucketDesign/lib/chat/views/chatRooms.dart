@@ -118,7 +118,6 @@ class _ChatRoomsViewState extends State<ChatRoomsView> {
   void initState() {
     getUserInfo();
     getId();
-    print("chat id: $chatroomId");
     super.initState();
   }
 
@@ -128,7 +127,6 @@ class _ChatRoomsViewState extends State<ChatRoomsView> {
         chatroomId = "KyrosDesign_porco";
       });
     }).catchError((e) => print(e.toString()));
-    print("secondo $chatroomId");
   }
 
   getUserInfo() async {

@@ -9,6 +9,11 @@ import '../utils/me.dart';
 import '../widgets/profileCounters.dart';
 
 class OwnProfileInformations extends StatelessWidget {
+  final String profilePicUrl;
+  final String username;
+  final String profession;
+  OwnProfileInformations({this.profilePicUrl, this.profession, this.username});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,7 +28,8 @@ class OwnProfileInformations extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 image: DecorationImage(
-                  image: NetworkImage(me.profileImage),
+                  image: NetworkImage(profilePicUrl),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -31,14 +37,14 @@ class OwnProfileInformations extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  me.username,
+                  username,
                   style: TextStyle(
                     color: CustomTheme.white,
                     fontSize: CustomTheme.titleSize,
                   ),
                 ),
                 Text(
-                  me.profession,
+                  profession,
                   style: TextStyle(
                     color: CustomTheme.gray,
                     fontSize: 18,

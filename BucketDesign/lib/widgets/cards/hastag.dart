@@ -35,7 +35,6 @@ class HastagCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => print("helo"),
       child: RoundedRect(
         radius: 20,
         width: 200,

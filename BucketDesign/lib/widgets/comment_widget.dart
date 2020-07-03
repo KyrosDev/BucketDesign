@@ -73,7 +73,6 @@ class CommentWidget extends StatelessWidget {
             ],
           ),
           IconButton(
-            onPressed: () => print(comment.author),
             icon: Icon(
               Icons.more_horiz,
               color: Colors.white,

@@ -51,7 +51,8 @@ class _SignInState extends State<SignIn> {
         setState(() {
           snapshotUserInfo = val;
         });
-        HelperFunctions.saveUsernameSharedPreference(val.documents[0].data['username']);
+        HelperFunctions.saveUsernameSharedPreference(
+            val.documents[0].data['username']);
         HelperFunctions.saveUserEmailSharedPreference(
             snapshotUserInfo.documents[0].data["email"]);
       });
@@ -188,7 +189,6 @@ class _SignInState extends State<SignIn> {
                                     ),
                                   ),
                                   FlatButton(
-                                    onPressed: () => print("porcoddio"),
                                     child: Text(
                                       "Forget Password?",
                                       style: TextStyle(
@@ -283,22 +283,30 @@ class _SignInState extends State<SignIn> {
                               ),
                             ),
                             Container(
-                              child: Text(
-                                "Don't have an account?",
-                                style: TextStyle(
-                                  color: CustomTheme.white,
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: widget.callback,
-                              child: Container(
-                                child: Text(
-                                  "Regsiter",
-                                  style: TextStyle(
-                                    color: CustomTheme.white,
+                              width: 350,
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    child: Text(
+                                      "Don't have an account?",
+                                      style: TextStyle(
+                                        color: CustomTheme.white,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  GestureDetector(
+                                    onTap: widget.callback,
+                                    child: Container(
+                                      child: Text(
+                                        "Regsiter",
+                                        style: TextStyle(
+                                          color: CustomTheme.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],

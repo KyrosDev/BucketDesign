@@ -8,6 +8,9 @@ import './views/home.dart';
 import './settings/views/settings.dart';
 import './views/postDetails.dart';
 import './views/fullPhoto.dart';
+import './views/profile_setup/loadPicture.dart';
+import './views/profile_setup/profileSetup.dart';
+import './views/profile_setup/biography.dart';
 
 // Helper
 import './helper/helperFunctions.dart';
@@ -22,7 +25,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool userIsLoggedIn = false;
+  bool userIsLoggedIn;
   int index;
   List<Map<String, dynamic>> routes = [
     {
@@ -36,7 +39,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     getLoggedInState();
-    setState(() {});
     super.initState();
   }
 
@@ -45,13 +47,15 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         userIsLoggedIn = value;
       });
-      setState(() {
-        if (userIsLoggedIn == true && value == true)
+      if (userIsLoggedIn == true && value == true) {
+        setState(() {
           index = 0;
-        else
+        });
+      } else {
+        setState(() {
           index = 1;
-      });
-      print(userIsLoggedIn);
+        });
+      }
     }).catchError((e) => print(e.toString()));
   }
 
@@ -66,7 +70,9 @@ class _MyAppState extends State<MyApp> {
       ),
       initialRoute: routes[index]["path"],
       routes: {
-        Loading.routeName: (context) => Loading(),
+        WriteBiography.routeName: (context) => WriteBiography(),
+        ProfileSetup.routeName: (context) => ProfileSetup(),
+        LoadPicture.routeName: (context) => LoadPicture(),
         Home.routeName: (context) => Home(),
         Authenticate.routeName: (context) => Authenticate(),
         Settings.routeName: (context) => Settings(),

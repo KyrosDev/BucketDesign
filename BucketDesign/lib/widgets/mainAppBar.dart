@@ -1,4 +1,6 @@
 // Packages
+import 'package:BucketDesign/helper/helperFunctions.dart';
+import 'package:BucketDesign/services/database.dart';
 import 'package:flutter/material.dart';
 
 // Utils
@@ -18,6 +20,26 @@ class MainAppBar extends StatefulWidget {
 }
 
 class _MainAppBarState extends State<MainAppBar> {
+  String email;
+  String imageUrl;
+
+  @override
+  void initState() {
+    getUser();
+    super.initState();
+  }
+
+  getUser() {
+    HelperFunctions.getUserEmailSharedPreference().then((userEmail) {
+      DBMethods().getUserByUserEmail(userEmail).then((user) {
+        setState(() {
+          imageUrl = "${user.documents[0].data["profileImage"]}";
+          email = userEmail;
+        });
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,7 +54,8 @@ class _MainAppBarState extends State<MainAppBar> {
               width: 200.0,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/icons/long_main_color_text_logo.png'),
+                  image: AssetImage(
+                      'assets/images/icons/long_main_color_text_logo.png'),
                   fit: BoxFit.contain,
                 ),
               ),
@@ -53,11 +76,13 @@ class _MainAppBarState extends State<MainAppBar> {
                 ],
                 child: Container(
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(me.profileImage),
-                      fit: BoxFit.contain,
-                      alignment: Alignment.center,
-                    ),
+                    image: imageUrl == null
+                        ? null
+                        : DecorationImage(
+                            image: NetworkImage(imageUrl),
+                            fit: BoxFit.cover,
+                            alignment: Alignment.center,
+                          ),
                   ),
                 ),
               ),

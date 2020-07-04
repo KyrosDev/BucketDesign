@@ -65,6 +65,53 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final Widget bnb = BottomNavigationBar(
+      selectedItemColor: CustomTheme.mainColor,
+      unselectedItemColor: Colors.white,
+      onTap: (page) => _selectPage(page),
+      backgroundColor: CustomTheme.darkGray,
+      type: BottomNavigationBarType.fixed,
+      currentIndex: _page,
+      selectedLabelStyle: TextStyle(
+        fontSize: 15,
+      ),
+      unselectedFontSize: 15,
+      items: const <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.home,
+          ),
+          title: Text(
+            "Home",
+          ),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.search,
+          ),
+          title: Text(
+            "Search",
+          ),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.chat,
+          ),
+          title: Text(
+            "Chat",
+          ),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.more,
+          ),
+          title: Text(
+            "More",
+          ),
+        ),
+      ],
+    );
+
     return Scaffold(
       appBar: PreferredSize(
         child: !profile
@@ -74,54 +121,7 @@ class _HomeState extends State<Home> {
       ),
       backgroundColor: CustomTheme.darkGray,
       body: profile ? ProfileView() : _pages[_page]["page"],
-      bottomNavigationBar: profile
-          ? null
-          : BottomNavigationBar(
-              selectedItemColor: CustomTheme.mainColor,
-              unselectedItemColor: Colors.white,
-              onTap: (page) => _selectPage(page),
-              backgroundColor: CustomTheme.darkGray,
-              type: BottomNavigationBarType.fixed,
-              currentIndex: _page,
-              selectedLabelStyle: TextStyle(
-                fontSize: 15,
-              ),
-              unselectedFontSize: 15,
-              items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.home,
-                  ),
-                  title: Text(
-                    "Home",
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.search,
-                  ),
-                  title: Text(
-                    "Search",
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.chat,
-                  ),
-                  title: Text(
-                    "Chat",
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.more,
-                  ),
-                  title: Text(
-                    "More",
-                  ),
-                ),
-              ],
-            ),
+      bottomNavigationBar: profile ? null : bnb,
     );
   }
 }

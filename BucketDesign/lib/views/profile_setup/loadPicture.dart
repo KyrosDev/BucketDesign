@@ -51,7 +51,6 @@ class _LoadPictureState extends State<LoadPicture> {
         .child("/designers/$username/profilePicture/");
     StorageUploadTask uploadTask = storageReference.putFile(_file);
     await uploadTask.onComplete;
-    print('File Uploaded');
     storageReference.getDownloadURL().then((fileURL) {
       HelperFunctions.getUserEmailSharedPreference().then((email) {
         DBMethods()
@@ -71,7 +70,6 @@ class _LoadPictureState extends State<LoadPicture> {
       setState(() {
         username = user;
       });
-      print(username);
     });
   }
 

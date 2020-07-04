@@ -1,9 +1,15 @@
 // Packages
-import 'package:BucketDesign/helper/helperFunctions.dart';
-import 'package:BucketDesign/services/database.dart';
-import 'package:BucketDesign/views/profile_setup/biography.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
+// Views
+import '../../views/profile_setup/biography.dart';
+
+// Services
+import '../../services/database.dart';
+
+// Helper
+import '../../helper/helperFunctions.dart';
 
 // Utils
 import '../../utils/Theme.dart';
@@ -22,7 +28,6 @@ class _ProfileSetupState extends State<ProfileSetup> {
     setState(() {
       profession = newProfession;
     });
-    print(profession["name"]);
   }
 
   @override

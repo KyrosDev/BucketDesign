@@ -1,5 +1,4 @@
 // Packages
-import 'package:BucketDesign/views/profile_setup/loadPicture.dart';
 import 'package:flutter/material.dart';
 
 // Utils
@@ -11,6 +10,9 @@ import '../services/database.dart';
 
 // Helper
 import '../helper/helperFunctions.dart';
+
+// Views
+import '../views/profile_setup/loadPicture.dart';
 
 class SignUp extends StatefulWidget {
   final Function callback;
@@ -47,7 +49,6 @@ class _SignUpState extends State<SignUp> {
           .then(
         (val) {
           try {
-            print(val["error"]);
             setState(() {
               _error = val["error"];
               _isLoading = false;

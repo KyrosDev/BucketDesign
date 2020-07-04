@@ -37,7 +37,6 @@ class _ProfileViewState extends State<ProfileView> {
           username = user.documents[0].data["username"];
           profession = user.documents[0].data["profession"];
         });
-        print("$imageUrl, $email, $username, $profession");
       });
     });
   }

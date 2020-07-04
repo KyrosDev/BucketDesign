@@ -33,7 +33,6 @@ class _ConverastionState extends State<Converastion> {
       _textController.clear();
       dbMethods
           .updateLastMessage({"lastMessage": messageMap["text"], "lastTime": messageMap["date"]}, chatId)
-          .then((r) => print(r.toString()))
           .catchError((e) => print(e.toString()));
     }
   }
@@ -247,7 +246,6 @@ class _MessagesListState extends State<MessagesList> {
                 physics: BouncingScrollPhysics(),
                 itemCount: snapshot.data.documents.length,
                 itemBuilder: (context, index) {
-                  print(snapshot.data.documents[index].data["text"]);
                   return MessageTile(
                     snapshot.data.documents[index].data["text"],
                     snapshot.data.documents[index].data["fromUsername"],

@@ -1,4 +1,5 @@
 // Packages
+import 'package:BucketDesignApp/utils/theme.dart';
 import 'package:flutter/material.dart';
 
 // Widgets
@@ -61,7 +62,6 @@ class _HomeState extends State<Home> {
       body: GestureDetector(
         onPanEnd: (details) => changeViewFromPan(details),
         child: Container(
-          margin: EdgeInsets.only(top: mq.padding.top),
           width: mq.size.width,
           height: mq.size.height,
           color: Theme.of(context).backgroundColor,
@@ -84,24 +84,16 @@ class _HomeState extends State<Home> {
             top: 30,
           ),
           decoration: BoxDecoration(
-            color: Colors.blue,
+            color: CustomTheme.mainColor,
             borderRadius: BorderRadius.circular(23),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                color: Color(0xFF04688F).withOpacity(0.4),
+                color: CustomTheme.mainColor.withOpacity(.4),
                 offset: Offset(0, 20),
                 blurRadius: 20,
                 spreadRadius: 0,
               ),
             ],
-            gradient: LinearGradient(
-              colors: [
-                Color(0xFF2EC0F9),
-                Color(0xFF04688F),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
           ),
           child: Icon(
             Icons.add,

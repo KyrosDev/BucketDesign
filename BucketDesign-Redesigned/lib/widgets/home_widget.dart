@@ -15,36 +15,74 @@ class HomeWidget extends StatefulWidget {
 class _HomeWidgetState extends State<HomeWidget> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Container(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.only(
-          left: 40,
-          right: 40,
-          top: 104,
-        ),
-        physics: BouncingScrollPhysics(),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-            AnimatedContainer(
-              duration: Duration(seconds: 1),
-              child: Text(
-                "Welcome,",
-                style: CustomTheme.uncoloredTitle,
+            Container(
+              margin: EdgeInsets.only(
+                bottom: CustomTheme.mainHorizontalPading * 2.5,
+              ),
+              // It will cover 20% of our total height
+              height: size.height * 0.3,
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(
+                      left: CustomTheme.mainHorizontalPading * 2,
+                      right: CustomTheme.mainHorizontalPading * 2,
+                      top: MediaQuery.of(context).padding.top,
+                    ),
+                    height: size.height * 0.3 - 27,
+                    decoration: BoxDecoration(
+                      color: CustomTheme.mainColor,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(36),
+                        bottomRight: Radius.circular(36),
+                      ),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          'Hi Designer!',
+                          style: Theme.of(context).textTheme.headline5.copyWith(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                        Spacer(),
+                        Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.white,
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                "https://instagram.fcia1-1.fna.fbcdn.net/v/t51.2885-19/s150x150/93266270_520174962009207_8404493275846672384_n.jpg?_nc_ht=instagram.fcia1-1.fna.fbcdn.net&_nc_ohc=RKRzhnbfJo4AX_9QqFm&oh=7f081fae3296838f7a1734620e067a6f&oe=5F2B9681",
+                              ),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-            AnimatedContainer(
-              duration: Duration(seconds: 1),
-              curve: Curves.easeInExpo,
-              child: Text(
-                "Kyros Design",
-                style: CustomTheme.coloredTitle,
+            for (int i = 0; i < 5; i++)
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: CustomTheme.mainHorizontalPading * 2,
+                ),
+                child: Align(
+                  alignment:
+                      i % 2 == 0 ? Alignment.centerLeft : Alignment.centerRight,
+                  child: PostPreview(i),
+                ),
               ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            for (int i = 0; i < 5; i++) PostPreview(i),
+            SizedBox(height: 28),
           ],
         ),
       ),

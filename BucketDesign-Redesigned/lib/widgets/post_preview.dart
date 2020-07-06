@@ -1,6 +1,9 @@
 // Packages
 import 'package:flutter/material.dart';
 
+// Views
+import '../views/post.dart';
+
 // Widgets
 import '../widgets/custom_icons_icons.dart';
 
@@ -51,7 +54,8 @@ class _PostPreviewState extends State<PostPreview> {
         overflow: Overflow.visible,
         children: <Widget>[
           Positioned(
-            left: -80,
+            left: widget.index % 2 != 0 ? -80 : null,
+            right: widget.index % 2 == 0 ? -80 : null,
             top: 40,
             child: Transform.rotate(
               angle: (180 / 260),
@@ -63,7 +67,13 @@ class _PostPreviewState extends State<PostPreview> {
             ),
           ),
           GestureDetector(
-            onTap: () => print("sei gay"),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => Post(
+                  postId: widget.index.toString(),
+                ),
+              ),
+            ),
             onDoubleTap: onLike,
             child: Hero(
               tag: "imageHero-${widget.index}",
@@ -76,7 +86,7 @@ class _PostPreviewState extends State<PostPreview> {
                   color: Colors.white,
                   image: DecorationImage(
                     image: NetworkImage(
-                      "https://instagram.fcia1-1.fna.fbcdn.net/v/t51.2885-15/e35/82562330_272512647140248_4367216450983926214_n.jpg?_nc_ht=instagram.fcia1-1.fna.fbcdn.net&_nc_cat=104&_nc_ohc=XwfIOEHmZ98AX9oxeW7&oh=b6dc0d584211c11903cb00b359e95bbd&oe=5F2CA8A1",
+                      "https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2020/03/single_arm_galaxy/21893256-1-eng-GB/Single_arm_galaxy_pillars.jpg",
                     ),
                     alignment: Alignment.center,
                     fit: BoxFit.cover,
@@ -86,7 +96,8 @@ class _PostPreviewState extends State<PostPreview> {
             ),
           ),
           Positioned(
-            left: -20,
+            left: widget.index % 2 != 0 ? -20 : null,
+            right: widget.index % 2 == 0 ? -20 : null,
             child: Container(
               margin: EdgeInsets.symmetric(vertical: 12),
               padding: EdgeInsets.symmetric(horizontal: 4),
@@ -99,71 +110,80 @@ class _PostPreviewState extends State<PostPreview> {
                     onTap: () {
                       onLike();
                     },
-                    child: AnimatedContainer(
-                      duration: Duration(milliseconds: 200),
-                      curve: Curves.easeInExpo,
+                    child: Hero(
+                      tag: "like-${widget.index}",
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 200),
+                        curve: Curves.easeInExpo,
+                        decoration: BoxDecoration(
+                          color: _circleColor,
+                          shape: BoxShape.circle,
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: _boxShadow,
+                              blurRadius: 20,
+                              offset: Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                        width: _size,
+                        height: _size,
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 200),
+                          transform: Matrix4.rotationZ(_radians),
+                          child: Icon(
+                            _icon,
+                            size: 15,
+                            color: _iconColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Hero(
+                    tag: "comment-${widget.index}",
+                    child: Container(
                       decoration: BoxDecoration(
-                        color: _circleColor,
+                        color: CustomTheme.darkBack,
                         shape: BoxShape.circle,
                         boxShadow: <BoxShadow>[
                           BoxShadow(
-                            color: _boxShadow,
+                            color: Colors.black.withOpacity(0.2),
                             blurRadius: 20,
                             offset: Offset(0, 5),
                           ),
                         ],
                       ),
-                      width: _size,
-                      height: _size,
-                      child: AnimatedContainer(
-                        duration: Duration(milliseconds: 200),
-                        transform: Matrix4.rotationZ(_radians),
-                        child: Icon(
-                          _icon,
-                          size: 15,
-                          color: _iconColor,
-                        ),
+                      width: 40,
+                      height: 40,
+                      child: Icon(
+                        CustomIcons.chat_smile_icon,
+                        size: 15,
+                        color: Colors.black.withOpacity(.3),
                       ),
                     ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: CustomTheme.darkBack,
-                      shape: BoxShape.circle,
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 20,
-                          offset: Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    width: 40,
-                    height: 40,
-                    child: Icon(
-                      CustomIcons.chat_smile_icon,
-                      size: 15,
-                      color: Colors.black.withOpacity(.3),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: CustomTheme.darkBack,
-                      shape: BoxShape.circle,
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 20,
-                          offset: Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    width: 40,
-                    height: 40,
-                    child: Icon(
-                      CustomIcons.share_icon,
-                      size: 15,
-                      color: Colors.black.withOpacity(.3),
+                  Hero(
+                    tag: "share-${widget.index}",
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: CustomTheme.darkBack,
+                        shape: BoxShape.circle,
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 20,
+                            offset: Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      width: 40,
+                      height: 40,
+                      child: Icon(
+                        CustomIcons.share_icon,
+                        size: 15,
+                        color: Colors.black.withOpacity(.3),
+                      ),
                     ),
                   ),
                 ],
@@ -171,7 +191,8 @@ class _PostPreviewState extends State<PostPreview> {
             ),
           ),
           Positioned(
-            left: -20,
+            left: widget.index % 2 != 0 ? -20 : null,
+            right: widget.index % 2 == 0 ? -200 : null,
             top: 14,
             child: Container(
               transform: Matrix4.rotationZ(1.570796),
@@ -181,10 +202,9 @@ class _PostPreviewState extends State<PostPreview> {
                   Text(
                     "Kyros Design",
                     style: TextStyle(
-                      color: CustomTheme.uncoloredText.withOpacity(0.6),
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold
-                    ),
+                        color: CustomTheme.uncoloredText.withOpacity(0.6),
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold),
                   ),
                   Text(
                     "2 Hours Ago.",

@@ -16,10 +16,12 @@ class CustomTheme {
 
   // Linear Gradient colors
   static const List<Color> mainGradient = [
-    mainColor,
     Color(0xFF2EC0F9),
+    Color(0xFF62AAC7),
   ];
 
+  // Padding
+  static const double mainHorizontalPading = 10;
 
   // TextStyles
   static const TextStyle uncoloredTitle = TextStyle(
@@ -29,7 +31,7 @@ class CustomTheme {
   );
 
   static const TextStyle coloredTitle = TextStyle(
-    color: text,
+    color: mainColor,
     fontSize: 28,
     fontWeight: FontWeight.w800
   );

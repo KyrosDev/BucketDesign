@@ -1,6 +1,9 @@
 // Packages
 import 'package:flutter/material.dart';
 
+// Utils
+import '../utils/theme.dart';
+
 class CustomNavigationBar extends StatefulWidget {
   final int tapped;
   final List<Map<String, dynamic>> items;
@@ -40,7 +43,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
           height: bottomNabHeight,
           padding: const EdgeInsets.only(left: 35, right: 35),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: CustomTheme.white,
             borderRadius: BorderRadius.circular(20),
             boxShadow: <BoxShadow>[
               BoxShadow(
@@ -83,7 +86,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
                           width: _size,
                           height: _size,
                           decoration: BoxDecoration(
-                            color: Color(0xFF2EC0F9),
+                            color: CustomTheme.mainColor,
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),

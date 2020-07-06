@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Widgets
 import '../widgets/customNavigationBar.dart';
 import '../widgets/custom_icons_icons.dart';
+import '../widgets/home_widget.dart';
 
 class Home extends StatefulWidget {
   static const String routeName = "/home";
@@ -14,9 +15,21 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final List<Map<String, dynamic>> items = [
-    {"icon": CustomIcons.home_smile_icon, "index": 0, "text": "Home"},
-    {"icon": CustomIcons.chat_smile_icon, "index": 1, "text": "Messages"},
-    {"icon": CustomIcons.search_eye_icon, "index": 2, "text": "Search"},
+    {
+      "icon": CustomIcons.home_smile_icon,
+      "index": 0,
+      "widget": HomeWidget(),
+    },
+    {
+      "icon": CustomIcons.chat_smile_icon,
+      "index": 1,
+      "widget": Center(child: Text("Messages")),
+    },
+    {
+      "icon": CustomIcons.search_eye_icon,
+      "index": 2,
+      "widget": Center(child: Text("Search")),
+    },
   ];
   int _tapped = 0;
 
@@ -27,7 +40,6 @@ class _HomeState extends State<Home> {
   }
 
   void changeViewFromPan(DragEndDetails details) {
-    print(details.velocity.pixelsPerSecond.dx);
     if (details.velocity.pixelsPerSecond.dx < 200) {
       setState(() {
         if (_tapped == items.length - 1) return;
@@ -43,19 +55,17 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mq = MediaQuery.of(context);
+
     return Scaffold(
       body: GestureDetector(
         onPanEnd: (details) => changeViewFromPan(details),
         child: Container(
-          width: double.infinity,
-          height: double.infinity,
+          margin: EdgeInsets.only(top: mq.padding.top),
+          width: mq.size.width,
+          height: mq.size.height,
           color: Theme.of(context).backgroundColor,
-          child: Center(
-            child: Text(
-              items[_tapped]["text"],
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
+          child: items[_tapped]["widget"],
         ),
       ),
       bottomNavigationBar: CustomNavigationBar(
@@ -64,12 +74,11 @@ class _HomeState extends State<Home> {
         items: items,
       ),
       floatingActionButton: GestureDetector(
-        onTap: () => print("tapped, sos"),
         child: AnimatedContainer(
           duration: Duration(seconds: 1),
           curve: Curves.easeInExpo,
-          width: 70,
-          height: 70,
+          width: 65,
+          height: 65,
           margin: const EdgeInsets.only(
             right: 10,
             top: 30,

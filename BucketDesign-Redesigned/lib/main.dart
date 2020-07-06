@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 // Views
 import './views/home.dart';
 
+// Utils
+import 'utils/theme.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -18,8 +21,8 @@ class MyApp extends StatelessWidget {
         fontFamily: "Manrope",
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        backgroundColor: Color(0xFFECEFF3),
-        canvasColor: Color(0xFFECEFF3),
+        backgroundColor: CustomTheme.background,
+        canvasColor: CustomTheme.background,
       ),
       initialRoute: Home.routeName,
       routes: {

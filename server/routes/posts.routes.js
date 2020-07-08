@@ -2,9 +2,8 @@ const { Router } = require("express");
 const { nanoid } = require("nanoid");
 const router = Router();
 
-// Models
+// Model
 const Post = require("../models/Post");
-const { restart } = require("nodemon");
 
 // Get all Posts
 router.get("/", async (req, res) => {

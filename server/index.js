@@ -7,7 +7,7 @@ const express = require("express"),
   cors = require("cors");
 
 // Middlewares
-const { errorHandler, notFound } = require('./middlewares/main');
+const { errorHandler, notFound } = require("./middlewares/main");
 
 // App
 const app = express();
@@ -30,8 +30,11 @@ mongoose.connect(
 );
 
 // Routes
-const userRoutes = require('./routes/users.routes');
-const postRoutes = require('./routes/posts.routes');
+const userRoutes = require("./routes/users.routes");
+const postRoutes = require("./routes/posts.routes");
+const commentRoutes = require("./routes/comments.routes");
+const messageRoutes = require("./routes/messages.routes");
+const chatroomRoutes = require("./routes/chatrooms.routes");
 
 // Routing
 app.get("/", (req, res) => {
@@ -41,6 +44,9 @@ app.get("/", (req, res) => {
 // Routers
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/comments", commentRoutes);
+app.use("/api/messages", messageRoutes);
+app.use("/api/chatrooms", chatroomRoutes);
 
 app.use(errorHandler);
 app.use(notFound);

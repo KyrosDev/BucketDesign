@@ -16,7 +16,7 @@ dotenv.config();
 // App setup
 app.use(express.json());
 app.use(helmet());
-app.use(morgan());
+app.use(morgan('tiny'));
 app.use(cors(process.env.CROSS_ORIGIN_ACCESS || "http://localhost:8080"));
 
 // DB Connection

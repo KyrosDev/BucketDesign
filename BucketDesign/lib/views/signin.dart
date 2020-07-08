@@ -189,6 +189,7 @@ class _SignInState extends State<SignIn> {
                                     ),
                                   ),
                                   FlatButton(
+                                    onPressed: () {},
                                     child: Text(
                                       "Forget Password?",
                                       style: TextStyle(

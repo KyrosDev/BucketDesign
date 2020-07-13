@@ -15,13 +15,37 @@ const schema = Joi.object().keys({
 
 auth.createIndex("email", { unique: true });
 
+function createTokenSendResponse(user, res, next) {
+  const payload = {
+    _id: user._id,
+    username: user.username,
+  };
+
+  jwt.sign(
+    payload,
+    process.env.SECRET_TOKEN,
+    {
+      expiresIn: "7d",
+    },
+    (err, token) => {
+      if (err) {
+        fttError(res, next);
+      } else {
+        res.json({
+          token,
+        });
+      }
+    }
+  );
+}
+
 router.get("/", (req, res) => {
   res.json({ message: "🔐" });
 });
 
 const fttError = (res, next) => {
   res.status(422);
-  const error = new Error("Email or Password is invalid.");
+  const error = new Error("Email or Password is invalid. 😬");
   next(error);
 };
 
@@ -37,15 +61,15 @@ router.post("/signup", (req, res, next) => {
       })
       .then((user) => {
         if (user) {
-          const error = new Error("Email already used.");
           res.status(409);
-          next(error);
+          const err = new Error("Email already used. 🆔");
+          next(err);
         } else {
           bcrypt.hash(body.password.trim(), 12).then((hash) => {
             auth
               .insert({ email: body.email, password: hash })
-              .then(() => {
-                res.json({ message: "User created!!! ✨" });
+              .then((insertedUser) => {
+                createTokenSendResponse(insertedUser, res, next);
               })
               .catch((e) => console.log(e.toString()));
           });

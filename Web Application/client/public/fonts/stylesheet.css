@@ -1,0 +1,40 @@
+@font-face {
+    font-family: 'Sailec';
+    src: url('Sailec-Thin.woff2') format('woff2'),
+        url('Sailec-Thin.woff') format('woff'),
+        url('Sailec-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Sailec';
+    src: url('Sailec-Medium.woff2') format('woff2'),
+        url('Sailec-Medium.woff') format('woff'),
+        url('Sailec-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Sailec';
+    src: url('Sailec-Bold.woff2') format('woff2'),
+        url('Sailec-Bold.woff') format('woff'),
+        url('Sailec-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Sailec';
+    src: url('Sailec-Light.woff2') format('woff2'),
+        url('Sailec-Light.woff') format('woff'),
+        url('Sailec-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+

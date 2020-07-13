@@ -18,9 +18,7 @@
         </transition>
         <a class="flat-button">Forgot Password?</a>
       </div>
-
       <button type="submit" class="button-primary">Sign in</button>
-
       <div class="register">
         <p>Haven't got an account?</p>
         <router-link to="register">Register now</router-link>
@@ -77,16 +75,11 @@ export default {
             });
           })
           .then(result => {
-            console.log(result);
-            localStorage.token = result;
-            setTimeout(() => {
-              this.$router.push("/home");
-            }, 1000);
+            localStorage.token = result.token;
+            this.$router.push("/home");
           })
           .catch(error => {
-            setTimeout(() => {
-              this.errorMessage = error.message;
-            }, 1000);
+            this.errorMessage = error.message;
           });
       }
     },
@@ -95,6 +88,7 @@ export default {
       if (result.error === null) {
         return true;
       }
+      this.errorMessage = "Email or Password is invalid. 😬";
       return false;
     }
   }

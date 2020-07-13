@@ -18,7 +18,7 @@ auth.createIndex("email", { unique: true });
 function createTokenSendResponse(user, res, next) {
   const payload = {
     _id: user._id,
-    username: user.username,
+    email: user.email,
   };
 
   jwt.sign(
@@ -82,6 +82,7 @@ router.post("/signup", (req, res, next) => {
   }
 });
 
+// SIGNIN - Login Route
 router.post("/signin", (req, res, next) => {
   const body = req.body;
   const result = Joi.validate(body, schema);
@@ -90,22 +91,7 @@ router.post("/signin", (req, res, next) => {
       if (user) {
         bcrypt.compare(body.password, user.password).then((isEqual) => {
           if (isEqual) {
-            const payload = {
-              id: user._id,
-              email: user.email,
-            };
-            jwt.sign(
-              payload,
-              process.env.SECRET_TOKEN,
-              { expiresIn: "7d" },
-              (err, token) => {
-                if (err) {
-                  fttError(res, next);
-                } else {
-                  res.json(token);
-                }
-              }
-            );
+            createTokenSendResponse(user, res, next);
           } else {
             fttError(res, next);
           }

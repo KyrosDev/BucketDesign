@@ -3,7 +3,6 @@ const router = Router();
 
 // Model
 const Chatroom = require("../models/Chatroom");
-const { route } = require("./users.routes");
 
 // Get all Chatrooms
 router.get("/", async (req, res) => {

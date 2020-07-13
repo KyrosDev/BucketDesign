@@ -14,18 +14,30 @@ router.get("/", async (req, res) => {
 router.post("/", (req, res) => {
   const { username, image, biography, profession, location } = req.body;
 
-  const designer = new Designer({
-    username,
-    image,
-    biography,
-    profession,
-    location,
-  });
+  Designer.findOne({ username: username })
+    .then((designer) => {
+      if (designer === null) {
+        const designer = new Designer({
+          username,
+          image,
+          biography,
+          profession,
+          location,
+        });
 
-  designer
-    .save()
-    .then(() => res.json(designer))
-    .catch((e) => res.json(e.message));
+        designer
+          .save()
+          .then(() => res.json(designer))
+          .catch((e) => console.log(e.message));
+      } else {
+        res.json({ error: "Username already exists" });
+      }
+    })
+    .catch((e) => {
+      if (e === "ValiditationError") {
+        res.json({ error: `${e}` });
+      }
+    });
 });
 
 // Get Designer by id and Update
@@ -42,6 +54,8 @@ router.put("/:id", (req, res) => {
     Designer.updateOne(designer).then(
       res.json("Designer updated successfully!!! 🎇")
     );
+  }).catch((e) => {
+    console.log(e.toString());
   });
 });
 

@@ -1,6 +1,6 @@
 // Utilities
 const express = require("express");
-const morgan = require('morgan');
+const morgan = require("morgan");
 const helmet = require("helmet");
 const dotenv = require("dotenv");
 const cors = require("cors");
@@ -13,7 +13,11 @@ dotenv.config();
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(helmet());
-app.use(cors({origin: "http://localhost:8080"}));
+app.use(
+  cors({
+    origin: process.env.CROSS_ORIGIN_ACCESS,
+  })
+);
 
 // Routes
 const designerRoutes = require("./routes/designers.routes");
@@ -31,10 +35,10 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/designers", designerRoutes);
-app.use("/api/posts", postRoutes);
+/* app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/messages", messageRoutes);
-app.use("/api/chatrooms", chatroomRoutes);
+app.use("/api/chatrooms", chatroomRoutes); */
 app.use("/auth", authRoute);
 
 function notFound(req, res, next) {

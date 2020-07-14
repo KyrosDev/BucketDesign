@@ -29,6 +29,7 @@ nav {
   height: 100px;
   border-radius: 0 0 40px 40px;
   padding: 30px 30px;
+  z-index: 9999;
   ul {
     display: flex;
     flex-wrap: nowrap;

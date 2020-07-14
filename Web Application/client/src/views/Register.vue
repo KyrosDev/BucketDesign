@@ -15,6 +15,7 @@
       <div class="form-group">
         <label for="password">Password</label>
         <input v-model="user.password" type="password" name="password" id="password" />
+        <p class="pass-length" :class="user.password.length >= 8 ? 'good' : null">Length: {{ user.password.length }} / 10</p>
         <transition name="slide-fade">
           <p v-if="passwordError" class="error">{{ passwordError }}</p>
         </transition>
@@ -154,6 +155,10 @@ form {
       padding: 5px 10px;
       color: $main;
       font-size: 1.1em;
+
+      &:focus {
+        border: 2px solid $main;
+      }
     }
     label {
       color: $white;
@@ -195,6 +200,14 @@ form {
     color: $main;
     text-decoration: none;
   }
+}
+
+.pass-length {
+  color: $gray;
+}
+
+.pass-length.good {
+  color: $main;
 }
 
 .error {

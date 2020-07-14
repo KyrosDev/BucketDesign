@@ -97,6 +97,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../assets/scss/variabless.scss";
+@import "../assets/scss/animations.scss";
 
 .top {
   background: $main;

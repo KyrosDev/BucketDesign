@@ -39,7 +39,7 @@ const schema = Joi.object().keys({
     .required()
 });
 
-const LOGIN_URL = "http://localhost:5000/auth/signin";
+const LOGIN_URL = "https://bucketdesign.herokuapp.com/auth/signin";
 
 export default {
   data: () => {
@@ -61,10 +61,10 @@ export default {
         };
         fetch(LOGIN_URL, {
           method: "POST",
+          body: JSON.stringify(body),
           headers: {
             "content-type": "application/json"
           },
-          body: JSON.stringify(body)
         })
           .then(response => {
             if (response.ok) {

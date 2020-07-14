@@ -7,15 +7,15 @@
     <form @submit.prevent="register">
       <div class="form-group">
         <label for="email">Email</label>
-        <input v-model="user.email" type="email" name="email" id="email" />
+        <input v-model="user.email" type="email" name="email" id="email" required/>
         <transition name="slide-fade">
           <p v-if="emailError" class="error">{{ emailError }}</p>
         </transition>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input v-model="user.password" type="password" name="password" id="password" />
-        <p class="pass-length" :class="user.password.length >= 8 ? 'good' : null">Length: {{ user.password.length }} / 10</p>
+        <input v-model="user.password" type="password" name="password" id="password" required/>
+        <p class="pass-length" :class="user.password.length >= 8 ? 'good' : null">Length: {{ user.password.length }} / 8</p>
         <transition name="slide-fade">
           <p v-if="passwordError" class="error">{{ passwordError }}</p>
         </transition>
@@ -90,7 +90,7 @@ export default {
           })
           .then(result => {
             localStorage.token = result.token;
-            this.$router.push("/home");
+            this.$router.push("/app");
           })
           .catch(error => {
             this.errorMessage = error.message;

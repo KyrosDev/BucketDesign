@@ -76,7 +76,7 @@ export default {
           })
           .then(result => {
             localStorage.token = result.token;
-            this.$router.push("/home");
+            this.$router.push("/app");
           })
           .catch(error => {
             this.errorMessage = error.message;

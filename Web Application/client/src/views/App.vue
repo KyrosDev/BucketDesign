@@ -7,13 +7,7 @@
       </div>
       <ul>
         <li v-for="post in posts" :key="post._id">
-          <Card
-            v-bind:title="post.title"
-            v-bind:likes="post.likes"
-            v-bind:image="post.previewURL"
-            v-bind:author="post.author"
-            v-bind:id="post._id"
-          />
+          <Card v-bind:post="post" />
         </li>
       </ul>
     </div>
@@ -27,7 +21,10 @@ import BottomBar from "../components/bottomBar";
 import Card from "../components/cardPreview";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/posts/";
+const userToken = localStorage.token;
+
+const POSTS_URL = "https://bucketdesign.herokuapp.com/api/posts/";
+const USER_URL = `https://bucketdesign.herokuapp.com/auth/token/${userToken}`;
 
 export default {
   name: "Home",
@@ -42,8 +39,11 @@ export default {
     };
   },
   mounted() {
-    axios.get(API_URL).then(response => {
+    axios.get(POSTS_URL).then(response => {
       this.posts = response.data;
+    });
+    axios.get(USER_URL).then(response => {
+      axios.get();
     });
   }
 };

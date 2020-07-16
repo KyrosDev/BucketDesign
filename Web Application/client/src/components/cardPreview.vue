@@ -1,10 +1,15 @@
 <template>
   <div class="card">
-    <div class="image-container" v-on:dblclick="like" :style="'background-image: url(' + image + ')'">
+    <div
+      class="image-container"
+      v-on:dblclick="like"
+      @click="viewDetails"
+      :style="'background-image: url(' + post.previewURL + ')'"
+    >
       <span class="type"></span>
     </div>
     <div class="info">
-      <h3 class="truncate-text">{{ author }} - {{ title }}</h3>
+      <h3 class="truncate-text">{{ post.author }} - {{ post.title }}</h3>
       <div class="likes" @click="like">
         <span :class="liked ? 'liked' : ''">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 18.48">
@@ -26,12 +31,7 @@ import axios from "axios";
 
 export default {
   props: {
-    id: String,
-    image: String,
-    title: String,
-    likes: Object,
-    type: String,
-    author: String
+    post: Object
   },
   data: () => {
     return {
@@ -40,8 +40,8 @@ export default {
     };
   },
   mounted() {
-    this.likeCounter = this.$props.likes.counter;
-    this.$props.likes.likes.forEach(user => {
+    this.likeCounter = this.$props.post.likes.counter;
+    this.$props.post.likes.likes.forEach(user => {
       if (user.userID === "BucketPorcoddio") {
         this.liked = true;
       }
@@ -64,21 +64,28 @@ export default {
     },
     leaveLike() {
       axios
-        .post(`http://localhost:5000/api/posts/unlike/${this.$props.id}`, {
-          user: { userID: "BucketPorcoddio" }
-        })
+        .post(
+          `http://localhost:5000/api/posts/unlike/${this.$props.post._id}`,
+          {
+            user: { userID: "BucketPorcoddio" }
+          }
+        )
         .then(response => {
           return response;
         });
     },
     addLike() {
       axios
-        .post(`http://localhost:5000/api/posts/like/${this.$props.id}`, {
+        .post(`https://bucketdesign.herokuapp.com/api/posts/like/${this.$props.post._id}`, {
           user: { userID: "BucketPorcoddio" }
         })
         .then(response => {
           return response;
         });
+    },
+    viewDetails() {
+      const shortcode = this.$props.post.shortcode;
+      this.$router.push(`post/${shortcode}`);
     }
   }
 };

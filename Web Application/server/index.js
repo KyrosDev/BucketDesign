@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const middlewares = require("./middlewares");
 
 // App
 const app = express();
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(helmet());
+app.use(middlewares.checkTokenSetUser);
 
 // Routes
 const designerRoutes = require("./routes/designers.routes");
@@ -27,7 +29,7 @@ const authRoute = require("./auth");
 
 // Routers
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to my API! 🎉" });
+  res.json({ message: "Welcome to my API! 🎉", user: req.user });
 });
 
 app.use("/api/designers", designerRoutes);

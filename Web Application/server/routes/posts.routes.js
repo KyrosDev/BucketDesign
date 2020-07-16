@@ -5,9 +5,21 @@ const connection = require("../database/connection");
 
 const posts = connection.get("posts");
 
+const randStr = (len) => {
+  const letters =
+    "ABCDEFGHIJLMNOPQRSTUVWXYZabcdefghijlmnopqrstuvwxyz1234567890";
+  let result = "";
+  for (let i = 0; i < len; i++) {
+    result += letters[Math.floor(Math.random() * letters.length)];
+  }
+  console.log(result);
+  return result;
+};
+
 const schema = Joi.object().keys({
   title: Joi.string().max(30).required(),
   description: Joi.string().max(500).optional(),
+  shortcode: Joi.string().alphanum().required(),
   author: Joi.string().alphanum().required(),
   previewURL: Joi.string().required(),
   likes: Joi.object({
@@ -45,6 +57,8 @@ const schema = Joi.object().keys({
       imageURL: Joi.string().required(),
     })
     .optional(),
+
+  createdAt: Joi.date().timestamp("javascript").required(),
 });
 
 router.get("/", (req, res) => {
@@ -59,7 +73,11 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", (req, res) => {
+  const date = Date.now();
   const body = req.body;
+  const shortcode = randStr(12);
+  body.shortcode = shortcode;
+  body.createdAt = date;
   const result = Joi.validate(body, schema);
   if (result.error === null) {
     posts
@@ -141,7 +159,7 @@ router.post("/unlike/:id", (req, res) => {
             const index = likes.indexOf(user);
 
             // Remove the item at index INDEX
-            likes.splice(index, index+1);
+            likes.splice(index, index + 1);
           }
         });
 
@@ -164,13 +182,25 @@ router.post("/unlike/:id", (req, res) => {
             res.json(pst); // Respond with the post
           })
           .catch((e) => {
-            res.json(e); // Respond with the error 
+            res.json(e); // Respond with the error
           });
       }
     })
     .catch((e) => {
       res.json(e);
     });
+});
+
+router.get("/:shortcode", (req, res) => {
+  const shortcode = req.params.shortcode;
+
+  posts.findOne({ shortcode }).then((post) => {
+    if (post !== null) {
+      res.json(post);
+    } else {
+      res.json("Invalid Shortcoded");
+    }
+  });
 });
 
 module.exports = router;

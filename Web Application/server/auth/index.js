@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 
 // DB Auth Setup
 const connection = require("../database/connection");
+const { json } = require("express");
 const auth = connection.get("auth");
 
 const schema = Joi.object().keys({
@@ -15,11 +16,12 @@ const schema = Joi.object().keys({
 
 auth.createIndex("email", { unique: true });
 
-function createTokenSendResponse(user, res, next) {
+function createTokenSendResponse(email, res, next) {
   const payload = {
-    _id: user._id,
-    email: user.email,
+    email,
   };
+
+  let tkn = "";
 
   jwt.sign(
     payload,
@@ -31,9 +33,7 @@ function createTokenSendResponse(user, res, next) {
       if (err) {
         fttError(res, next);
       } else {
-        res.json({
-          token,
-        });
+        res.json({ token });
       }
     }
   );
@@ -66,12 +66,36 @@ router.post("/signup", (req, res, next) => {
           next(err);
         } else {
           bcrypt.hash(body.password.trim(), 12).then((hash) => {
-            auth
-              .insert({ email: body.email, password: hash })
-              .then((insertedUser) => {
-                createTokenSendResponse(insertedUser, res, next);
-              })
-              .catch((e) => console.log(e.toString()));
+            if (result !== "error") {
+              const payload = {
+                email: body.email,
+              };
+              jwt.sign(
+                payload,
+                process.env.SECRET_TOKEN,
+                {
+                  expiresIn: "7d",
+                },
+                (err, token) => {
+                  if (err) {
+                    res.json(err);
+                  } else {
+                    auth
+                      .insert({
+                        email: body.email,
+                        password: hash,
+                        token: token,
+                      })
+                      .then((insertedUser) => {
+                        res.json(insertedUser);
+                      })
+                      .catch((e) => console.log(e.toString()));
+                  }
+                }
+              );
+            } else {
+              res.json(result);
+            }
           });
         }
       })
@@ -80,6 +104,20 @@ router.post("/signup", (req, res, next) => {
     res.status(422);
     next(result.error);
   }
+});
+
+// Get user and check for token
+router.get("/token/:token", (req, res) => {
+  const token = req.params.token;
+
+  auth.findOne({ token }).then((user) => {
+    if (user !== null) {
+      const result = jwt.verify(token, process.env.SECRET_TOKEN);
+      res.json({ user: { email: result.email } });
+    } else {
+      res.json("User not found");
+    }
+  });
 });
 
 // SIGNIN - Login Route
@@ -91,7 +129,7 @@ router.post("/signin", (req, res, next) => {
       if (user) {
         bcrypt.compare(body.password, user.password).then((isEqual) => {
           if (isEqual) {
-            createTokenSendResponse(user, res, next);
+            createTokenSendResponse(user.email, res, next);
           } else {
             fttError(res, next);
           }

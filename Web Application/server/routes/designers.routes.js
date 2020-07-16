@@ -29,6 +29,7 @@ const schema = Joi.object().keys({
   profile_picture: Joi.string().alphanum().required(),
   location: Joi.string().required(),
   biography: Joi.string().max(150).required(),
+  email: Joi.string().email()
 });
 
 designers.createIndex("username", { unique: true });

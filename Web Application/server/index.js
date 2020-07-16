@@ -35,8 +35,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/designers", designerRoutes);
-/* app.use("/api/posts", postRoutes);
-app.use("/api/comments", commentRoutes);
+app.use("/api/posts", postRoutes);
+/* app.use("/api/comments", commentRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/chatrooms", chatroomRoutes); */
 app.use("/auth", authRoute);

@@ -1,9 +1,15 @@
 $main: #6065e9;
-$red: #FF6262;
+$red: #ff6262;
 $gray: #b8b8b8;
 $black: #000000;
 $white: #ffffff;
-$unselectedSvg: #C0C0C0;
+$unselectedSvg: #c0c0c0;
 @mixin shadow() {
   box-shadow: 0 10px 20px rgba(96, 101, 233, 0.25);
+}
+
+.truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

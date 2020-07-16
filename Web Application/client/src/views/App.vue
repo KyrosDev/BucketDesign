@@ -6,8 +6,13 @@
         <h1>Discover the world’s top designers & creatives.</h1>
       </div>
       <ul>
-        <li v-for="item in 10" :key="item">
-          <Card v-bind:title="'item' + item"  v-bind:likes="item"  v-bind:image="'item'" author="KyrosDesign"/>
+        <li v-for="post in posts" :key="post._id">
+          <Card
+            v-bind:title="post.title"
+            v-bind:likes="post.likes.counter"
+            v-bind:image="post.preview"
+            v-bind:author="post.author"
+          />
         </li>
       </ul>
     </div>
@@ -20,12 +25,34 @@ import Nav from "../components/Nav";
 import BottomBar from "../components/bottomBar";
 import Card from "../components/cardPreview";
 
+const API_URL = "http://localhost:5000/api/posts/";
+
 export default {
   name: "Home",
   components: {
     Nav,
     BottomBar,
     Card
+  },
+  data: () => {
+    return {
+      posts: []
+    };
+  },
+  mounted() {
+    fetch(API_URL, {
+      method: "GET"
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          return response.statusText;
+        }
+      })
+      .then(result => {
+        this.posts = result;
+      });
   }
 };
 </script>

@@ -4,7 +4,7 @@
       <span class="type"></span>
     </div>
     <div class="info">
-      <h3>{{ author }} - {{ title }}</h3>
+      <h3 class="truncate-text">{{ author }} - {{ title }}</h3>
       <div class="likes" @click="like">
         <span :class="liked ? 'liked' : ''">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 18.48">
@@ -73,6 +73,7 @@ export default {
     justify-content: space-between;
     h3 {
       cursor: pointer;
+      width: 70%;
     }
     .likes {
       display: flex;

@@ -7,9 +7,3 @@ $unselectedSvg: #c0c0c0;
 @mixin shadow() {
   box-shadow: 0 10px 20px rgba(96, 101, 233, 0.25);
 }
-
-.truncate-text {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}

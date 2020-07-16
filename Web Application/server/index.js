@@ -10,14 +10,10 @@ const app = express();
 dotenv.config();
 
 // App setup
+app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(helmet());
-app.use(
-  cors({
-    origin: process.env.CROSS_ORIGIN_ACCESS,
-  })
-);
 
 // Routes
 const designerRoutes = require("./routes/designers.routes");

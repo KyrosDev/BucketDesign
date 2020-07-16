@@ -9,9 +9,10 @@
         <li v-for="post in posts" :key="post._id">
           <Card
             v-bind:title="post.title"
-            v-bind:likes="post.likes.counter"
-            v-bind:image="post.preview"
+            v-bind:likes="post.likes"
+            v-bind:image="post.previewURL"
             v-bind:author="post.author"
+            v-bind:id="post._id"
           />
         </li>
       </ul>
@@ -24,6 +25,7 @@
 import Nav from "../components/Nav";
 import BottomBar from "../components/bottomBar";
 import Card from "../components/cardPreview";
+import axios from "axios";
 
 const API_URL = "http://localhost:5000/api/posts/";
 
@@ -40,19 +42,9 @@ export default {
     };
   },
   mounted() {
-    fetch(API_URL, {
-      method: "GET"
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          return response.statusText;
-        }
-      })
-      .then(result => {
-        this.posts = result;
-      });
+    axios.get(API_URL).then(response => {
+      this.posts = response.data;
+    });
   }
 };
 </script>

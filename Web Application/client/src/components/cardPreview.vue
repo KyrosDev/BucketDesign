@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <div class="image-container">
+    <div class="image-container" v-on:dblclick="like" :style="'background-image: url(' + image + ')'">
       <span class="type"></span>
     </div>
     <div class="info">
@@ -15,35 +15,70 @@
             </g>
           </svg>
         </span>
-        {{ likes }}
+        {{ likeCounter }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   props: {
+    id: String,
     image: String,
     title: String,
-    likes: Number,
+    likes: Object,
     type: String,
     author: String
   },
   data: () => {
     return {
+      likeCounter: 0,
       liked: false
     };
+  },
+  mounted() {
+    this.likeCounter = this.$props.likes.counter;
+    this.$props.likes.likes.forEach(user => {
+      if (user.userID === "BucketPorcoddio") {
+        this.liked = true;
+      }
+    });
   },
   methods: {
     like() {
       if (this.liked) {
-        this.$props.likes--;
+        if (this.likeCounter <= 0) {
+          this.likeCounter = 0;
+        }
+        this.likeCounter--;
         this.liked = false;
+        this.leaveLike();
       } else {
         this.liked = true;
-        this.$props.likes++;
+        this.likeCounter++;
+        this.addLike();
       }
+    },
+    leaveLike() {
+      axios
+        .post(`http://localhost:5000/api/posts/unlike/${this.$props.id}`, {
+          user: { userID: "BucketPorcoddio" }
+        })
+        .then(response => {
+          return response;
+        });
+    },
+    addLike() {
+      axios
+        .post(`http://localhost:5000/api/posts/like/${this.$props.id}`, {
+          user: { userID: "BucketPorcoddio" }
+        })
+        .then(response => {
+          return response;
+        });
     }
   }
 };
@@ -52,6 +87,7 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/scss/animations.scss";
 @import "../assets/scss/variabless.scss";
+@import "../assets/scss/utils.scss";
 
 .card {
   width: 100%;
@@ -64,7 +100,9 @@ export default {
     overflow: hidden;
     margin-bottom: 20px;
     border-radius: 10px;
-    background: red;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
   }
   .info {
     display: flex;

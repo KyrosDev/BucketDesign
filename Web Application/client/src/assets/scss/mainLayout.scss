@@ -1,6 +1,5 @@
 .container {
   .top {
-    height: 30vh;
     background: $main;
     color: $white;
     border-radius: 0 0 40px 40px;
@@ -8,5 +7,9 @@
     padding-top: 120px;
     margin-bottom: 30px;
     @include shadow();
+
+    .header {
+      padding-bottom: 30px;
+    }
   }
 }

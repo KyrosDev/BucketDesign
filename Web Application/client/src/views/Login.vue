@@ -39,7 +39,7 @@ const schema = Joi.object().keys({
     .required()
 });
 
-const LOGIN_URL = "https://bucketdesign.herokuapp.com/auth/signin";
+const LOGIN_URL = "http://localhost:5000/auth/signin";
 
 export default {
   data: () => {
@@ -76,7 +76,7 @@ export default {
           })
           .then(result => {
             localStorage.token = result.token;
-            this.$router.push("/app");
+            this.$router.push("/profile/customize");
           })
           .catch(error => {
             this.errorMessage = error.message;

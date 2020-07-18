@@ -11,6 +11,7 @@ export default {};
 </script>
 
 <style>
+@import './assets/scss/animations.scss';
 * {
   margin: 0;
   padding: 0;

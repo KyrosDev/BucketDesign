@@ -9,7 +9,10 @@
       <span class="type"></span>
     </div>
     <div class="info">
-      <h3 class="truncate-text">{{ post.author }} - {{ post.title }}</h3>
+      <h3 class="truncate-text">
+        <span @click="like">{{ post.author }}</span>
+        - {{ post.title }}
+      </h3>
       <div class="likes" @click="like">
         <span :class="liked ? 'liked' : ''">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 18.48">
@@ -76,7 +79,7 @@ export default {
     },
     addLike() {
       axios
-        .post(`https://bucketdesign.herokuapp.com/api/posts/like/${this.$props.post._id}`, {
+        .post(`http://localhost:5000/api/posts/like/${this.$props.post._id}`, {
           user: { userID: "BucketPorcoddio" }
         })
         .then(response => {
@@ -105,7 +108,7 @@ export default {
     padding-top: 56.25%;
     position: relative;
     overflow: hidden;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border-radius: 10px;
     background-position: center;
     background-size: cover;
@@ -119,6 +122,8 @@ export default {
     h3 {
       cursor: pointer;
       width: 70%;
+      font-weight: 400;
+      font-size: 1em;
     }
     .likes {
       display: flex;
@@ -134,7 +139,10 @@ export default {
       }
       .liked {
         fill: $red;
+        animation-name: like;
+        animation-duration: 1s;
       }
+
       &:active span {
         animation-name: like;
         animation-duration: 1s;
@@ -148,6 +156,7 @@ export default {
         animation-duration: 1s;
         animation-iteration-count: infinite;
       }
+      
     }
   }
 }

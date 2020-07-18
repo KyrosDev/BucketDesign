@@ -4,6 +4,7 @@ const Joi = require("joi");
 
 const connection = require("../database/connection");
 const designers = connection.get("designers");
+const auth = connection.get("auth");
 
 const schema = Joi.object().keys({
   username: Joi.string().min(4).max(25).alphanum().required(),
@@ -29,14 +30,16 @@ const schema = Joi.object().keys({
   profile_picture: Joi.string().alphanum().required(),
   location: Joi.string().required(),
   biography: Joi.string().max(150).required(),
-  email: Joi.string().email()
+  email: Joi.string().email(),
 });
 
-designers.createIndex("username", { unique: true });
+designers.createIndex("email", { unique: true });
 
 // Create Designer
-router.post("/", (req, res) => {
+router.post("/:email", (req, res) => {
+  const email = req.params.email;
   const body = req.body;
+  body.email = email;
   const result = Joi.validate(body, schema);
   if (result.error === null) {
     designers
@@ -70,21 +73,25 @@ router.get("/", (req, res) => {
     });
 });
 
-// Get Designer by Username
-router.get("/:username", (req, res) => {
-  const username = req.params.username;
-  designers
-    .findOne({ username })
-    .then((designer) => {
-      if (designer == null) {
-        res.json({ message: `Designer '${username}' not found! 🆔` });
-      } else {
-        res.json(designer);
-      }
-    })
-    .catch((e) => {
-      res.json({ message: e });
-    });
+// Get Designer by Token
+router.get("/:token", (req, res) => {
+  const token = req.params.token;
+  
+  auth.findOne({ token: token }).then((user) => {
+    if (user === null) {
+      res.json({ message: `Designer '${username}' not found! 🆔` });
+    } else {
+      const email = user.email;
+      designers
+        .findOne({ email })
+        .then((designer) => {
+          res.json(designer);
+        })
+        .catch((e) => {
+          res.json({ message: e });
+        });
+    }
+  });
 });
 
 // Delete user by ID

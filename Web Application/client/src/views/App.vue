@@ -3,7 +3,7 @@
     <Nav />
     <div class="container">
       <div class="top">
-        <h1>Discover the world’s top designers & creatives.</h1>
+        <h1 class="header">Discover the world’s top designers & creatives.</h1>
       </div>
       <ul>
         <li v-for="post in posts" :key="post._id">
@@ -23,8 +23,8 @@ import axios from "axios";
 
 const userToken = localStorage.token;
 
-const POSTS_URL = "https://bucketdesign.herokuapp.com/api/posts/";
-const USER_URL = `https://bucketdesign.herokuapp.com/auth/token/${userToken}`;
+const POSTS_URL = "http://localhost:5000/api/posts/";
+const USER_URL = `http://localhost:5000/auth/token/${userToken}`;
 
 export default {
   name: "Home",
@@ -35,7 +35,8 @@ export default {
   },
   data: () => {
     return {
-      posts: []
+      posts: [],
+      profile: null
     };
   },
   mounted() {
@@ -43,7 +44,7 @@ export default {
       this.posts = response.data;
     });
     axios.get(USER_URL).then(response => {
-      axios.get();
+      return response.data;
     });
   }
 };

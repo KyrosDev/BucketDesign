@@ -51,7 +51,7 @@ const routes = [
   },
   {
     path: "/profile/customize",
-    name: "editProfile",
+    name: "profileCustomize",
     component: Customize,
     beforeEnter: isLoggedIn,
   },

@@ -21,10 +21,7 @@ import BottomBar from "../components/bottomBar";
 import Card from "../components/cardPreview";
 import axios from "axios";
 
-const userToken = localStorage.token;
-
 const POSTS_URL = "http://localhost:5000/api/posts/";
-const USER_URL = `http://localhost:5000/auth/token/${userToken}`;
 
 export default {
   name: "Home",
@@ -42,9 +39,6 @@ export default {
   mounted() {
     axios.get(POSTS_URL).then(response => {
       this.posts = response.data;
-    });
-    axios.get(USER_URL).then(response => {
-      return response.data;
     });
   }
 };

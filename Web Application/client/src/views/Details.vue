@@ -45,11 +45,10 @@ export default {
   mounted() {
     const shortcode = this.$route.params.shortcode;
     const POST_URL = `http://localhost:5000/api/posts/${shortcode}`;
-    console.log(shortcode);
     axios.get(POST_URL).then(response => {
       if (response.status == 200) {
         this.post = response.data;
-        this.likeCounter = post.likes.counter;
+        this.likeCounter = this.post.likes.counter;
         this.post.likes.likes.forEach(user => {
           if (user.userID === "BucketPorcoddio") {
             this.liked = true;
@@ -57,8 +56,6 @@ export default {
         });
       }
     });
-    if (this.post !== null) {
-    }
   },
   watch: {},
   methods: {

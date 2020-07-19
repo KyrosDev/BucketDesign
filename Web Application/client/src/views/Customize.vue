@@ -60,7 +60,10 @@ export default {
     activeButton() {
       const button = this.$el.querySelector(".button");
       button.classList.toggle("active");
-    }
+    },
+    uploadImage() {},
+    setProfession() {},
+    setUsernameAndBio() {}
   }
 };
 </script>

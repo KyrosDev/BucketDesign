@@ -7,11 +7,22 @@
 </template>
 
 <script>
-export default {};
+import axios from "axios";
+
+const userToken = localStorage.token;
+const USER_URL = `http://localhost:5000/api/designer/token/${userToken}`;
+
+export default {
+  mounted() {
+    axios.get(USER_URL).then(response => {
+      localStorage.user = JSON.stringify(response.data);
+    });
+  }
+};
 </script>
 
 <style>
-@import './assets/scss/animations.scss';
+@import "./assets/scss/animations.scss";
 * {
   margin: 0;
   padding: 0;

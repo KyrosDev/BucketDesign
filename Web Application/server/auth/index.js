@@ -6,7 +6,6 @@ const jwt = require("jsonwebtoken");
 
 // DB Auth Setup
 const connection = require("../database/connection");
-const { json } = require("express");
 const auth = connection.get("auth");
 
 const schema = Joi.object().keys({

@@ -32,8 +32,7 @@ export default {
   },
   data: () => {
     return {
-      posts: [],
-      profile: null
+      posts: []
     };
   },
   mounted() {

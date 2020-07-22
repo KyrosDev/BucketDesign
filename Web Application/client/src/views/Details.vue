@@ -10,6 +10,7 @@
       <p v-if="post !== null">{{ post.createdAt | luxon }}</p>
       <div
         class="image-container"
+        v-on:dblclick="like"
         v-bind:style="post !== null ? 'background-image: url(' + post.previewURL + ');' : ''"
       ></div>
       <div class="likes" @click="like">
@@ -24,6 +25,7 @@
         </span>
         {{ likeCounter }}
       </div>
+      {{ post !== null ? post.description : null }}
     </div>
   </div>
 </template>
@@ -49,15 +51,14 @@ export default {
       if (response.status == 200) {
         this.post = response.data;
         this.likeCounter = this.post.likes.counter;
-        this.post.likes.likes.forEach(user => {
-          if (user.userID === "BucketPorcoddio") {
+        this.post.likes.likes.forEach(item => {
+          if (item.user === localStorage.user) {
             this.liked = true;
           }
         });
       }
     });
   },
-  watch: {},
   methods: {
     like() {
       if (this.liked) {
@@ -76,7 +77,7 @@ export default {
     leaveLike() {
       axios
         .post(`http://localhost:5000/api/posts/unlike/${this.post._id}`, {
-          user: { userID: "BucketPorcoddio" }
+          user: { user: localStorage.user }
         })
         .then(response => {
           return response.data;
@@ -85,7 +86,7 @@ export default {
     addLike() {
       axios
         .post(`http://localhost:5000/api/posts/like/${this.post._id}`, {
-          user: { userID: "BucketPorcoddio" }
+          user: { user: localStorage.user }
         })
         .then(response => {
           return response.data;
@@ -126,6 +127,7 @@ export default {
     border-radius: 10px;
     background-position: center;
     background-size: cover;
+    cursor: pointer;
     background-repeat: no-repeat;
   }
 

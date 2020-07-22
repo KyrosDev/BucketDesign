@@ -44,8 +44,8 @@ export default {
   },
   mounted() {
     this.likeCounter = this.$props.post.likes.counter;
-    this.$props.post.likes.likes.forEach(user => {
-      if (user.userID === "BucketPorcoddio") {
+    this.$props.post.likes.likes.forEach(item => {
+      if (item.user === localStorage.user) {
         this.liked = true;
       }
     });
@@ -70,7 +70,7 @@ export default {
         .post(
           `http://localhost:5000/api/posts/unlike/${this.$props.post._id}`,
           {
-            user: { userID: "BucketPorcoddio" }
+            user: { user: localStorage.user }
           }
         )
         .then(response => {
@@ -80,7 +80,7 @@ export default {
     addLike() {
       axios
         .post(`http://localhost:5000/api/posts/like/${this.$props.post._id}`, {
-          user: { userID: "BucketPorcoddio" }
+          user: { user: localStorage.user }
         })
         .then(response => {
           return response;

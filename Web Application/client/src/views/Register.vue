@@ -42,7 +42,7 @@ const schema = Joi.object().keys({
     .required()
 });
 
-const REGISTER_URL = "http://localhost:5000/auth/signup";
+const REGISTER_URL = "http://localhost:5000/api/designers/signup";
 
 export default {
   data: () => {
@@ -90,6 +90,7 @@ export default {
           })
           .then(result => {
             localStorage.token = result.token;
+            localStorage.user = result.email;
             this.$router.push("/profile/customize");
           })
           .catch(error => {

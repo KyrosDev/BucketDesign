@@ -1,6 +1,11 @@
 const { Router } = require("express");
 const router = Router();
 const Joi = require("joi");
+const multer = require("multer");
+const path = require("path");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const fs = require("fs");
 
 const connection = require("../database/connection");
 const designers = connection.get("designers");
@@ -33,15 +38,14 @@ const schema = Joi.object().keys({
   password: Joi.string().min(8).required(),
   token: Joi.string().token(),
 });
-
 designers.createIndex("email", { unique: true });
 
+// Create Token and send it to Front-end
 function createTokenSendResponse(email, res, next) {
+  // Create payload
   const payload = {
     email,
   };
-
-  let tkn = "";
 
   jwt.sign(
     payload,
@@ -60,7 +64,9 @@ function createTokenSendResponse(email, res, next) {
 }
 
 router.get("/", (req, res) => {
-  res.json({ message: "🔐" });
+  designers.find().then((users) => {
+    res.json(users);
+  });
 });
 
 const fttError = (res, next) => {
@@ -107,6 +113,7 @@ router.post("/signup", (req, res, next) => {
                         token: token,
                       })
                       .then((insertedUser) => {
+                        delete insertedUser.password;
                         res.json(insertedUser);
                       })
                       .catch((e) => console.log(e.toString()));
@@ -127,10 +134,10 @@ router.post("/signup", (req, res, next) => {
 });
 
 // Get user and check for token
-router.get("/designer/:token", (req, res) => {
+router.get("/token/:token", (req, res) => {
   const token = req.params.token;
 
-  designers.findOne({ token }).then((user) => {
+  designers.findOne({ token: token }).then((user) => {
     if (user !== null) {
       const result = jwt.verify(token, process.env.SECRET_TOKEN);
       if (result.error === null) {
@@ -144,6 +151,56 @@ router.get("/designer/:token", (req, res) => {
     }
   });
 });
+
+const upload = multer({
+  dest: "./public/",
+});
+
+router.post(
+  "/:user/setup/profile/picture",
+  upload.single("file"),
+  (req, res, next) => {
+    const user = req.params.user;
+    const tempPath = req.file.path;
+    if (!fs.existsSync(`./public/${user}`)) {
+      fs.mkdirSync(`./public/${user}`);
+    }
+    const targetPath = `./public/${user}/profilePicture.${
+      req.file.mimetype.split("/")[1]
+    }`;
+    if (
+      path.extname(req.file.originalname).toLowerCase() ===
+      (".png" || ".jpg" || ".jpeg")
+    ) {
+      fs.rename(tempPath, targetPath, (err) => {
+        if (err) next(err, res);
+        designers.findOne({ email: user }).then((user) => {
+          if (user !== null) {
+            const newUser = user;
+            user.profile_picture = targetPath.split("/").slice(2).join("/");
+            designers.remove({ email: user.email });
+            designers.insert(newUser).then((inserted) => {
+              console.log(inserted);
+              res.json("success");
+            }).catch((e) => {
+              next(e, res)
+            })
+          } else {
+            res.json("User not found")
+          }
+        }).catch((e) => next(e, res));
+      });
+    } else {
+      fs.unlink(tempPath, (err) => {
+        if (err) return next(err, res);
+        res
+          .status(403)
+          .contentType("text/plain")
+          .end("Only '.png', '.jpg', 'jpeg', '.gif' and '.mp4' files allowed");
+      });
+    }
+  }
+);
 
 // SIGNIN - Login Route
 router.post("/signin", (req, res, next) => {
@@ -174,7 +231,7 @@ router.get("/", (req, res) => {
   });
 });
 
-router.post("/:email", (req, res) => {
+router.post("/email/:email", (req, res) => {
   const email = req.params.email;
   const body = req.body;
   designers.findOne({ email }).then((user) => {

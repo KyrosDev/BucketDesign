@@ -6,23 +6,20 @@
   </div>
 </template>
 
-<script>
-import axios from "axios";
-
-const userToken = localStorage.token;
-const USER_URL = `http://localhost:5000/api/designer/token/${userToken}`;
-
-export default {
-  mounted() {
-    axios.get(USER_URL).then(response => {
-      localStorage.user = JSON.stringify(response.data);
-    });
-  }
-};
-</script>
-
 <style>
 @import "./assets/scss/animations.scss";
+
+.fade-enter-active {
+  transition: opacity .5s;
+}
+.fade-leave-active {
+  opacity: 0;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
 * {
   margin: 0;
   padding: 0;

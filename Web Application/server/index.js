@@ -5,6 +5,8 @@ const helmet = require("helmet");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const middlewares = require("./middlewares");
+const path = require("path");
+const fs = require("fs");
 
 // App
 const app = express();
@@ -24,11 +26,8 @@ const commentRoutes = require("./routes/comments.routes");
 const messageRoutes = require("./routes/messages.routes");
 const chatroomRoutes = require("./routes/chatrooms.routes");
 
-// AUTH Routes
-const authRoute = require("./auth");
-
 // Routers
-app.get("/", (req, res) => {
+app.get("/", express.static(path.join(__dirname, "./public")), (req, res) => {
   res.json({ message: "Welcome to my API! 🎉", user: req.user });
 });
 
@@ -37,7 +36,6 @@ app.use("/api/posts", postRoutes);
 /* app.use("/api/comments", commentRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/chatrooms", chatroomRoutes); */
-app.use("/auth", authRoute);
 
 function notFound(req, res, next) {
   res.status(404);

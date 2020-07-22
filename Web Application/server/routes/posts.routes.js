@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
-const connection = require("../database/connection");
 
+const connection = require("../database/connection");
 const posts = connection.get("posts");
 
 const randStr = (len) => {
@@ -12,7 +12,12 @@ const randStr = (len) => {
   for (let i = 0; i < len; i++) {
     result += letters[Math.floor(Math.random() * letters.length)];
   }
-  console.log(result);
+  posts.find({ shortcode: result }).then((res) => {
+    if (res !== null) {
+      result[Math.floor(Math.random() * result.length)] =
+        letters[Math.floor(Math.random() * letters.length)];
+    }
+  });
   return result;
 };
 
@@ -72,10 +77,11 @@ router.get("/", (req, res) => {
     });
 });
 
-router.post("/", (req, res) => {
+router.post("/", (req, res, next) => {
+  const shortcode = randStr(12);
+
   const date = Date.now();
   const body = req.body;
-  const shortcode = randStr(12);
   body.shortcode = shortcode;
   body.createdAt = date;
   const result = Joi.validate(body, schema);

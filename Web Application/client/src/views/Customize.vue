@@ -5,7 +5,9 @@
       <h1>Let's customize your profile!</h1>
     </div>
     <div class="content">
-      <component :is="routes[currentIndex].component" v-bind:callback="activeButton" />
+      <transition name="fade">
+        <component :is="routes[currentIndex].component" v-bind:callback="activeButton" />
+      </transition>
     </div>
     <div class="button">
       <div :class="currentIndex > 0 ? 'back active' : 'back'">
@@ -60,10 +62,7 @@ export default {
     activeButton() {
       const button = this.$el.querySelector(".button");
       button.classList.toggle("active");
-    },
-    uploadImage() {},
-    setProfession() {},
-    setUsernameAndBio() {}
+    }
   }
 };
 </script>
@@ -73,6 +72,17 @@ export default {
 @import "../assets/scss/variabless.scss";
 @import "../assets/scss/utils.scss";
 @import "../assets/scss/mainLayout.scss";
+
+.fade-enter-active {
+  transition: opacity .8s;
+}
+.fade-leave-active {
+  opacity: 0;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 
 .top {
   background: $main;

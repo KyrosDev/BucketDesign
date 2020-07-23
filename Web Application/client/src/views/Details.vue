@@ -3,17 +3,14 @@
     <Nav />
     <BottomNav />
     <div class="content">
-      <h4
-        class="author"
-      >{{ post !== null ? post.author : "" }} - {{ profession !== null ? profession : "Designer" }}</h4>
+      <h4 class="author" v-if="post !== null">{{post.author}} - {{ post.createdAt | luxon }}</h4>
       <h1 class="title">{{ post !== null ? post.title : "" }}</h1>
-      <p v-if="post !== null">{{ post.createdAt | luxon }}</p>
       <div
-        class="image-container"
+        class="image-container unselectable"
         v-on:dblclick="like"
         v-bind:style="post !== null ? 'background-image: url(' + post.previewURL + ');' : ''"
       ></div>
-      <div class="likes" @click="like">
+      <div class="likes unselectable" @click="like">
         <span :class="liked ? 'liked' : ''">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 18.48">
             <g id="Layer_2" data-name="Layer 2">
@@ -25,7 +22,9 @@
         </span>
         {{ likeCounter }}
       </div>
-      {{ post !== null ? post.description : null }}
+      <p class="description">
+        <span v-html="parseDescription !== null ? parseDescription : null"></span>
+      </p>
     </div>
   </div>
 </template>
@@ -40,22 +39,24 @@ export default {
     return {
       post: null,
       profession: null,
+      parseDescription: null,
       liked: false,
-      likeCounter: 0
+      likeCounter: 0,
     };
   },
   mounted() {
     const shortcode = this.$route.params.shortcode;
     const POST_URL = `http://localhost:5000/api/posts/${shortcode}`;
-    axios.get(POST_URL).then(response => {
+    axios.get(POST_URL).then((response) => {
       if (response.status == 200) {
         this.post = response.data;
         this.likeCounter = this.post.likes.counter;
-        this.post.likes.likes.forEach(item => {
+        this.post.likes.likes.forEach((item) => {
           if (item.user === localStorage.user) {
             this.liked = true;
           }
         });
+        this.parseDescription = this.post.description;
       }
     });
   },
@@ -77,26 +78,26 @@ export default {
     leaveLike() {
       axios
         .post(`http://localhost:5000/api/posts/unlike/${this.post._id}`, {
-          user: { user: localStorage.user }
+          user: { user: localStorage.user },
         })
-        .then(response => {
+        .then((response) => {
           return response.data;
         });
     },
     addLike() {
       axios
         .post(`http://localhost:5000/api/posts/like/${this.post._id}`, {
-          user: { user: localStorage.user }
+          user: { user: localStorage.user },
         })
-        .then(response => {
+        .then((response) => {
           return response.data;
         });
-    }
+    },
   },
   components: {
     Nav,
-    BottomNav
-  }
+    BottomNav,
+  },
 };
 </script>
 
@@ -107,14 +108,17 @@ export default {
 @import "../assets/scss/mainLayout.scss";
 
 .content {
-  padding: 0 40px;
+  padding: 0 20px;
   padding-top: 120px;
   .author {
     font-weight: 300;
     font-size: 1em;
+    margin-bottom: 10px;
   }
   .title {
     font-weight: 400;
+    line-height: auto;
+    margin-bottom: 10px;
   }
 
   .image-container {
@@ -136,6 +140,7 @@ export default {
     cursor: pointer;
     flex-direction: row;
     color: $gray;
+    margin: 20px 0;
     span {
       transition: 0.5s;
       width: 20px;
@@ -162,6 +167,11 @@ export default {
       animation-duration: 1s;
       animation-iteration-count: infinite;
     }
+  }
+
+  .description {
+    font-weight: 300;
+    font-size: 1em;
   }
 }
 </style>

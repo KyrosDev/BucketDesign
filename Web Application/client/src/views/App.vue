@@ -3,7 +3,7 @@
     <Nav />
     <div class="container">
       <div class="top">
-        <h1 class="header">Discover the world’s top designers & creatives.</h1>
+        <h1 class="header">Discover the world’s <br /> top designers & creatives.</h1>
       </div>
       <ul>
         <li v-for="post in posts" :key="post._id">

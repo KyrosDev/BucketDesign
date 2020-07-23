@@ -7,7 +7,7 @@
         :key="index"
         @click="selected = profession"
       >
-        <input type="radio" :id="profession.name" name="designer" :value="profession" />
+        <input type="radio" :id="profession.name" name="profession" :value="profession" />
         <label :for="profession.name">{{ profession.name }}</label>
       </li>
     </ul>

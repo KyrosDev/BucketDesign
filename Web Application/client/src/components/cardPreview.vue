@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div
-      class="image-container"
+      class="image-container unselectable"
       v-on:dblclick="like"
       @click="viewDetails"
       :style="'background-image: url(' + post.previewURL + ')'"
@@ -9,11 +9,11 @@
       <span class="type"></span>
     </div>
     <div class="info">
-      <h3 class="truncate-text">
+      <h3 class="truncate-text unselectable">
         <span @click="like">{{ post.author }}</span>
         - {{ post.title }}
       </h3>
-      <div class="likes" @click="like">
+      <div class="likes unselectable" @click="like">
         <span :class="liked ? 'liked' : ''">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 18.48">
             <g id="Layer_2" data-name="Layer 2">

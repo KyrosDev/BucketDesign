@@ -23,7 +23,7 @@ const randStr = (len) => {
 
 const schema = Joi.object().keys({
   title: Joi.string().max(30).required(),
-  description: Joi.string().max(500).optional(),
+  description: Joi.string().max(1500).optional(),
   shortcode: Joi.string().alphanum().required(),
   author: Joi.string().alphanum().required(),
   previewURL: Joi.string().required(),
@@ -84,6 +84,31 @@ router.post("/", (req, res, next) => {
   const body = req.body;
   body.shortcode = shortcode;
   body.createdAt = date;
+  const newDescription = body.description.split(" ");
+
+  const urlExpression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+  const urlRegExp = new RegExp(urlExpression);
+
+  const tagExpression = /\@[a-zA-Z0-9()]?/gi;
+  const tagRegExp = new RegExp(tagExpression);
+
+  const boldExpression = /\*\*([a-zA-Z0-9:%._\+~#=]*)\*\*/gi
+  const boldRegExp = new RegExp(boldExpression);
+  newDescription.map((w, i) => {
+    if (w.match(urlRegExp)) {
+      newDescription[i] = `<a href='${w}' class='link' target='_blank'>${w}</a>`;
+    }
+    if (w.match(tagRegExp)) {
+      newDescription[i] = `<a href='http://localhost:8080/designer/${
+        w.split("@")[1]
+      }' class='tag'>${w}</a>`;
+    }
+    if (w.match(boldRegExp)) {
+      console.log("here");
+      newDescription[i] = `<b>${w.split("**")[1]}</b>`;
+    }
+  });
+  body.description = newDescription.join(" ");
   const result = Joi.validate(body, schema);
   if (result.error === null) {
     posts

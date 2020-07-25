@@ -12,7 +12,7 @@ const designers = connection.get("designers");
 
 const schema = Joi.object().keys({
   username: Joi.string().min(4).max(25).alphanum(),
-  profession: Joi.string(),
+  profession: Joi.object(),
   edge_posts: Joi.array()
     .items({
       postID: Joi.string(),
@@ -57,7 +57,7 @@ function createTokenSendResponse(email, res, next) {
       if (err) {
         fttError(res, next);
       } else {
-        res.json({ token });
+        res.json({ token: token, email: email });
       }
     }
   );
@@ -157,50 +157,91 @@ const upload = multer({
 });
 
 router.post(
-  "/:user/setup/profile/picture",
+  "/:user/profile/picture",
   upload.single("file"),
   (req, res, next) => {
     const user = req.params.user;
     const tempPath = req.file.path;
-    if (!fs.existsSync(`./public/${user}`)) {
-      fs.mkdirSync(`./public/${user}`);
-    }
-    const targetPath = `./public/${user}/profilePicture.${
-      req.file.mimetype.split("/")[1]
-    }`;
-    if (
-      path.extname(req.file.originalname).toLowerCase() ===
-      (".png" || ".jpg" || ".jpeg")
-    ) {
-      fs.rename(tempPath, targetPath, (err) => {
-        if (err) next(err, res);
-        designers.findOne({ email: user }).then((user) => {
-          if (user !== null) {
-            const newUser = user;
-            user.profile_picture = targetPath.split("/").slice(2).join("/");
-            designers.remove({ email: user.email });
-            designers.insert(newUser).then((inserted) => {
-              console.log(inserted);
-              res.json("success");
-            }).catch((e) => {
-              next(e, res)
-            })
-          } else {
-            res.json("User not found")
-          }
-        }).catch((e) => next(e, res));
-      });
-    } else {
-      fs.unlink(tempPath, (err) => {
-        if (err) return next(err, res);
-        res
-          .status(403)
-          .contentType("text/plain")
-          .end("Only '.png', '.jpg', 'jpeg', '.gif' and '.mp4' files allowed");
-      });
-    }
+    designers.findOne({ email: user }).then((u) => {
+      if (u !== null) {
+        if (!fs.existsSync(`./public/${u._id}`)) {
+          fs.mkdirSync(`./public/${u._id}`);
+        }
+        const targetPath = `./public/${u._id}/profilePicture.${
+          req.file.mimetype.split("/")[1]
+        }`;
+        if (
+          path.extname(req.file.originalname).toLowerCase() ===
+          (".png" || ".jpg" || ".jpeg")
+        ) {
+          fs.rename(tempPath, targetPath, (err) => {
+            if (err) next(err, res);
+            designers
+              .findOne({ email: user })
+              .then((user) => {
+                if (user !== null) {
+                  const newUser = user;
+                  newUser.profile_picture = targetPath
+                    .split("/")
+                    .slice(2)
+                    .join("/");
+                  designers.remove({ email: user.email });
+                  designers
+                    .insert(newUser)
+                    .then((inserted) => {
+                      console.log(inserted);
+                      res.json("success");
+                    })
+                    .catch((e) => {
+                      next(e, res);
+                    });
+                } else {
+                  res.json("User not found");
+                }
+              })
+              .catch((e) => next(e, res));
+          });
+        } else {
+          fs.unlink(tempPath, (err) => {
+            if (err) return next(err, res);
+            res
+              .status(403)
+              .contentType("text/plain")
+              .end(
+                "Only '.png', '.jpg', 'jpeg', '.gif' and '.mp4' files allowed"
+              );
+          });
+        }
+      }
+    });
   }
 );
+
+// Set profession
+router.post("/:user/profile/profession", (req, res, next) => {
+  const user = req.params.user;
+  const { profession } = req.body;
+
+  designers
+    .findOne({ email: user })
+    .then((u) => {
+      if (u !== null) {
+        const newUser = u;
+        newUser.profession = profession;
+        designers.remove({ email: user });
+        designers
+          .insert(newUser)
+          .then((inserted) => {
+            console.log(inserted);
+            res.json("success");
+          })
+          .catch((e) => next(e));
+      } else {
+        res.json("User not found");
+      }
+    })
+    .catch((e) => next(e));
+});
 
 // SIGNIN - Login Route
 router.post("/signin", (req, res, next) => {

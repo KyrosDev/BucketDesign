@@ -19,7 +19,7 @@
       </label>
       <input type="file" ref="file" name="file" id="file" accept="image/*" @change="onChange" />
     </form>
-    <h1 @click="callback">
+    <h1>
       Upload a profile
       <br />picture.
     </h1>
@@ -29,7 +29,7 @@
 <script>
 import axios from "axios";
 
-const API_URL = `http://localhost:5000/api/designers/${localStorage.user}/setup/profile/picture`;
+const API_URL = `http://localhost:5000/api/designers/${localStorage.user}/profile/picture`;
 export default {
   props: {
     callback: Function

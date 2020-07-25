@@ -76,7 +76,8 @@ export default {
           })
           .then(result => {
             localStorage.token = result.token;
-            this.$router.push("/profile/customize");
+            localStorage.user = result.email;
+            this.$router.push("/app");
           })
           .catch(error => {
             this.errorMessage = error.message;

@@ -8,7 +8,7 @@
         @click="selected = profession"
       >
         <input type="radio" :id="profession.name" name="profession" :value="profession" />
-        <label :for="profession.name">{{ profession.name }}</label>
+        <label @click="setUpProfession(profession)" :for="profession.name">{{ profession.name }}</label>
       </li>
     </ul>
     <h1>
@@ -19,52 +19,59 @@
 </template>
 
 <script>
-
-const API_URL = ``;
+import axios from "axios";
+const API_URL = `http://localhost:5000/api/designers/${localStorage.user}/profile/profession`;
 
 export default {
   props: {
-    callback: Function
+    callback: Function,
   },
   data() {
     return {
       professions: [
         {
           name: "UI Designer",
-          shortcode: "uid"
+          shortcode: "uid",
         },
         {
           name: "UX Designer",
-          shortcode: "uxd"
+          shortcode: "uxd",
         },
         {
           name: "Grahic Designer",
-          shortcode: "gd"
+          shortcode: "gd",
         },
         {
           name: "Anim. Designer",
-          shortcode: "agd"
+          shortcode: "agd",
         },
         {
           name: "Product Designer",
-          shortcode: "pd"
+          shortcode: "pd",
         },
         {
           name: "Motion Designer",
-          shortcode: "md"
+          shortcode: "md",
         },
         {
           name: "Arc. Designer",
-          shortcode: "ad"
+          shortcode: "ad",
         },
         {
           name: "Fashion Designer",
-          shortcode: "fd"
-        }
+          shortcode: "fd",
+        },
       ],
-      selected: null
+      selected: null,
     };
-  }
+  },
+  methods: {
+    setUpProfession(p) {
+      axios.post(API_URL, {
+        profession: p,
+      });
+    },
+  },
 };
 </script>
 

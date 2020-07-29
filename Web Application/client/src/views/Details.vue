@@ -34,6 +34,8 @@ import axios from "axios";
 import Nav from "../components/PostNav";
 import BottomNav from "../components/bottomBar";
 
+const designer = JSON.parse(localStorage.designer);
+
 export default {
   data: () => {
     return {
@@ -52,7 +54,7 @@ export default {
         this.post = response.data;
         this.likeCounter = this.post.likes.counter;
         this.post.likes.likes.forEach((item) => {
-          if (item.user === localStorage.user) {
+          if (item.user === designer._id) {
             this.liked = true;
           }
         });
@@ -78,7 +80,7 @@ export default {
     leaveLike() {
       axios
         .post(`http://localhost:5000/api/posts/unlike/${this.post._id}`, {
-          user: { user: localStorage.user },
+          user: designer._id,
         })
         .then((response) => {
           return response.data;
@@ -87,7 +89,7 @@ export default {
     addLike() {
       axios
         .post(`http://localhost:5000/api/posts/like/${this.post._id}`, {
-          user: { user: localStorage.user },
+          user: designer._id,
         })
         .then((response) => {
           return response.data;

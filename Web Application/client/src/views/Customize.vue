@@ -5,8 +5,20 @@
       <h1>Let's customize your profile!</h1>
     </div>
     <div class="content">
-      <transition name="fade">
-        <component :is="routes[currentIndex].component" v-bind:callback="activeButton" />
+      <transition name="fade" v-if="currentIndex !== 2">
+        <component
+          :is="routes[currentIndex].component"
+          v-bind:callback="activeButton"
+          v-bind:toggle="disableButton"
+        />
+      </transition>
+      <transition name="fade" v-else>
+        <ChooseNameAndBio
+          v-if="currentIndex === 2"
+          v-bind:callback="activeButton"
+          v-bind:toggle="disableButton"
+          v-bind:setup="setUsernameAndBio"
+        />
       </transition>
     </div>
     <div class="button">
@@ -19,6 +31,10 @@
 </template>
 
 <script>
+import axios from "axios";
+
+const API_URL = `http://localhost:5000/api/designers/${localStorage.user}/profile/informations/`;
+
 import UploadImage from "../components/customize/uploadImage";
 import ChooseProfession from "../components/customize/chooseProfession";
 import ChooseNameAndBio from "../components/customize/chooseNameAndBio";
@@ -26,24 +42,26 @@ import ChooseNameAndBio from "../components/customize/chooseNameAndBio";
 export default {
   data: () => {
     return {
-      currentIndex: 0,
+      username: "",
+      bio: "",
+      currentIndex: 2,
       routes: [
         {
-          component: UploadImage
+          component: UploadImage,
         },
         {
-          component: ChooseProfession
+          component: ChooseProfession,
         },
         {
-          component: ChooseNameAndBio
-        }
-      ]
+          component: ChooseNameAndBio,
+        },
+      ],
     };
   },
   components: {
     UploadImage,
     ChooseProfession,
-    ChooseNameAndBio
+    ChooseNameAndBio,
   },
   methods: {
     incrementIndex() {
@@ -51,6 +69,14 @@ export default {
         this.currentIndex++;
       }
       if (this.currentIndex == 3) {
+        axios
+          .post(API_URL, {
+            username: this.username,
+            biography: this.bio,
+          })
+          .then((response) => {
+            localStorage.designer = JSON.stringify(response.data);
+          });
         this.$router.push("/app");
       }
     },
@@ -59,11 +85,19 @@ export default {
         this.currentIndex--;
       }
     },
+    setUsernameAndBio(user, bio) {
+      this.username = user;
+      this.bio = bio;
+    },
     activeButton() {
       const button = this.$el.querySelector(".button");
-      button.classList.toggle("active");
-    }
-  }
+      button.classList.add("active");
+    },
+    disableButton() {
+      const button = this.$el.querySelector(".button");
+      button.classList.remove("active");
+    },
+  },
 };
 </script>
 
@@ -74,7 +108,7 @@ export default {
 @import "../assets/scss/mainLayout.scss";
 
 .fade-enter-active {
-  transition: opacity .8s;
+  transition: opacity 0.8s;
 }
 .fade-leave-active {
   opacity: 0;

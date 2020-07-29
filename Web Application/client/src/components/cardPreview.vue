@@ -31,21 +31,22 @@
 
 <script>
 import axios from "axios";
+const designer = JSON.parse(localStorage.designer);
 
 export default {
   props: {
-    post: Object
+    post: Object,
   },
   data: () => {
     return {
       likeCounter: 0,
-      liked: false
+      liked: false,
     };
   },
   mounted() {
     this.likeCounter = this.$props.post.likes.counter;
-    this.$props.post.likes.likes.forEach(item => {
-      if (item.user === localStorage.user) {
+    this.$props.post.likes.likes.forEach((item) => {
+      if (item.user === designer._id) {
         this.liked = true;
       }
     });
@@ -70,27 +71,27 @@ export default {
         .post(
           `http://localhost:5000/api/posts/unlike/${this.$props.post._id}`,
           {
-            user: { user: localStorage.user }
+            user: designer._id,
           }
         )
-        .then(response => {
+        .then((response) => {
           return response;
         });
     },
     addLike() {
       axios
         .post(`http://localhost:5000/api/posts/like/${this.$props.post._id}`, {
-          user: { user: localStorage.user }
+          user: designer._id,
         })
-        .then(response => {
+        .then((response) => {
           return response;
         });
     },
     viewDetails() {
       const shortcode = this.$props.post.shortcode;
       this.$router.push(`post/${shortcode}`);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -156,7 +157,6 @@ export default {
         animation-duration: 1s;
         animation-iteration-count: infinite;
       }
-      
     }
   }
 }

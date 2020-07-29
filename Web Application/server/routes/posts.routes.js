@@ -140,7 +140,7 @@ router.post("/like/:id", (req, res) => {
         let likes = [...new Set(newPost.likes.likes)];
 
         // Add user who liked the post to the array
-        likes.push(body.user);
+        likes.push(body);
 
         // Save the old values and save to the new post
         newPost._id = id;

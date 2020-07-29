@@ -1,5 +1,9 @@
 <template>
   <div class="container">
+    <h1>
+      Upload a profile
+      <br />picture.
+    </h1>
     <form @submit.prevent method="post" enctype="multipart/form-data">
       <label for="file">
         <svg v-if="file === ''" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 19">
@@ -19,27 +23,27 @@
       </label>
       <input type="file" ref="file" name="file" id="file" accept="image/*" @change="onChange" />
     </form>
-    <h1>
-      Upload a profile
-      <br />picture.
-    </h1>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-
 const API_URL = `http://localhost:5000/api/designers/${localStorage.user}/profile/picture`;
+
 export default {
   props: {
-    callback: Function
+    callback: Function,
+    toggle: Function,
   },
   data() {
     return {
-      file: ""
+      file: "",
     };
   },
   name: "UploadImage",
+  mounted() {
+    this.$props.toggle();
+  },
   methods: {
     onChange() {
       const file = this.$refs.file.files[0];
@@ -48,17 +52,15 @@ export default {
       formData.append("file", this.file);
       axios
         .post(API_URL, formData)
-        .then(response => {
-          console.log(response.data);
-          if (response.data === "success") {
-            this.$props.callback();
-          }
+        .then((response) => {
+          return;
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
-    }
-  }
+      this.$props.callback();
+    },
+  },
 };
 </script>
 
@@ -85,7 +87,7 @@ export default {
   }
 
   label {
-    margin-bottom: 30px;
+    margin-top: 30px;
     display: flex;
     align-items: center;
     justify-content: center;

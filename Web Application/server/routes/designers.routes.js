@@ -136,16 +136,14 @@ router.post("/signup", (req, res, next) => {
 // Get user and check for token
 router.get("/token/:token", (req, res) => {
   const token = req.params.token;
-
-  designers.findOne({ token: token }).then((user) => {
+  designers.findOne({ token }).then((user) => {
     if (user !== null) {
       const result = jwt.verify(token, process.env.SECRET_TOKEN);
-      if (result.error === null) {
-        const newUser = delete user.password;
-        res.json({ user: newUser });
-      } else {
-        res.json(result.error);
-      }
+      designers.findOne({ email: result.email }).then((u) => {
+        delete u.password;
+        delete u.token;
+        res.json({ user: u });
+      });
     } else {
       res.json("User not found");
     }
@@ -160,10 +158,10 @@ router.post(
   "/:user/profile/picture",
   upload.single("file"),
   (req, res, next) => {
-    const user = req.params.user;
+    const email = req.params.user;
     const tempPath = req.file.path;
-    designers.findOne({ email: user }).then((u) => {
-      if (u !== null) {
+    designers.findOne({ email }).then((u) => {
+      if (u) {
         if (!fs.existsSync(`./public/${u._id}`)) {
           fs.mkdirSync(`./public/${u._id}`);
         }
@@ -177,7 +175,7 @@ router.post(
           fs.rename(tempPath, targetPath, (err) => {
             if (err) next(err, res);
             designers
-              .findOne({ email: user })
+              .findOne({ email })
               .then((user) => {
                 if (user !== null) {
                   const newUser = user;
@@ -185,11 +183,10 @@ router.post(
                     .split("/")
                     .slice(2)
                     .join("/");
-                  designers.remove({ email: user.email });
+                  designers.remove({ token: user.token });
                   designers
                     .insert(newUser)
                     .then((inserted) => {
-                      console.log(inserted);
                       res.json("success");
                     })
                     .catch((e) => {
@@ -232,7 +229,6 @@ router.post("/:user/profile/profession", (req, res, next) => {
         designers
           .insert(newUser)
           .then((inserted) => {
-            console.log(inserted);
             res.json("success");
           })
           .catch((e) => next(e));
@@ -241,6 +237,28 @@ router.post("/:user/profile/profession", (req, res, next) => {
       }
     })
     .catch((e) => next(e));
+});
+
+router.post("/:user/profile/informations", (req, res, next) => {
+  const email = req.params.user;
+  const body = req.body;
+
+  designers.findOne({ email }).then((u) => {
+    if (u !== null) {
+      const newUser = u;
+      newUser.username = body.username;
+      newUser.biography = body.biography.trim();
+      designers.remove({ email });
+      designers
+        .insert(newUser)
+        .then((inserted) => {
+          res.json(inserted);
+        })
+        .catch((e) => next(e));
+    } else {
+      res.json("User not found");
+    }
+  });
 });
 
 // SIGNIN - Login Route

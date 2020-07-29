@@ -25,6 +25,7 @@ const API_URL = `http://localhost:5000/api/designers/${localStorage.user}/profil
 export default {
   props: {
     callback: Function,
+    toggle: Function,
   },
   data() {
     return {
@@ -65,11 +66,15 @@ export default {
       selected: null,
     };
   },
+  mounted() {
+    this.$props.toggle();
+  },
   methods: {
     setUpProfession(p) {
       axios.post(API_URL, {
         profession: p,
       });
+      this.$props.callback();
     },
   },
 };

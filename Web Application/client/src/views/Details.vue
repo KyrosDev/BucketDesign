@@ -3,7 +3,10 @@
     <Nav />
     <BottomNav />
     <div class="content">
-      <h4 class="author" v-if="post !== null">{{post.author}} - {{ post.createdAt | luxon }}</h4>
+      <h4 class="author" v-if="post !== null">
+        <span @click="viewProfile(post.author.username)">{{post.author.username}}</span>
+        - {{ post.createdAt | luxon }}
+      </h4>
       <h1 class="title">{{ post !== null ? post.title : "" }}</h1>
       <div
         class="image-container unselectable"
@@ -34,8 +37,6 @@ import axios from "axios";
 import Nav from "../components/PostNav";
 import BottomNav from "../components/bottomBar";
 
-const designer = JSON.parse(localStorage.designer);
-
 export default {
   data: () => {
     return {
@@ -44,23 +45,28 @@ export default {
       parseDescription: null,
       liked: false,
       likeCounter: 0,
+      designer: {},
     };
   },
   mounted() {
-    const shortcode = this.$route.params.shortcode;
-    const POST_URL = `http://localhost:5000/api/posts/${shortcode}`;
-    axios.get(POST_URL).then((response) => {
-      if (response.status == 200) {
-        this.post = response.data;
-        this.likeCounter = this.post.likes.counter;
-        this.post.likes.likes.forEach((item) => {
-          if (item.user === designer._id) {
-            this.liked = true;
-          }
-        });
-        this.parseDescription = this.post.description;
-      }
-    });
+    try {
+      const designer = JSON.parse(localStorage.designer);
+      this.designer = designer;
+      const shortcode = this.$route.params.shortcode;
+      const POST_URL = `http://localhost:5000/api/posts/${shortcode}`;
+      axios.get(POST_URL).then((response) => {
+        if (response.status == 200) {
+          this.post = response.data;
+          this.likeCounter = this.post.likes.counter;
+          this.post.likes.likes.forEach((item) => {
+            if (item.user === designer._id) {
+              this.liked = true;
+            }
+          });
+          this.parseDescription = this.post.description;
+        }
+      });
+    } catch (e) {}
   },
   methods: {
     like() {
@@ -80,7 +86,7 @@ export default {
     leaveLike() {
       axios
         .post(`http://localhost:5000/api/posts/unlike/${this.post._id}`, {
-          user: designer._id,
+          user: this.designer._id,
         })
         .then((response) => {
           return response.data;
@@ -89,11 +95,14 @@ export default {
     addLike() {
       axios
         .post(`http://localhost:5000/api/posts/like/${this.post._id}`, {
-          user: designer._id,
+          user: this.designer._id,
         })
         .then((response) => {
           return response.data;
         });
+    },
+    viewProfile(username) {
+      this.$router.push({ name: "profile", params: { username } });
     },
   },
   components: {

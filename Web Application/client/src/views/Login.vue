@@ -28,15 +28,12 @@
 </template>
 
 <script>
+import axios from "axios";
 import Joi from "joi";
 
 const schema = Joi.object().keys({
-  email: Joi.string()
-    .email()
-    .required(),
-  password: Joi.string()
-    .min(8)
-    .required()
+  email: Joi.string().email().required(),
+  password: Joi.string().min(8).required(),
 });
 
 const LOGIN_URL = "http://localhost:5000/api/designers/signin";
@@ -47,8 +44,8 @@ export default {
       errorMessage: "",
       user: {
         email: "",
-        password: ""
-      }
+        password: "",
+      },
     };
   },
   methods: {
@@ -57,29 +54,35 @@ export default {
       if (this.validUser()) {
         const body = {
           email: this.user.email,
-          password: this.user.password
+          password: this.user.password,
         };
         fetch(LOGIN_URL, {
           method: "POST",
           body: JSON.stringify(body),
           headers: {
-            "content-type": "application/json"
+            "content-type": "application/json",
           },
         })
-          .then(response => {
+          .then((response) => {
             if (response.ok) {
               return response.json();
             }
-            return response.json().then(error => {
+            return response.json().then((error) => {
               throw new Error(error.message);
             });
           })
-          .then(result => {
+          .then((result) => {
             localStorage.token = result.token;
             localStorage.user = result.email;
+
+            axios
+              .get(`http://localhost:5000/api/designers/email/${localStorage.user}`)
+              .then((response) => {
+                localStorage.designer = JSON.stringify(response.data);
+              });
             this.$router.push("/app");
           })
-          .catch(error => {
+          .catch((error) => {
             this.errorMessage = error.message;
           });
       }
@@ -91,8 +94,8 @@ export default {
       }
       this.errorMessage = "Email or Password is invalid. 😬";
       return false;
-    }
-  }
+    },
+  },
 };
 </script>
 

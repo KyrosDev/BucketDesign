@@ -1,6 +1,5 @@
-const { Router } = require("express");
-const router = Router();
-const Joi = require("joi");
+const router = require("express").Router();
+const Joi = require("@hapi/joi");
 const multer = require("multer");
 const path = require("path");
 const bcrypt = require("bcryptjs");
@@ -13,24 +12,33 @@ const designers = connection.get("designers");
 const schema = Joi.object().keys({
   username: Joi.string().min(4).max(25).alphanum(),
   profession: Joi.object(),
-  edge_posts: Joi.array()
-    .items({
-      postID: Joi.string(),
+  edge_posts: Joi.object()
+    .keys({
+      counter: Joi.number().default(0),
+      posts: Joi.array().items(Joi.object()).default([]),
     })
-    .optional()
-    .default([]),
-  edge_followers: Joi.array()
-    .items({
-      followerID: Joi.string(),
+    .default({
+      counter: 0,
+      posts: [],
+    }),
+  edge_followers: Joi.object()
+    .keys({
+      counter: Joi.number().default(0),
+      followers: Joi.array().items(Joi.object()).default([]),
     })
-    .optional()
-    .default([]),
-  edge_followos: Joi.array()
-    .items({
-      followID: Joi.string(),
+    .default({
+      counter: 0,
+      followers: [],
+    }),
+  edge_follows: Joi.object()
+    .keys({
+      counter: Joi.number().default(0),
+      follows: Joi.array().items(Joi.object()).default([]),
     })
-    .optional()
-    .default([]),
+    .default({
+      counter: 0,
+      follows: [],
+    }),
   profile_picture: Joi.string().alphanum(),
   location: Joi.string(),
   biography: Joi.string().max(150),
@@ -111,9 +119,12 @@ router.post("/signup", (req, res, next) => {
                         email: body.email,
                         password: hash,
                         token: token,
+                        edge_posts: {
+                          counter: 0,
+                          posts: [],
+                        },
                       })
                       .then((insertedUser) => {
-                        delete insertedUser.password;
                         res.json(insertedUser);
                       })
                       .catch((e) => console.log(e.toString()));
@@ -134,15 +145,13 @@ router.post("/signup", (req, res, next) => {
 });
 
 // Get user and check for token
-router.get("/token/:token", (req, res) => {
-  const token = req.params.token;
-  designers.findOne({ token }).then((user) => {
+router.get("/email/:email", (req, res) => {
+  const email = req.params.email;
+  designers.findOne({ email }).then((user) => {
     if (user !== null) {
       const result = jwt.verify(token, process.env.SECRET_TOKEN);
-      designers.findOne({ email: result.email }).then((u) => {
-        delete u.password;
-        delete u.token;
-        res.json({ user: u });
+      designers.findOne({ email }).then((u) => {
+        res.json(u);
       });
     } else {
       res.json("User not found");
@@ -232,6 +241,20 @@ router.post("/:user/profile/profession", (req, res, next) => {
             res.json("success");
           })
           .catch((e) => next(e));
+      } else {
+        res.json("User not found");
+      }
+    })
+    .catch((e) => next(e));
+});
+
+router.get("/username/:username", (req, res, next) => {
+  const username = req.params.username;
+  designers
+    .findOne({ username })
+    .then((user) => {
+      if (user !== null) {
+        res.json(user);
       } else {
         res.json("User not found");
       }

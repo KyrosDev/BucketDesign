@@ -44,7 +44,7 @@ export default {
     return {
       username: "",
       bio: "",
-      currentIndex: 2,
+      currentIndex: 0,
       routes: [
         {
           component: UploadImage,
@@ -62,6 +62,11 @@ export default {
     UploadImage,
     ChooseProfession,
     ChooseNameAndBio,
+  },
+  created() {
+    if (localStorage.user == null) {
+      this.$router.go(0);
+    }
   },
   methods: {
     incrementIndex() {

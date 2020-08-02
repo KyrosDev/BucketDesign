@@ -18,13 +18,11 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(helmet());
 app.use(middlewares.checkTokenSetUser);
+app.use(express.static('public'));
 
 // Routes
 const designerRoutes = require("./routes/designers.routes");
 const postRoutes = require("./routes/posts.routes");
-const commentRoutes = require("./routes/comments.routes");
-const messageRoutes = require("./routes/messages.routes");
-const chatroomRoutes = require("./routes/chatrooms.routes");
 
 // Routers
 app.get("/", express.static(path.join(__dirname, "./public")), (req, res) => {
@@ -33,9 +31,7 @@ app.get("/", express.static(path.join(__dirname, "./public")), (req, res) => {
 
 app.use("/api/designers", designerRoutes);
 app.use("/api/posts", postRoutes);
-/* app.use("/api/comments", commentRoutes);
-app.use("/api/messages", messageRoutes);
-app.use("/api/chatrooms", chatroomRoutes); */
+app.use("/public", express.static('public'));
 
 function notFound(req, res, next) {
   res.status(404);

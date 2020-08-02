@@ -10,7 +10,7 @@
     </div>
     <div class="info">
       <h3 class="truncate-text unselectable">
-        <span @click="like">{{ post.author }}</span>
+        <span @click="viewProfile(post.author.username)">{{ post.author.username }}</span>
         - {{ post.title }}
       </h3>
       <div class="likes unselectable" @click="like">
@@ -31,7 +31,6 @@
 
 <script>
 import axios from "axios";
-const designer = JSON.parse(localStorage.designer);
 
 export default {
   props: {
@@ -41,15 +40,20 @@ export default {
     return {
       likeCounter: 0,
       liked: false,
+      designer: {},
     };
   },
   mounted() {
-    this.likeCounter = this.$props.post.likes.counter;
-    this.$props.post.likes.likes.forEach((item) => {
-      if (item.user === designer._id) {
-        this.liked = true;
-      }
-    });
+    try {
+      const designer = JSON.parse(localStorage.designer);
+      this.designer = designer;
+      this.likeCounter = this.$props.post.likes.counter;
+      this.$props.post.likes.likes.forEach((item) => {
+        if (item.user === this.designer._id) {
+          this.liked = true;
+        }
+      });
+    } catch (error) {}
   },
   methods: {
     like() {
@@ -71,7 +75,7 @@ export default {
         .post(
           `http://localhost:5000/api/posts/unlike/${this.$props.post._id}`,
           {
-            user: designer._id,
+            user: this.designer._id,
           }
         )
         .then((response) => {
@@ -81,7 +85,7 @@ export default {
     addLike() {
       axios
         .post(`http://localhost:5000/api/posts/like/${this.$props.post._id}`, {
-          user: designer._id,
+          user: this.designer._id,
         })
         .then((response) => {
           return response;
@@ -90,6 +94,12 @@ export default {
     viewDetails() {
       const shortcode = this.$props.post.shortcode;
       this.$router.push(`post/${shortcode}`);
+    },
+    viewProfile(username) {
+      this.$router.push({
+        name: "profile",
+        params: { username },
+      });
     },
   },
 };

@@ -6,6 +6,7 @@ import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import Customize from "../views/Customize.vue";
 import Details from "../views/Details.vue";
+import Profile from "../views/Profile.vue";
 
 Vue.use(VueRouter);
 
@@ -59,6 +60,11 @@ const routes = [
     path: "/post/:shortcode",
     component: Details,
     name: "details",
+  },
+  {
+    path: "/designer/:username",
+    component: Profile,
+    name: "profile",
   },
 ];
 

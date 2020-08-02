@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const Joi = require("joi");
+const Joi = require("@hapi/joi");
 
 const connection = require("../database/connection");
 const posts = connection.get("posts");
+const designers = connection.get("designers");
 
 const randStr = (len) => {
   const letters =
@@ -25,7 +26,12 @@ const schema = Joi.object().keys({
   title: Joi.string().max(30).required(),
   description: Joi.string().max(1500).optional(),
   shortcode: Joi.string().alphanum().required(),
-  author: Joi.string().alphanum().required(),
+  author: Joi.object()
+    .keys({
+      id: Joi.string().alphanum().required(),
+      username: Joi.string().required(),
+    })
+    .required(),
   previewURL: Joi.string().required(),
   likes: Joi.object({
     counter: Joi.number().required().default(0),
@@ -92,11 +98,13 @@ router.post("/", (req, res, next) => {
   const tagExpression = /\@[a-zA-Z0-9()]?/gi;
   const tagRegExp = new RegExp(tagExpression);
 
-  const boldExpression = /\*\*([a-zA-Z0-9:%._\+~#=]*)\*\*/gi
+  const boldExpression = /\*\*([a-zA-Z0-9:%._\+~#=]*)\*\*/gi;
   const boldRegExp = new RegExp(boldExpression);
   newDescription.map((w, i) => {
     if (w.match(urlRegExp)) {
-      newDescription[i] = `<a href='${w}' class='link' target='_blank'>${w}</a>`;
+      newDescription[
+        i
+      ] = `<a href='${w}' class='link' target='_blank'>${w}</a>`;
     }
     if (w.match(tagRegExp)) {
       newDescription[i] = `<a href='http://localhost:8080/designer/${
@@ -104,7 +112,6 @@ router.post("/", (req, res, next) => {
       }' class='tag'>${w}</a>`;
     }
     if (w.match(boldRegExp)) {
-      console.log("here");
       newDescription[i] = `<b>${w.split("**")[1]}</b>`;
     }
   });
@@ -114,7 +121,26 @@ router.post("/", (req, res, next) => {
     posts
       .insert(result.value)
       .then((post) => {
-        res.json(post);
+        designers
+          .findOne({ username: post.author.username })
+          .then((designer) => {
+            if (designer !== null) {
+              const newDesigner = designer;
+              newDesigner.edge_posts.posts.push(post);
+              console.log(newDesigner)
+              newDesigner.edge_posts.counter =
+                newDesigner.edge_posts.posts.length;
+              designers.update({ username: newDesigner.username }, { $set: newDesigner}).then((updated) => {
+                console.log(updated);
+                res.json(post);
+              }).catch((e) => {
+                console.log(e);
+                res.json(e);
+              });
+            } else {
+              res.json("Designer not found");
+            }
+          });
       })
       .catch((e) => {
         res.json(e);

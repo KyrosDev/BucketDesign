@@ -6,6 +6,7 @@
       </li>
       <li>
         <div
+          @click="goProfile"
           class="unselectable"
           :style="'background-image: url(' + profileURL + ');'"
           alt="Profile Picture"
@@ -30,6 +31,15 @@ export default {
       const profile_picture = `http://localhost:5000/public/${designer.profile_picture}`;
       this.$data.profileURL = profile_picture;
     } catch (error) {}
+  },
+  methods: {
+    goProfile() {
+      const storage = JSON.parse(localStorage.designer);
+      this.$router.push({
+        name: "profile",
+        params: { username: storage.username },
+      });
+    },
   },
 };
 </script>

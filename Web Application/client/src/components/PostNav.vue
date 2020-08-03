@@ -14,11 +14,10 @@
           </svg>
         </span>
       </li>
-      <li>
-        <img
+      <li @click="goProfile">
+        <div
           class="unselectable"
-          :src="profileURL"
-          alt="asd"
+          :style="'background-image: url(' + profileURL + ');'"
         />
       </li>
     </ul>
@@ -42,6 +41,13 @@ export default {
   methods: {
     goBack() {
       this.$router.go(-1);
+    },
+    goProfile() {
+      const storage = JSON.parse(localStorage.designer);
+      this.$router.push({
+        name: "profile",
+        params: { username: storage.username },
+      });
     },
   },
 };
@@ -80,9 +86,11 @@ nav {
         align-self: center;
       }
 
-      img {
-        width: 40px;
+      div {
         height: 40px;
+        width: 40px;
+        background-position: center;
+        background-size: cover;
         border-radius: 15px;
       }
       span {

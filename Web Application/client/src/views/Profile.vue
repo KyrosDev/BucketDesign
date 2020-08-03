@@ -44,14 +44,14 @@ const HOST = "http://localhost:5000";
 export default {
   components: {
     Nav,
-    BottomNav
+    BottomNav,
   },
   data: () => {
     return {
       designer: null,
       profile_picture: null,
       not_found: false,
-      loading: true
+      loading: true,
     };
   },
   mounted() {

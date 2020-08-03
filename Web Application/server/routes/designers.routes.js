@@ -49,10 +49,10 @@ router.get("/token/verify/:token", (req, res, next) => {
   res.json(result);
 });
 
-// Auth Routes
+// Auth Routes - Login and Register
 router.use("/auth", require("./auth.routes"));
 
-// Edit Profile Routes
+// Edit Profile Routes - Add Profile Picture, Profession and Username
 router.use("/profile", require("./profile.routes"));
 
 

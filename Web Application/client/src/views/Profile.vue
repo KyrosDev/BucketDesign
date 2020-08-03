@@ -48,17 +48,30 @@
           <p>{{ designer.edge_posts.counter }} shots.</p>
         </div>
       </div>
-      <ul class="posts-container">
-        <li
-          v-for="post in designer.edge_posts.posts"
-          @click="viewDetails(post.shortcode)"
-          :key="post._id"
-        >
-          <div class="image-container" :style="'background-image: url(' + post.previewURL + ');'">
-            <div class="hover"></div>
-          </div>
-        </li>
-      </ul>
+      <div
+        v-if="follow"
+        @click="followUser"
+        :class="following ? 'follow following' : 'follow unfollowing'"
+      >
+        <p>{{ following ? 'Following' : 'Follow' }}</p>
+      </div>
+      <div class="posts">
+        <h1 class="title">
+          Posts
+          <span>.</span>
+        </h1>
+        <ul class="posts-container">
+          <li
+            v-for="post in designer.edge_posts.posts"
+            @click="viewDetails(post.shortcode)"
+            :key="post._id"
+          >
+            <div class="image-container" :style="'background-image: url(' + post.previewURL + ');'">
+              <div class="hover"></div>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
   <div v-else-if="not_found">
@@ -84,6 +97,8 @@ export default {
       profile_picture: null,
       not_found: false,
       loading: true,
+      follow: true,
+      following: false,
     };
   },
   mounted() {
@@ -97,10 +112,18 @@ export default {
         this.$data.profile_picture = `${HOST}/public/${this.$data.designer.profile_picture}`;
       }
     });
+    const designer = JSON.parse(localStorage.designer);
+    if (this.$router.currentRoute.path.includes(designer.username)) {
+      this.$data.follow = false;
+    }
   },
   methods: {
     viewDetails(shortcode) {
       this.$router.push({ name: "details", params: { shortcode } });
+    },
+    followUser() {
+      const username = this.$router.currentRoute.path.split("/")[2];
+      this.$data.following = !this.$data.following;
     },
   },
 };
@@ -139,6 +162,8 @@ export default {
 
 .content {
   margin-bottom: 80px;
+  display: flex;
+  flex-direction: column;
   .header {
     display: flex;
     flex-direction: row;
@@ -146,7 +171,7 @@ export default {
     .image-container {
       width: 40%;
       padding-top: 40%;
-      background: $red;
+      background: $main;
       border-radius: 0 0 40px 0;
       background-position: center;
       background-size: cover;
@@ -171,17 +196,34 @@ export default {
     }
   }
 
+  .follow {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $white;
+    background: $main;
+    width: 50%;
+    padding: 10px 30px;
+    border-radius: 0 10px 10px 0;
+  }
+
+  .follow.following {
+    background: $green;
+  }
+
   .counters {
     margin-top: 20px;
     display: flex;
     flex-direction: row;
+    justify-content: center;
     .counter {
       display: flex;
       flex-direction: row;
       color: $main;
       justify-content: center;
       align-items: center;
-      margin: 0 10px;
+      margin: 0 15px;
       .counter_icon {
         overflow: hidden;
         height: 20px;
@@ -194,45 +236,53 @@ export default {
     }
   }
 
-  .posts-container {
-    margin-top: 120px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding: 0;
-    list-style: none;
-    width: calc(100vw - 5px);
-    li {
-      cursor: pointer;
-      margin-left: 5px;
-      margin-bottom: 5px;
-      width: calc(100% / 3 - 5px);
-      position: relative;
+  .posts {
+    margin-top: 20px;
+    h1 {
+      margin-left: 10px;
+      span {
+        color: $main;
+      }
     }
-    .hover {
-      width: 100%;
-      height: 100%;
-      background-color: $black;
-      border-radius: 5px;
-      position: absolute;
+    .posts-container {
       display: flex;
-      top: 0;
-      left: 0;
-      opacity: 0;
-      transition: 0.3s;
-      color: white;
-      align-items: center;
-      justify-content: center;
-    }
-    .image-container {
-      width: 100%;
-      padding-top: 100%;
-      background-position: center;
-      background-size: cover;
-      border-radius: 5px;
-      &:hover {
-        .hover {
-          opacity: 0.4;
+      flex-direction: row;
+      flex-wrap: wrap;
+      padding: 0;
+      list-style: none;
+      width: calc(100vw - 5px);
+      li {
+        cursor: pointer;
+        margin-left: 5px;
+        margin-bottom: 5px;
+        width: calc(100% / 3 - 5px);
+        position: relative;
+      }
+      .hover {
+        width: 100%;
+        height: 100%;
+        background-color: $black;
+        border-radius: 5px;
+        position: absolute;
+        display: flex;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        transition: 0.3s;
+        color: white;
+        align-items: center;
+        justify-content: center;
+      }
+      .image-container {
+        width: 100%;
+        padding-top: 100%;
+        background-position: center;
+        background-size: cover;
+        border-radius: 5px;
+        &:hover {
+          .hover {
+            opacity: 0.4;
+          }
         }
       }
     }

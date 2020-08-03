@@ -58,7 +58,6 @@ export default {
             password: this.$data.user.password,
           })
           .then((res) => {
-            console.log(res.data);
             localStorage.token = res.data.token;
             localStorage.user = res.data.email;
             localStorage.designer = JSON.stringify(res.data.designer);

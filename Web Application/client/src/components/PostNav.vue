@@ -14,11 +14,20 @@
           </svg>
         </span>
       </li>
-      <li @click="goProfile">
+      <li @click="settings ? logout() : goProfile()">
         <div
+          v-if="!settings"
           class="unselectable"
           :style="'background-image: url(' + profileURL + ');'"
         />
+        <span v-else  class="logout">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewport="0 0 24 24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path
+              d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2a9.985 9.985 0 0 1 8 4h-2.71a8 8 0 1 0 .001 12h2.71A9.985 9.985 0 0 1 12 22zm7-6v-3h-8v-2h8V8l5 4-5 4z"
+            />
+          </svg>
+        </span>
       </li>
     </ul>
   </nav>
@@ -29,14 +38,21 @@ export default {
   data: () => {
     return {
       profileURL: null,
+      settings: false,
     };
   },
   mounted() {
     try {
       const designer = JSON.parse(localStorage.designer);
       const profile_picture = `http://localhost:5000/public/${designer.profile_picture}`;
-      this.$data.profileURL = profile_picture;
-    } catch (error) {}
+      if (this.$router.currentRoute.path.includes(designer.username)) {
+        this.$data.settings = true;
+      } else {
+        this.$data.profileURL = profile_picture;
+      }
+    } catch (error) {
+      console.log(error);
+    }
   },
   methods: {
     goBack() {
@@ -48,6 +64,9 @@ export default {
         name: "profile",
         params: { username: storage.username },
       });
+    },
+    logout() {
+      this.$router.push({ name: "logout" });
     },
   },
 };
@@ -72,7 +91,7 @@ nav {
     margin: 0;
     list-style: none;
     justify-content: space-between;
-    align-content: center;
+    align-items: center;
     li {
       cursor: pointer;
       margin: 0;
@@ -85,7 +104,6 @@ nav {
       p {
         align-self: center;
       }
-
       div {
         height: 40px;
         width: 40px;
@@ -94,10 +112,12 @@ nav {
         border-radius: 15px;
       }
       span {
+        height: 40px;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        fill: $white;
       }
     }
 
@@ -105,9 +125,6 @@ nav {
       justify-content: flex-end;
       justify-self: flex-end;
       justify-items: flex-end;
-      align-content: flex-end;
-      align-items: flex-end;
-      align-self: flex-end;
     }
   }
 }

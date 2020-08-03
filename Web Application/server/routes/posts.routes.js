@@ -127,22 +127,12 @@ router.post("/", (req, res, next) => {
             if (designer !== null) {
               const newDesigner = designer;
               newDesigner.edge_posts.posts.push(post);
-              console.log(newDesigner);
               newDesigner.edge_posts.counter =
                 newDesigner.edge_posts.posts.length;
-              designers
-                .update(
-                  { username: newDesigner.username },
-                  { $set: newDesigner }
-                )
-                .then((updated) => {
-                  console.log(updated);
-                  res.json(post);
-                })
-                .catch((e) => {
-                  console.log(e);
-                  res.json(e);
-                });
+              designers.update(
+                { username: newDesigner.username },
+                { $set: newDesigner }
+              );
             } else {
               res.json("Designer not found");
             }
@@ -156,7 +146,7 @@ router.post("/", (req, res, next) => {
   }
 });
 
-router.post("/like/:id", (req, res) => {
+router.post("/like/:id", (req, res, next) => {
   const id = req.params.id;
   const body = req.body;
   posts
@@ -182,7 +172,10 @@ router.post("/like/:id", (req, res) => {
         };
 
         // Delete the old post
-        posts.update({ _id: id }, { $set: newPost });
+        posts.update({ _id: id }, { $set: newPost }).catch((e) => next(e));
+        designers
+          .update({ username: newPost.author.username }, { $set: newPost })
+          .catch((e) => next(e));
       }
     })
     .catch((e) => {
@@ -190,7 +183,7 @@ router.post("/like/:id", (req, res) => {
     });
 });
 
-router.post("/unlike/:id", (req, res) => {
+router.post("/unlike/:id", (req, res, next) => {
   const id = req.params.id;
   const body = req.body;
   posts
@@ -226,9 +219,10 @@ router.post("/unlike/:id", (req, res) => {
         };
 
         // Delete the old post
-        posts
-          .update({ _id: id }, { $set: newPost })
-          .then((e) => console.log(e));
+        posts.update({ _id: id }, { $set: newPost }).catch((e) => next(e));
+        designers
+          .update({ username: newPost.author.username }, { $set: newPost })
+          .catch((e) => next(e));
       }
     })
     .catch((e) => {

@@ -16,6 +16,38 @@
           <p class="biography">{{ designer.biography }}</p>
         </div>
       </div>
+      <div class="counters">
+        <div class="counter followers">
+          <span class="counter_icon">
+            <svg xmlns="http://www.w3.org/2000/svg">
+              <title>group_icon</title>
+              <g id="Layer_2" data-name="Layer 2">
+                <g id="Layer_1-2" data-name="Layer 1">
+                  <path
+                    d="M0,21a8,8,0,0,1,16,0H14A6,6,0,0,0,2,21Zm8-9a6,6,0,1,1,6-6A6,6,0,0,1,8,12Zm0-2A4,4,0,1,0,4,6,4,4,0,0,0,8,10Zm8.28,3.7A8,8,0,0,1,21,21H19a6,6,0,0,0-3.54-5.47l.82-1.83ZM15.6,2.41A5.51,5.51,0,0,1,14,13V11a3.5,3.5,0,0,0,1-6.61Z"
+                  />
+                </g>
+              </g>
+            </svg>
+          </span>
+          <p>{{ designer.edge_followers.counter }} followers.</p>
+        </div>
+        <div class="counter posts">
+          <span class="counter_icon">
+            <svg xmlns="http://www.w3.org/2000/svg">
+              <title>image_icon</title>
+              <g id="Layer_2" data-name="Layer 2">
+                <g id="Layer_1-2" data-name="Layer 1">
+                  <path
+                    d="M2,8.1l2-2,5.5,5.5L13,8.1l3,3V2H2Zm0,2.83V16H5.1l3-3L4,8.93ZM7.93,16H16V13.93l-3-3ZM1,0H17a1,1,0,0,1,1,1V17a1,1,0,0,1-1,1H1a1,1,0,0,1-1-1V1A1,1,0,0,1,1,0ZM12.5,7A1.5,1.5,0,1,1,14,5.5,1.5,1.5,0,0,1,12.5,7Z"
+                  />
+                </g>
+              </g>
+            </svg>
+          </span>
+          <p>{{ designer.edge_posts.counter }} shots.</p>
+        </div>
+      </div>
       <ul class="posts-container">
         <li
           v-for="post in designer.edge_posts.posts"
@@ -137,7 +169,29 @@ export default {
         font-size: 0.8em;
       }
     }
-    margin-bottom: 120px;
+  }
+
+  .counters {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    .counter {
+      display: flex;
+      flex-direction: row;
+      color: $main;
+      justify-content: center;
+      align-items: center;
+      margin: 0 10px;
+      .counter_icon {
+        overflow: hidden;
+        height: 20px;
+        width: 20px;
+        fill: $main;
+      }
+      p {
+        margin-left: 5px;
+      }
+    }
   }
 
   .posts-container {

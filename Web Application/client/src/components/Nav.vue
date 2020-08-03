@@ -2,7 +2,7 @@
   <nav>
     <ul>
       <li>
-        <p>Hi, Designer</p>
+        <p v-if="username !== ''">Hi, {{ username }}</p>
       </li>
       <li>
         <div
@@ -23,11 +23,13 @@ export default {
   data: () => {
     return {
       profileURL: null,
+      username: "",
     };
   },
   mounted() {
     try {
       const designer = JSON.parse(localStorage.designer);
+      this.$data.username = designer.username;
       const profile_picture = `http://localhost:5000/public/${designer.profile_picture}`;
       this.$data.profileURL = profile_picture;
     } catch (error) {}

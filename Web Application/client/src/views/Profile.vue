@@ -110,7 +110,6 @@ export default {
         this.$data.not_found = true;
       } else {
         this.$data.designer = response.data;
-        console.log(this.$data.designer);
         this.$data.profile_picture = `${HOST}/public/${this.$data.designer.profile_picture}`;
         this.$data.designer.edge_followers.followers.map((user) => {
           if (user.id == designer._id) {
@@ -132,6 +131,11 @@ export default {
       this.$data.following = !this.$data.following;
       const API_URL = `${HOST}/api/designers/profile/follow/`;
       const designer = JSON.parse(localStorage.designer);
+      if (this.$data.following) {
+        this.$data.designer.edge_followers.counter++;
+      } else {
+        this.$data.designer.edge_followers.counter--;
+      }
       axios
         .post(API_URL, {
           from: designer._id,

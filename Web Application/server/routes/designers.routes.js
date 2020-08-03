@@ -17,7 +17,6 @@ router.get("/", (req, res) => {
 // Get user by email
 router.get("/email/:email", (req, res) => {
   const email = req.params.email;
-  console.log(email);
   designers.findOne({ email }).then((user) => {
     if (user !== null) {
       res.json(u);

@@ -75,7 +75,6 @@ router.post("/follow", (req, res, next) => {
 
 router.post("/:email/picture", upload.single("file"), (req, res, next) => {
   const email = req.params.email;
-  console.log(email);
   const tempPath = req.file.path;
   designers.findOne({ email }).then((u) => {
     if (u) {
@@ -130,7 +129,6 @@ router.post("/:email/picture", upload.single("file"), (req, res, next) => {
 router.post("/:email/profession", (req, res, next) => {
   const email = req.params.email;
   const { profession } = req.body;
-  console.log(profession);
 
   designers
     .findOne({ email: email })

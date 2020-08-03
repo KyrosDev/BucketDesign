@@ -68,8 +68,8 @@ const schema = Joi.object().keys({
       imageURL: Joi.string().required(),
     })
     .optional(),
-
   createdAt: Joi.date().timestamp("javascript").required(),
+  deleted: Joi.bool().default(false),
 });
 
 router.get("/", (req, res) => {
@@ -127,16 +127,22 @@ router.post("/", (req, res, next) => {
             if (designer !== null) {
               const newDesigner = designer;
               newDesigner.edge_posts.posts.push(post);
-              console.log(newDesigner)
+              console.log(newDesigner);
               newDesigner.edge_posts.counter =
                 newDesigner.edge_posts.posts.length;
-              designers.update({ username: newDesigner.username }, { $set: newDesigner}).then((updated) => {
-                console.log(updated);
-                res.json(post);
-              }).catch((e) => {
-                console.log(e);
-                res.json(e);
-              });
+              designers
+                .update(
+                  { username: newDesigner.username },
+                  { $set: newDesigner }
+                )
+                .then((updated) => {
+                  console.log(updated);
+                  res.json(post);
+                })
+                .catch((e) => {
+                  console.log(e);
+                  res.json(e);
+                });
             } else {
               res.json("Designer not found");
             }
@@ -176,17 +182,7 @@ router.post("/like/:id", (req, res) => {
         };
 
         // Delete the old post
-        posts.remove({ _id: id });
-
-        // Create the new post with old id
-        posts
-          .insert(newPost)
-          .then((pst) => {
-            res.json(pst);
-          })
-          .catch((e) => {
-            res.json(e);
-          });
+        posts.update({ _id: id }, { $set: newPost });
       }
     })
     .catch((e) => {
@@ -230,17 +226,9 @@ router.post("/unlike/:id", (req, res) => {
         };
 
         // Delete the old post
-        posts.remove({ _id: id });
-
-        // Create the new post with old id
         posts
-          .insert(newPost) // Create the post
-          .then((pst) => {
-            res.json(pst); // Respond with the post
-          })
-          .catch((e) => {
-            res.json(e); // Respond with the error
-          });
+          .update({ _id: id }, { $set: newPost })
+          .then((e) => console.log(e));
       }
     })
     .catch((e) => {

@@ -52,7 +52,7 @@ ul {
   padding: 0;
   margin: 0;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   padding: 10px 20px;
   margin-bottom: 80px;
   list-style: none;

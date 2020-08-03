@@ -17,7 +17,8 @@
           v-if="currentIndex === 2"
           v-bind:callback="activeButton"
           v-bind:toggle="disableButton"
-          v-bind:setup="setUsernameAndBio"
+          v-bind:setBio="setBio"
+          v-bind:setUsername="setUsername"
         />
       </transition>
     </div>
@@ -33,7 +34,7 @@
 <script>
 import axios from "axios";
 
-const API_URL = `http://localhost:5000/api/designers/${localStorage.user}/profile/informations/`;
+const API_URL = `http://localhost:5000/api/designers/profile/${localStorage.user}/informations/`;
 
 import UploadImage from "../components/customize/uploadImage";
 import ChooseProfession from "../components/customize/chooseProfession";
@@ -90,8 +91,10 @@ export default {
         this.currentIndex--;
       }
     },
-    setUsernameAndBio(user, bio) {
+    setUsername(user) {
       this.username = user;
+    },
+    setBio(bio) {
       this.bio = bio;
     },
     activeButton() {

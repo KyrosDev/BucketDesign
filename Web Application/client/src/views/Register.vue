@@ -42,7 +42,7 @@ const schema = Joi.object().keys({
     .required()
 });
 
-const REGISTER_URL = "http://localhost:5000/api/designers/signup";
+const REGISTER_URL = "http://localhost:5000/api/designers/auth/signup";
 
 export default {
   data: () => {

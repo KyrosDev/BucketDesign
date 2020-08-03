@@ -36,7 +36,7 @@ const schema = Joi.object().keys({
   password: Joi.string().min(8).required(),
 });
 
-const LOGIN_URL = "http://localhost:5000/api/designers/signin";
+const LOGIN_URL = "http://localhost:5000/api/designers/auth/signin";
 
 export default {
   data: () => {
@@ -52,11 +52,22 @@ export default {
     login() {
       this.errorMessage = "";
       if (this.validUser()) {
-        const body = {
-          email: this.user.email,
-          password: this.user.password,
-        };
-        fetch(LOGIN_URL, {
+        axios
+          .post(LOGIN_URL, {
+            email: this.$data.user.email,
+            password: this.$data.user.password,
+          })
+          .then((res) => {
+            console.log(res.data);
+            localStorage.token = res.data.token;
+            localStorage.user = res.data.email;
+            localStorage.designer = JSON.stringify(res.data.designer);
+            this.$router.push("/app");
+          })
+          .catch((error) => {
+            this.errorMessage = error.message;
+          });
+        /* fetch(LOGIN_URL, {
           method: "POST",
           body: JSON.stringify(body),
           headers: {
@@ -74,17 +85,10 @@ export default {
           .then((result) => {
             localStorage.token = result.token;
             localStorage.user = result.email;
-
-            axios
-              .get(`http://localhost:5000/api/designers/email/${localStorage.user}`)
-              .then((response) => {
-                localStorage.designer = JSON.stringify(response.data);
-              });
-            this.$router.push("/app");
           })
           .catch((error) => {
             this.errorMessage = error.message;
-          });
+          }); */
       }
     },
     validUser() {

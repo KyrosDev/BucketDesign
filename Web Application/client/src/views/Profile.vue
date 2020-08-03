@@ -1,9 +1,13 @@
 <template>
-  <div class="container">
+  <div v-if="loading" class="loader">
+    <div class="line icon1"></div>
+    <div class="line icon2"></div>
+  </div>
+  <div v-else-if="!not_found" class="container">
     <Nav />
+    <BottomNav />
     <div class="colored-background"></div>
-    <div v-if="designer === null" class="loader"></div>
-    <div v-else class="content">
+    <div class="content">
       <div class="header">
         <div class="image-container" :style="'background-image: url(' + profile_picture + ');'"></div>
         <div class="informations">
@@ -25,10 +29,14 @@
       </ul>
     </div>
   </div>
+  <div v-else-if="not_found">
+    <h1>User not found</h1>
+  </div>
 </template>
 
 <script>
 import Nav from "../components/PostNav";
+import BottomNav from "../components/bottomBar";
 import axios from "axios";
 
 const HOST = "http://localhost:5000";
@@ -36,18 +44,26 @@ const HOST = "http://localhost:5000";
 export default {
   components: {
     Nav,
+    BottomNav
   },
   data: () => {
     return {
       designer: null,
       profile_picture: null,
+      not_found: false,
+      loading: true
     };
   },
   mounted() {
     const API_URL = `${HOST}/api/designers/username/${this.$route.params.username}`;
     axios.get(API_URL).then((response) => {
-      this.$data.designer = response.data;
-      this.$data.profile_picture = `${HOST}/public/${this.$data.designer.profile_picture}`;
+      this.$data.loading = false;
+      if (response.data === "User not found") {
+        this.$data.not_found = true;
+      } else {
+        this.$data.designer = response.data;
+        this.$data.profile_picture = `${HOST}/public/${this.$data.designer.profile_picture}`;
+      }
     });
   },
   methods: {
@@ -70,7 +86,27 @@ export default {
   background-color: $main;
 }
 
+.loader {
+  width: 100vw;
+  height: 100vh;
+  background-color: $main;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .line {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    border-radius: 100px;
+    background: transparent;
+    border: 4px solid $white;
+    border-bottom: none;
+    animation: loading 3s infinite cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+}
+
 .content {
+  margin-bottom: 80px;
   .header {
     display: flex;
     flex-direction: row;
@@ -129,7 +165,7 @@ export default {
       top: 0;
       left: 0;
       opacity: 0;
-      transition: .3s;
+      transition: 0.3s;
       color: white;
       align-items: center;
       justify-content: center;
@@ -140,9 +176,9 @@ export default {
       background-position: center;
       background-size: cover;
       border-radius: 5px;
-      &:hover{
-        .hover{
-          opacity: .4;
+      &:hover {
+        .hover {
+          opacity: 0.4;
         }
       }
     }

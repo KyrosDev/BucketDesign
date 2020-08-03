@@ -1,10 +1,10 @@
 <template>
   <form @submit.prevent method="post">
     <label for="username">Username:</label>
-    <input @change="checkIfFinished" v-model="username" type="text" name="username" id="username" />
+    <input @change="setUsernameC" v-model="username" type="text" name="username" id="username" />
     <label for="bio">Biography:</label>
     <textarea
-      @change="checkIfFinished"
+      @change="setBioC"
       v-model="bio"
       name="bio"
       id="bio"
@@ -23,7 +23,8 @@ export default {
   props: {
     callback: Function,
     toggle: Function,
-    setup: Function,
+    setUsername: Function,
+    setBio: Function,
   },
   data: () => {
     return {
@@ -32,13 +33,16 @@ export default {
     };
   },
   methods: {
-    checkIfFinished() {
+    setUsernameC() {
       if (this.$data.username.length > 3) {
-        this.$props.setup(this.username, this.bio);
+        this.$props.setUsername(this.username);
         this.$props.callback();
       } else {
         this.$props.toggle();
       }
+    },
+    setBioC() {
+      this.$props.setBio(this.bio);
     },
   },
 };

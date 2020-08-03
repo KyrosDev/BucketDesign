@@ -11,6 +11,68 @@ const upload = multer({
   dest: "./public/",
 });
 
+router.post("/follow", (req, res, next) => {
+  const { from, to, method } = req.body;
+
+  // Find the user (fromUser) how follow the new user (toUser)
+  designers
+    .findOne({ _id: from })
+    .then((fromUser) => {
+      if (fromUser !== null) {
+        // Find the new user (toUser) how followed the user (fromUser)
+        designers
+          .findOne({ username: to })
+          .then((toUser) => {
+            if (toUser !== null) {
+              if (method === "follow") {
+                // Create the fromUser with the new follows map
+                let newFrom = fromUser;
+                const followsSet = [...new Set(newFrom.edge_follows.follows)];
+                followsSet.push({ id: toUser._id });
+                newFrom.edge_follows.follows = followsSet;
+                newFrom.edge_follows.counter = followsSet.length;
+
+                // Create the toUser with the new followers map
+                let newTo = toUser;
+                const followersSet = [
+                  ...new Set(newTo.edge_followers.followers),
+                ];
+                followersSet.push({ id: fromUser._id });
+                newTo.edge_followers.followers = followersSet;
+                newTo.edge_followers.counter = followersSet.length;
+
+                designers.update({ _id: fromUser._id }, { $set: newFrom }); // Update fromUser
+                designers.update({ _id: toUser._id }, { $set: newTo }); // Update toUser
+                res.json(newFrom);
+              } else if (method === "unfollow") {
+                // Create the fromUser with the new follows map
+                let newFrom = fromUser;
+                const fromArr = newFrom.edge_follows.follows;
+                const fromIndex = fromArr.indexOf(toUser._id);
+                fromArr.splice(fromIndex, 1);
+                newFrom.edge_follows.follows = fromArr;
+                newFrom.edge_follows.counter = fromArr.length;
+
+                // Create the toUser with the new followers map
+                let newTo = toUser;
+                const toArr = newTo.edge_followers.followers;
+                const toIndex = toArr.indexOf(fromUser._id);
+                toArr.splice(toIndex, 1);
+                newTo.edge_followers.followers = toArr;
+                newTo.edge_followers.counter = toArr.length;
+
+                designers.update({ _id: fromUser._id }, { $set: newFrom }); // Update fromUser
+                designers.update({ _id: toUser._id }, { $set: newTo }); // Update toUser
+                res.json(newFrom);
+              }
+            }
+          })
+          .catch((e) => next(e));
+      }
+    })
+    .catch((e) => next(e));
+});
+
 router.post("/:email/picture", upload.single("file"), (req, res, next) => {
   const email = req.params.email;
   console.log(email);

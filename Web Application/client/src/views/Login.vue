@@ -66,28 +66,6 @@ export default {
           .catch((error) => {
             this.errorMessage = error.message;
           });
-        /* fetch(LOGIN_URL, {
-          method: "POST",
-          body: JSON.stringify(body),
-          headers: {
-            "content-type": "application/json",
-          },
-        })
-          .then((response) => {
-            if (response.ok) {
-              return response.json();
-            }
-            return response.json().then((error) => {
-              throw new Error(error.message);
-            });
-          })
-          .then((result) => {
-            localStorage.token = result.token;
-            localStorage.user = result.email;
-          })
-          .catch((error) => {
-            this.errorMessage = error.message;
-          }); */
       }
     },
     validUser() {

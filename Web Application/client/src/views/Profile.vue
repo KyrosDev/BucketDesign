@@ -102,6 +102,7 @@ export default {
     };
   },
   mounted() {
+    const designer = JSON.parse(localStorage.designer);
     const API_URL = `${HOST}/api/designers/username/${this.$route.params.username}`;
     axios.get(API_URL).then((response) => {
       this.$data.loading = false;
@@ -109,10 +110,15 @@ export default {
         this.$data.not_found = true;
       } else {
         this.$data.designer = response.data;
+        console.log(this.$data.designer);
         this.$data.profile_picture = `${HOST}/public/${this.$data.designer.profile_picture}`;
+        this.$data.designer.edge_followers.followers.map((user) => {
+          if (user.id == designer._id) {
+            this.$data.following = true;
+          }
+        });
       }
     });
-    const designer = JSON.parse(localStorage.designer);
     if (this.$router.currentRoute.path.includes(designer.username)) {
       this.$data.follow = false;
     }
@@ -124,6 +130,17 @@ export default {
     followUser() {
       const username = this.$router.currentRoute.path.split("/")[2];
       this.$data.following = !this.$data.following;
+      const API_URL = `${HOST}/api/designers/profile/follow/`;
+      const designer = JSON.parse(localStorage.designer);
+      axios
+        .post(API_URL, {
+          from: designer._id,
+          to: username,
+          method: this.$data.following ? "follow" : "unfollow",
+        })
+        .then((response) => {
+          localStorage.designer = JSON.stringify(response.data);
+        });
     },
   },
 };

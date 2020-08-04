@@ -19,35 +19,4 @@ router.get("/:username", (req, res, next) => {
     .catch((e) => next(e));
 });
 
-router.get("/:username/followers", (req, res, next) => {
-  const username = req.params.username;
-  let followers = new Array();
-  designers
-    .findOne({ username })
-    .then((user) => {
-      if (user !== null) {
-        user.edge_followers.followers.forEach((follower) => {
-          designers
-            .findOne({ _id: follower.id })
-            .then((f) => {
-              if (f !== null) {
-                followers.push({
-                  id: f._id,
-                  username: f.username,
-                  profile_picture: `http://localhost:5000/public/${f.profile_picture}`,
-                  profession: f.profession,
-                });
-              }
-            })
-            .then(() => {
-              res.json(followers);
-            });
-        });
-      } else {
-        res.json("User not found");
-      }
-    })
-    .catch((e) => next(e));
-});
-
 module.exports = router;

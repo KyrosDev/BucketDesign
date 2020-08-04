@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const Joi = require("@hapi/joi");
 const jwt = require("jsonwebtoken");
 
 const connection = require("../database/connection");
@@ -33,6 +32,23 @@ router.get("/token/verify/:token", (req, res, next) => {
   res.json(result);
 });
 
+router.get("/:id", (req, res, next) => {
+  const id = req.params.id;
+  designers
+    .findOne({ _id: id })
+    .then((user) => {
+      if (user !== null) {
+        res.json({
+          id: user._id,
+          profile_picture: `http://localhost:5000/public/${user.profile_picture}`,
+          username: user.username,
+          profession: user.profession,
+        });
+      }
+    })
+    .catch((e) => next(e));
+});
+
 // Auth Routes - Login and Register
 router.use("/auth", require("./auth.routes"));
 
@@ -41,6 +57,5 @@ router.use("/username", require("./username.routes"));
 
 // Edit Profile Routes - Add Profile Picture, Profession and Username
 router.use("/profile", require("./profile.routes"));
-
 
 module.exports = router;

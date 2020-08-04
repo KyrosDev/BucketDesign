@@ -14,7 +14,7 @@
             Followers
             <span>.</span>
           </p>
-          <div @click="showFollowersModal" class="close">
+          <div @click="closeFollowersModal" class="close">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
               <path fill="none" d="M0 0h24v24H0z" />
               <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z" />
@@ -105,6 +105,11 @@
         </ul>
       </div>
     </div>
+    <div
+      v-if="followersModal && followers !== null"
+      @click="closeFollowersModal"
+      class="out-clicker"
+    ></div>
   </div>
   <div v-else-if="not_found">
     <h1>User not found</h1>
@@ -132,7 +137,8 @@ export default {
       follow: true,
       following: false,
       followersModal: false,
-      followers: null,
+      designerFollowers: null,
+      followers: [],
     };
   },
   mounted() {
@@ -145,6 +151,13 @@ export default {
       } else {
         this.$data.designer = response.data;
         this.$data.profile_picture = `${HOST}/public/${this.$data.designer.profile_picture}`;
+
+        this.$data.designerFollowers = this.$data.designer.edge_followers.followers;
+        this.$data.designerFollowers.map((follower) => {
+          axios.get(`${HOST}/api/designers/${follower.id}`).then((response) => {
+            this.$data.followers.push(response.data);
+          });
+        });
         this.$data.designer.edge_followers.followers.map((user) => {
           if (user.id == designer._id) {
             this.$data.following = true;
@@ -167,8 +180,19 @@ export default {
       const designer = JSON.parse(localStorage.designer);
       if (this.$data.following) {
         this.$data.designer.edge_followers.counter++;
+
+        this.$data.followers.push({
+          id: designer._id,
+          username: designer.username,
+          profession: designer.profession,
+          profile_picture: `http://localhost:5000/public/${designer.profile_picture}`,
+        });
       } else {
+        const designer = JSON.parse(localStorage.designer);
         this.$data.designer.edge_followers.counter--;
+        const list = this.$data.followers;
+        const index = list.indexOf(designer._id);
+        list.splice(index, 1);
       }
       axios
         .post(API_URL, {
@@ -180,13 +204,11 @@ export default {
           localStorage.designer = JSON.stringify(response.data);
         });
     },
+    closeFollowersModal() {
+      this.$data.followersModal = false;
+    },
     showFollowersModal() {
-      const username = this.$router.currentRoute.path.split("/")[2];
-      const API_URL = `${HOST}/api/designers/username/${this.$route.params.username}/followers`;
-      axios.get(API_URL).then((response) => {
-        this.$data.followers = response.data;
-        this.$data.followersModal = !this.$data.followersModal;
-      });
+      this.$data.followersModal = true;
     },
     goProfile(username) {
       this.$router.push({ name: "profile", params: { username } });
@@ -227,18 +249,21 @@ export default {
 }
 
 .out-clicker {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: transparent;
-  background: transparent;
+  background-color: rgba($color: #000000, $alpha: 0.18);
   overflow: hidden;
+  z-index: 9999999;
 }
 
 .followers-modal {
   z-index: 99999999;
   background: $white;
   position: fixed;
-  height: 70vh;
+  max-height: 60vh;
   width: 70vw;
   left: 50%;
   top: 50%;
@@ -287,6 +312,7 @@ export default {
     overflow-y: auto;
 
     li {
+      margin: 2px 0;
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
@@ -316,7 +342,7 @@ export default {
         height: 50px;
         background-position: center;
         background-size: cover;
-        border-radius: 15px;
+        border-radius: 12px;
       }
     }
   }

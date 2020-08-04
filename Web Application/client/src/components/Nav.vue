@@ -30,7 +30,7 @@ export default {
     try {
       const designer = JSON.parse(localStorage.designer);
       this.$data.username = designer.username;
-      const profile_picture = `http://localhost:5000/public/${designer.profile_picture}`;
+      const profile_picture = `https://bucketdesign.herokuapp.com/public/${designer.profile_picture}`;
       this.$data.profileURL = profile_picture;
     } catch (error) {}
   },

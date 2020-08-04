@@ -3,8 +3,8 @@
     <Nav />
     <BottomNav />
     <div class="content">
-      <h4 class="author" v-if="post !== null">
-        <span @click="viewProfile(post.author.username)">{{post.author.username}}</span>
+      <h4 class="author" v-if="author !== null">
+        <span @click="viewProfile(author)">{{ author }}</span>
         - {{ post.createdAt | luxon }}
       </h4>
       <h1 class="title">{{ post !== null ? post.title : "" }}</h1>
@@ -46,24 +46,32 @@ export default {
       liked: false,
       likeCounter: 0,
       designer: {},
+      author: null,
     };
   },
   mounted() {
     try {
       const designer = JSON.parse(localStorage.designer);
-      this.designer = designer;
+      this.$data.designer = designer;
       const shortcode = this.$route.params.shortcode;
-      const POST_URL = `http://localhost:5000/api/posts/${shortcode}`;
+      const POST_URL = `https://bucketdesign.herokuapp.com/api/posts/${shortcode}`;
       axios.get(POST_URL).then((response) => {
         if (response.status == 200) {
-          this.post = response.data;
-          this.likeCounter = this.post.likes.counter;
-          this.post.likes.likes.forEach((item) => {
-            if (item.user === designer._id) {
-              this.liked = true;
+          this.$data.post = response.data;
+          this.$data.likeCounter = this.$data.post.likes.counter;
+          this.$data.post.likes.likes.forEach((item) => {
+            if (item.id === designer._id) {
+              this.$data.liked = true;
             }
           });
-          this.parseDescription = this.post.description;
+          this.$data.parseDescription = this.$data.post.description;
+          axios
+            .get(
+              `https://bucketdesign.herokuapp.com/api/designers/${this.$data.post.author.id}`
+            )
+            .then((response) => {
+              this.$data.author = response.data.username;
+            });
         }
       });
     } catch (e) {}
@@ -85,8 +93,9 @@ export default {
     },
     leaveLike() {
       axios
-        .post(`http://localhost:5000/api/posts/unlike/${this.post._id}`, {
-          user: this.designer._id,
+        .post(`https://bucketdesign.herokuapp.com/api/posts/actions/${this.post._id}`, {
+          id: this.designer._id,
+          method: "unlike",
         })
         .then((response) => {
           return response.data;
@@ -94,8 +103,9 @@ export default {
     },
     addLike() {
       axios
-        .post(`http://localhost:5000/api/posts/like/${this.post._id}`, {
-          user: this.designer._id,
+        .post(`https://bucketdesign.herokuapp.com/api/posts/actions/${this.post._id}`, {
+          id: this.designer._id,
+          method: "like",
         })
         .then((response) => {
           return response.data;

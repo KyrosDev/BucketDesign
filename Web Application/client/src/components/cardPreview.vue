@@ -9,8 +9,8 @@
       <span class="type"></span>
     </div>
     <div class="info">
-      <h3 class="truncate-text unselectable">
-        <span @click="viewProfile(post.author.username)">{{ post.author.username }}</span>
+      <h3 v-if="author !== null" class="truncate-text unselectable">
+        <span @click="viewProfile(author)">{{ author }}</span>
         - {{ post.title }}
       </h3>
       <div class="likes unselectable" @click="like">
@@ -41,6 +41,7 @@ export default {
       likeCounter: 0,
       liked: false,
       designer: {},
+      author: null,
     };
   },
   mounted() {
@@ -49,10 +50,13 @@ export default {
       this.designer = designer;
       this.likeCounter = this.$props.post.likes.counter;
       this.$props.post.likes.likes.forEach((item) => {
-        if (item.user === this.designer._id) {
+        if (item.id === this.designer._id) {
           this.liked = true;
         }
       });
+      axios.get(`https://bucketdesign.herokuapp.com/api/designers/${this.$props.post.author.id}`).then((response) => {
+        this.$data.author = response.data.username;
+      })
     } catch (error) {}
   },
   methods: {
@@ -73,9 +77,10 @@ export default {
     leaveLike() {
       axios
         .post(
-          `http://localhost:5000/api/posts/unlike/${this.$props.post._id}`,
+          `https://bucketdesign.herokuapp.com/api/posts/actions/${this.$props.post._id}`,
           {
-            user: this.designer._id,
+            id: this.designer._id,
+            method: "unlike"
           }
         )
         .then((response) => {
@@ -84,8 +89,9 @@ export default {
     },
     addLike() {
       axios
-        .post(`http://localhost:5000/api/posts/like/${this.$props.post._id}`, {
-          user: this.designer._id,
+        .post(`https://bucketdesign.herokuapp.com/api/posts/actions/${this.$props.post._id}`, {
+          id: this.designer._id,
+          method: "like"
         })
         .then((response) => {
           return response;

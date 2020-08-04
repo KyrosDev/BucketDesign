@@ -46,7 +46,7 @@ router.get("/:id", (req, res, next) => {
       if (user !== null) {
         res.json({
           id: user._id, // Used for v-for :key
-          profile_picture: `http://localhost:5000/public/${user.profile_picture}`, // Profile Picutre
+          profile_picture: `https://bucketdesign.herokuapp.com/public/${user.profile_picture}`, // Profile Picutre
           username: user.username, // Designer Username
           profession: user.profession, // Designer Profession
         });

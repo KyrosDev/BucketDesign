@@ -130,6 +130,8 @@ router.post("/", (req, res, next) => {
               { username: newDesigner.username },
               { $set: newDesigner }
             );
+
+            res.json(post); // Send current post
           } else {
             res.status(404).json("Designer not found"); // If author doesn't exists send 404 error
           }
@@ -144,13 +146,15 @@ router.post("/", (req, res, next) => {
 });
 
 // Make action on the post with ID
-router.post("/action/:id", (req, res, next) => {
-  // Get the post ID and the Method of the action form request body
-  const { id, method } = req.params.id;
+router.post("/actions/:id", (req, res, next) => {
+  // Get post id from params
+  const id = req.params.id;
+
+  // Get the designer ID and the Method of the action form request body
   const body = req.body;
 
   // If methods is LIKE
-  if (method == "like") {
+  if (body.method == "like") {
     // Find the post by it's ID
     posts
       .findOne({ _id: id })
@@ -188,7 +192,7 @@ router.post("/action/:id", (req, res, next) => {
   }
 
   // If method is UNLIKE
-  else if (method == "unlike") {
+  else if (body.method == "unlike") {
     // Find the post by it's ID
     posts
       .findOne({ _id: id })

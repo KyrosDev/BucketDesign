@@ -34,7 +34,7 @@
 <script>
 import axios from "axios";
 
-const API_URL = `http://localhost:5000/api/designers/profile/${localStorage.user}/informations/`;
+const API_URL = `https://bucketdesign.herokuapp.com/api/designers/profile/${localStorage.user}/informations/`;
 
 import UploadImage from "../components/customize/uploadImage";
 import ChooseProfession from "../components/customize/chooseProfession";

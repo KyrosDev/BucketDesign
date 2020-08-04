@@ -121,7 +121,7 @@ import Nav from "../components/PostNav";
 import BottomNav from "../components/bottomBar";
 import axios from "axios";
 
-const HOST = "http://localhost:5000";
+const HOST = "https://bucketdesign.herokuapp.com/";
 
 export default {
   components: {
@@ -185,7 +185,7 @@ export default {
           id: designer._id,
           username: designer.username,
           profession: designer.profession,
-          profile_picture: `http://localhost:5000/public/${designer.profile_picture}`,
+          profile_picture: `https://bucketdesign.herokuapp.com/public/${designer.profile_picture}`,
         });
       } else {
         const designer = JSON.parse(localStorage.designer);

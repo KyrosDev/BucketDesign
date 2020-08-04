@@ -26,21 +26,6 @@ router.get("/email/:email", (req, res) => {
   });
 });
 
-// Get user by username
-router.get("/username/:username", (req, res, next) => {
-  const username = req.params.username;
-  designers
-    .findOne({ username })
-    .then((user) => {
-      if (user !== null) {
-        res.json(user);
-      } else {
-        res.json("User not found");
-      }
-    })
-    .catch((e) => next(e));
-});
-
 // Verify token route
 router.get("/token/verify/:token", (req, res, next) => {
   const token = req.params.token;
@@ -50,6 +35,9 @@ router.get("/token/verify/:token", (req, res, next) => {
 
 // Auth Routes - Login and Register
 router.use("/auth", require("./auth.routes"));
+
+// Get user information by username
+router.use("/username", require("./username.routes"));
 
 // Edit Profile Routes - Add Profile Picture, Profession and Username
 router.use("/profile", require("./profile.routes"));

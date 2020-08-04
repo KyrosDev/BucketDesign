@@ -7,6 +7,38 @@
     <Nav />
     <BottomNav />
     <div class="colored-background"></div>
+    <transition name="fade" mode="out-in">
+      <div v-if="followersModal && followers !== null" class="followers-modal">
+        <div class="header">
+          <p class="title">
+            Followers
+            <span>.</span>
+          </p>
+          <div @click="showFollowersModal" class="close">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+              <path fill="none" d="M0 0h24v24H0z" />
+              <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z" />
+            </svg>
+          </div>
+        </div>
+        <ul>
+          <li
+            v-for="follower in followers"
+            :key="follower.id"
+            @click="goProfile(follower.username)"
+          >
+            <div
+              class="image-container"
+              :style="'background-image: url(' + follower.profile_picture + ');'"
+            ></div>
+            <div class="informations">
+              <p class="username">{{ follower.username }}</p>
+              <p class="profession">{{ follower.profession.name }}</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </transition>
     <div class="content">
       <div class="header">
         <div class="image-container" :style="'background-image: url(' + profile_picture + ');'"></div>
@@ -17,7 +49,7 @@
         </div>
       </div>
       <div class="counters">
-        <div class="counter followers">
+        <div @click="showFollowersModal" class="counter followers">
           <span class="counter_icon">
             <svg xmlns="http://www.w3.org/2000/svg">
               <title>group_icon</title>
@@ -99,6 +131,8 @@ export default {
       loading: true,
       follow: true,
       following: false,
+      followersModal: false,
+      followers: null,
     };
   },
   mounted() {
@@ -146,6 +180,17 @@ export default {
           localStorage.designer = JSON.stringify(response.data);
         });
     },
+    showFollowersModal() {
+      const username = this.$router.currentRoute.path.split("/")[2];
+      const API_URL = `${HOST}/api/designers/username/${this.$route.params.username}/followers`;
+      axios.get(API_URL).then((response) => {
+        this.$data.followers = response.data;
+        this.$data.followersModal = !this.$data.followersModal;
+      });
+    },
+    goProfile(username) {
+      this.$router.push({ name: "profile", params: { username } });
+    },
   },
 };
 </script>
@@ -178,6 +223,102 @@ export default {
     border: 4px solid $white;
     border-bottom: none;
     animation: loading 3s infinite cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+}
+
+.out-clicker {
+  width: 100vw;
+  height: 100vh;
+  background-color: transparent;
+  background: transparent;
+  overflow: hidden;
+}
+
+.followers-modal {
+  z-index: 99999999;
+  background: $white;
+  position: fixed;
+  height: 70vh;
+  width: 70vw;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px;
+  box-sizing: border-box;
+  padding: 30px;
+  box-shadow: 0 0 100px rgba($color: #000000, $alpha: 0.08);
+
+  .header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    .close {
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      svg {
+        transform: rotate(-45deg);
+        fill: $main;
+      }
+    }
+  }
+
+  .title {
+    font-weight: bold;
+    font-size: 1.4em;
+    span {
+      color: $main;
+    }
+  }
+
+  ul {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+
+    li {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      padding: 5px;
+      transition: 0.3s;
+      border-radius: 15px;
+      cursor: pointer;
+      &:hover,
+      &:active {
+        background: $gray;
+      }
+      .informations {
+        margin-left: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        .username {
+          font-weight: bold;
+        }
+        .profession {
+          color: $main;
+          font-weight: 400;
+        }
+      }
+      .image-container {
+        width: 50px;
+        height: 50px;
+        background-position: center;
+        background-size: cover;
+        border-radius: 15px;
+      }
+    }
   }
 }
 
@@ -227,6 +368,7 @@ export default {
     width: 50%;
     padding: 10px 30px;
     border-radius: 0 10px 10px 0;
+    cursor: pointer;
   }
 
   .follow.following {
@@ -239,6 +381,7 @@ export default {
     flex-direction: row;
     justify-content: center;
     .counter {
+      cursor: pointer;
       display: flex;
       flex-direction: row;
       color: $main;

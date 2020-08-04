@@ -21,7 +21,7 @@ import BottomBar from "../components/bottomBar";
 import Card from "../components/cardPreview";
 import axios from "axios";
 
-const POSTS_URL = "https://bucketdesign.herokuapp.com/api/posts/";
+const POSTS_URL = "http://localhost:5000/api/posts/";
 
 export default {
   name: "Home",

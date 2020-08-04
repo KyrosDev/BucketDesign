@@ -28,7 +28,7 @@
 
 <script>
 import axios from "axios";
-const API_URL = `https://bucketdesign.herokuapp.com/api/designers/profile/${localStorage.user}/picture`;
+const API_URL = `http://localhost:5000/api/designers/profile/${localStorage.user}/picture`;
 
 export default {
   props: {

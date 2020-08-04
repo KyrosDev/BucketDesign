@@ -13,12 +13,12 @@ const app = express();
 dotenv.config();
 
 // App setup
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN_ACCESS,
-    allowedHeaders: "Access-Control-Allow-Origin",
-  })
-);
+const origins = [
+  process.env.CORS_ORIGIN_ACCESS,
+  "http://localhost:5000/",
+  "http://localhost:5000/",
+];
+app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(helmet());
@@ -31,7 +31,7 @@ const postRoutes = require("./routes/posts.routes");
 
 // Routers
 app.get("/", express.static(path.join(__dirname, "./public")), (req, res) => {
-  res.json({ message: "Welcome to my API! 🎉", user: req.user });
+  res.json({ message: "Welcome to my API! 🎉" });
 });
 
 app.use("/api/designers", designerRoutes);

@@ -93,13 +93,21 @@
           <span>.</span>
         </h1>
         <ul class="posts-container">
-          <li
-            v-for="post in designer.edge_posts.posts"
-            @click="viewDetails(post.shortcode)"
-            :key="post._id"
-          >
+          <li v-for="post in posts" @click="viewDetails(post.shortcode)" :key="post._id">
             <div class="image-container" :style="'background-image: url(' + post.previewURL + ');'">
-              <div class="hover"></div>
+              <div class="hover">
+                <span>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 18.48">
+                    <title>heart_fill_icon</title>
+                    <g id="Layer_2" data-name="Layer 2">
+                      <g id="Layer_1-2" data-name="Layer 1">
+                        <path d="M10,1.53A6,6,0,0,1,18.48,10L10,18.48,1.52,10A6,6,0,0,1,10,1.53Z" />
+                      </g>
+                    </g>
+                  </svg>
+                </span>
+                <p>{{ post.likes.counter }}</p>
+              </div>
             </div>
           </li>
         </ul>
@@ -121,7 +129,7 @@ import Nav from "../components/PostNav";
 import BottomNav from "../components/bottomBar";
 import axios from "axios";
 
-const HOST = "https://bucketdesign.herokuapp.com/";
+const HOST = "http://localhost:5000";
 
 export default {
   components: {
@@ -139,6 +147,7 @@ export default {
       followersModal: false,
       designerFollowers: null,
       followers: [],
+      posts: [],
     };
   },
   mounted() {
@@ -163,6 +172,13 @@ export default {
             this.$data.following = true;
           }
         });
+        this.$data.designer.edge_posts.posts.map((post) => {
+          axios
+            .get(`http://localhost:5000/api/posts/id/${post.id}`)
+            .then((response) => {
+              this.$data.posts.push(response.data);
+            });
+        });
       }
     });
     if (this.$router.currentRoute.path.includes(designer.username)) {
@@ -185,7 +201,7 @@ export default {
           id: designer._id,
           username: designer.username,
           profession: designer.profession,
-          profile_picture: `https://bucketdesign.herokuapp.com/public/${designer.profile_picture}`,
+          profile_picture: `http://localhost:5000/public/${designer.profile_picture}`,
         });
       } else {
         const designer = JSON.parse(localStorage.designer);
@@ -249,7 +265,7 @@ export default {
 }
 
 .out-clicker {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
@@ -455,13 +471,28 @@ export default {
         border-radius: 5px;
         position: absolute;
         display: flex;
+        flex-direction: column;
         top: 0;
         left: 0;
         opacity: 0;
-        transition: 0.3s;
+        transition: 0.2s;
         color: white;
         align-items: center;
         justify-content: center;
+
+        p{
+          color: $white;
+        }
+
+        span {
+          height: 30px;
+          width: 30px;
+          fill: $white;
+          svg {
+            width: 100%;
+          }
+        }
+
       }
       .image-container {
         width: 100%;
@@ -471,7 +502,7 @@ export default {
         border-radius: 5px;
         &:hover {
           .hover {
-            opacity: 0.4;
+            opacity: 0.6;
           }
         }
       }

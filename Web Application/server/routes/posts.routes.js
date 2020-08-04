@@ -87,7 +87,7 @@ router.post("/", (req, res, next) => {
     // If word match with an TAG String
     if (w.match(tagRegExp)) {
       // Convert the word at current index to an HTMLElement who contain an "a href" with path: /designer/:username
-      newDescription[i] = `<a href='http://localhost:8080/designer/${
+      newDescription[i] = `<a href='http://localhost:5000/designer/${
         w.split("@")[1]
       }' class='tag'>${w}</a>`;
     }
@@ -173,7 +173,7 @@ router.post("/actions/:id", (req, res, next) => {
           let likes = [...new Set(newPost.likes.likes)];
 
           // Add user who liked the post to the array
-          likes.push(body);
+          likes.push({ id: body.id });
 
           // Save the old values and save to the new post
           newPost._id = id;
@@ -212,7 +212,7 @@ router.post("/actions/:id", (req, res, next) => {
 
           // Find the user and remove it from array
           likes.forEach((user) => {
-            if (user.id == body.user.id) {
+            if (user.id == body.id) {
               // Get the index of element where user.userID === body.user.userID
               const index = likes.indexOf(user);
 
@@ -255,6 +255,26 @@ router.get("/:shortcode", (req, res) => {
     // If post doesn't exists
     else {
       res.status(404).json("Invalid Shortcoded"); // Send 404 error
+    }
+  });
+});
+
+// Get the post with ID
+router.get("/id/:id", (req, res) => {
+  // Get the shortcode from the request body
+  const id = req.params.id;
+  console.log(id);
+
+  // Find the post by it's shortcode
+  posts.findOne({ _id: id }).then((post) => {
+    // If post exists
+    if (post !== null) {
+      res.json(post); // Send it
+    }
+
+    // If post doesn't exists
+    else {
+      res.status(404).json("Invalid ID"); // Send 404 error
     }
   });
 });

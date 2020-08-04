@@ -44,7 +44,7 @@ export default {
   mounted() {
     try {
       const designer = JSON.parse(localStorage.designer);
-      const profile_picture = `https://bucketdesign.herokuapp.com/public/${designer.profile_picture}`;
+      const profile_picture = `http://localhost:5000/public/${designer.profile_picture}`;
       if (this.$router.currentRoute.path.includes(designer.username)) {
         this.$data.settings = true;
       } else {

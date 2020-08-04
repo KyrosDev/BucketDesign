@@ -33,23 +33,26 @@ app.use("/api/designers", designerRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/public", express.static('public'));
 
+// Send not found error
 function notFound(req, res, next) {
-  res.status(404);
-  const error = new Error(`Not Found - URL: ${req.originalUrl}`);
-  next(error);
+  res.status(404); // Set status code to 404 Not Found
+  const error = new Error(`Not Found - URL: ${req.originalUrl}`); // Create error
+  next(error); // Send error
 }
 
+// Send error if some error
 function errorHandler(err, req, res, next) {
-  res.status(res.statusCode || 500);
+  res.status(res.statusCode || 500); // Set status code to currentStatus or 500
   res.json({
     message: err.message,
     stack: process.env.NODE_ENV === "production" ? "🥮" : err.stack,
-  });
+  }); // Send message
 }
 
-app.use(notFound);
-app.use(errorHandler);
+app.use(notFound); // Use middlewares
+app.use(errorHandler); // Use middlewares
 
+// Run application
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on: 'http://localhost:${PORT}' ✨`);

@@ -13,12 +13,17 @@ const app = express();
 dotenv.config();
 
 // App setup
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN_ACCESS,
+    allowedHeaders: "Access-Control-Allow-Origin",
+  })
+);
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(helmet());
 app.use(middlewares.checkTokenSetUser);
-app.use(express.static('public'));
+app.use(express.static("public"));
 
 // Routes
 const designerRoutes = require("./routes/designers.routes");
@@ -31,7 +36,7 @@ app.get("/", express.static(path.join(__dirname, "./public")), (req, res) => {
 
 app.use("/api/designers", designerRoutes);
 app.use("/api/posts", postRoutes);
-app.use("/public", express.static('public'));
+app.use("/public", express.static("public"));
 
 // Send not found error
 function notFound(req, res, next) {

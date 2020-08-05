@@ -21,7 +21,28 @@
             </svg>
           </div>
         </div>
-        <ul>
+        <div class="search-bar">
+          <input
+            type="text"
+            id="username"
+            name="username"
+            v-model="findUser"
+            placeholder="Find user..."
+          />
+          <span @click="searchByUsername(findUser)">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20.31 20.31">
+              <title>search_eye_icon</title>
+              <g id="Layer_2" data-name="Layer 2">
+                <g id="Layer_1-2" data-name="Layer 1">
+                  <path
+                    d="M16,14.62l4.28,4.28L18.9,20.31,14.62,16A9,9,0,1,1,16,14.62Zm-2-.74a7,7,0,1,0-.14.14Zm-3.84-8.7a2,2,0,1,0,1.64,3.64,2,2,0,0,0,1-1,4,4,0,1,1-5-2.64A4,4,0,0,1,10.18,5.18Z"
+                  />
+                </g>
+              </g>
+            </svg>
+          </span>
+        </div>
+        <ul v-if="!searched && !userNotFound">
           <li
             v-for="follower in followers"
             :key="follower.id"
@@ -37,6 +58,25 @@
             </div>
           </li>
         </ul>
+        <ul v-if="searched && !userNotFound">
+          <li
+            v-for="follower in searchResult"
+            :key="follower.id"
+            @click="goProfile(follower.username)"
+          >
+            <div
+              class="image-container"
+              :style="'background-image: url(' + follower.profile_picture + ');'"
+            ></div>
+            <div class="informations">
+              <p class="username">{{ follower.username }}</p>
+              <p class="profession">{{ follower.profession.name }}</p>
+            </div>
+          </li>
+        </ul>
+        <div class="not-found" v-if="userNotFound">
+          <p>User not found</p>
+        </div>
       </div>
     </transition>
     <div class="content">
@@ -148,6 +188,10 @@ export default {
       designerFollowers: null,
       followers: [],
       posts: [],
+      findUser: "",
+      searchResult: [],
+      searched: false,
+      userNotFound: false,
     };
   },
   mounted() {
@@ -228,6 +272,28 @@ export default {
     },
     goProfile(username) {
       this.$router.push({ name: "profile", params: { username } });
+    },
+    searchByUsername(username) {
+      const designer = JSON.parse(localStorage.designer);
+      if (username !== "") {
+        axios.get(`${HOST}/api/designers/find/${username}`).then((response) => {
+          this.$data.searchResult = [];
+          if (response.data == "Not found") {
+            this.$data.userNotFound = true;
+          } else {
+            response.data.map((user) => {
+              if (user.username !== designer.username) {
+                this.$data.searchResult.push(user);
+              }
+            });
+            this.$data.userNotFound = false;
+            this.$data.searched = true;
+          }
+        });
+      } else {
+        this.$data.searched = false;
+        this.$data.userNotFound = false;
+      }
     },
   },
 };
@@ -315,6 +381,34 @@ export default {
     font-size: 1.4em;
     span {
       color: $main;
+    }
+  }
+
+  .search-bar {
+    width: 100%;
+    height: 2em;
+    box-shadow: 5px 5px 20px rgba($color: #000000, $alpha: 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    input {
+      width: 100%;
+      color: $main;
+      height: 100%;
+      padding: 0 15px;
+      outline: none;
+      border: none;
+    }
+
+    span {
+      margin-right: 15px;
+      fill: $main;
+      z-index: 2;
+      width: 20px;
+      height: 20px;
     }
   }
 
@@ -480,7 +574,7 @@ export default {
         align-items: center;
         justify-content: center;
 
-        p{
+        p {
           color: $white;
         }
 
@@ -492,7 +586,6 @@ export default {
             width: 100%;
           }
         }
-
       }
       .image-container {
         width: 100%;

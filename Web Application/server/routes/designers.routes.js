@@ -51,10 +51,33 @@ router.get("/:id", (req, res, next) => {
           profession: user.profession, // Designer Profession
         });
       } else {
-        res.json("User not found")
+        res.json("User not found");
       }
     })
     // If error send error
+    .catch((e) => next(e));
+});
+
+router.get("/find/:username", (req, res, next) => {
+  const { username } = req.params;
+  designers
+    .find({ username: { $regex: username, $options: "i" } })
+    .then(async (designer) => {
+      if (designer.length > 0) {
+        const arr = [];
+        await designer.map((user) => {
+          arr.push({
+            id: user._id, // Used for v-for :key
+            profile_picture: `http://localhost:5000/public/${user.profile_picture}`, // Profile Picutre
+            username: user.username, // Designer Username
+            profession: user.profession, // Designer Profession
+          });
+        });
+        res.json(arr);
+      } else {
+        res.json("Not found");
+      }
+    })
     .catch((e) => next(e));
 });
 

@@ -12,11 +12,15 @@ const app = express();
 dotenv.config();
 
 // App setup
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, Content-Type, Accept, Authorization, X-Request-With"
+  );
+  next();
+});
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -32,6 +36,7 @@ const postRoutes = require("./routes/posts.routes");
 
 // Routers
 app.get("/", (req, res) => {
+  console.log(req.headers);
   res.json({ message: "Welcome to my API! 🎉" });
 });
 

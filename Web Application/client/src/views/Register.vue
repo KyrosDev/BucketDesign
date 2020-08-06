@@ -89,26 +89,6 @@ export default {
             this.$data.error = err.message;
           }
         );
-        /* fetch(REGISTER_URL, {
-          method: "POST",
-          body: JSON.stringify(body),
-        })
-          .then((response) => {
-            if (response.ok) {
-              return response.json();
-            }
-            return response.json().then((error) => {
-              this.emailError = error.message;
-            });
-          })
-          .then((result) => {
-            localStorage.token = result.token;
-            localStorage.user = result.email;
-            this.$router.push("/profile/customize");
-          })
-          .catch((error) => {
-            this.errorMessage = error.message;
-          }); */
       }
     },
     validUser() {

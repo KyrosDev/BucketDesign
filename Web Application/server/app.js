@@ -12,7 +12,11 @@ const app = express();
 dotenv.config();
 
 // App setup
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

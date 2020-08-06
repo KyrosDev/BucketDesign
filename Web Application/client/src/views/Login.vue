@@ -36,7 +36,7 @@ const schema = Joi.object().keys({
   password: Joi.string().min(8).required(),
 });
 
-const LOGIN_URL = "http://localhost:5000/api/designers/auth/signin";
+const LOGIN_URL = "http://localhost:5000/api/v1/designers/auth/signin";
 
 export default {
   data: () => {

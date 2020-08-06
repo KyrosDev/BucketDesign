@@ -22,7 +22,7 @@ function loggedInRedirectDashboard(to, from, next) {
 
 function isLoggedIn(to, from, next) {
   if (localStorage.token) {
-    const API_URL = `http://localhost:5000/api/designers/token/verify/${localStorage.token}`;
+    const API_URL = `http://localhost:5000/api/v1/designers/token/verify/${localStorage.token}`;
     axios.get(API_URL).then((response) => {
       if (response.data.message == "invalid token") {
         localStorage.clear();

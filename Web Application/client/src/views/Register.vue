@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section v-if="!loading">
     <div class="top">
       <p>Hi, designer!</p>
       <h1>Welcome to BucketDesign.</h1>
@@ -7,15 +7,18 @@
     <form @submit.prevent="register">
       <div class="form-group">
         <label for="email">Email</label>
-        <input v-model="user.email" type="email" name="email" id="email" required/>
+        <input v-model="user.email" type="email" name="email" id="email" required />
         <transition name="slide-fade">
           <p v-if="emailError" class="error">{{ emailError }}</p>
         </transition>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input v-model="user.password" type="password" name="password" id="password" required/>
-        <p class="pass-length" :class="user.password.length >= 8 ? 'good' : null">Length: {{ user.password.length }} / 8</p>
+        <input v-model="user.password" type="password" name="password" id="password" required />
+        <p
+          class="pass-length"
+          :class="user.password.length >= 8 ? 'good' : null"
+        >Length: {{ user.password.length }} / 8</p>
         <transition name="slide-fade">
           <p v-if="passwordError" class="error">{{ passwordError }}</p>
         </transition>
@@ -28,31 +31,32 @@
       </div>
     </form>
   </section>
+  <div v-else>CARICAMENTO</div>
 </template>
 
 <script>
+import axios from "axios";
 import Joi from "joi";
 
 const schema = Joi.object().keys({
-  email: Joi.string()
-    .email()
-    .required(),
-  password: Joi.string()
-    .min(8)
-    .required()
+  email: Joi.string().email().required(),
+  password: Joi.string().min(8).required(),
 });
 
-const REGISTER_URL = "http://localhost:5000/api/designers/auth/signup";
+const REGISTER_URL =
+  "https://bucketdesign.herokuapp.com/api/v1/designers/auth/signup";
 
 export default {
   data: () => {
     return {
       emailError: "",
       passwordError: "",
+      error: "",
       user: {
         email: "",
-        password: ""
-      }
+        password: "",
+      },
+      loading: false,
     };
   },
   watch: {
@@ -60,8 +64,8 @@ export default {
       handler() {
         this.emailError = "";
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
     register() {
@@ -70,32 +74,41 @@ export default {
       if (this.validUser()) {
         const body = {
           email: this.user.email,
-          password: this.user.password
+          password: this.user.password,
         };
-        this.signingUp = true;
-        fetch(REGISTER_URL, {
+        this.loading = true;
+        axios.post(REGISTER_URL, body).then(
+          (response) => {
+            this.$data.loading = false;
+            localStorage.token = result.token;
+            localStorage.user = result.email;
+            this.$router.push("/profile/customize");
+          },
+          (err) => {
+            this.$data.loading = false;
+            this.$data.error = err.message;
+          }
+        );
+        /* fetch(REGISTER_URL, {
           method: "POST",
           body: JSON.stringify(body),
-          headers: {
-            "content-type": "application/json"
-          }
         })
-          .then(response => {
+          .then((response) => {
             if (response.ok) {
               return response.json();
             }
-            return response.json().then(error => {
+            return response.json().then((error) => {
               this.emailError = error.message;
             });
           })
-          .then(result => {
+          .then((result) => {
             localStorage.token = result.token;
             localStorage.user = result.email;
             this.$router.push("/profile/customize");
           })
-          .catch(error => {
+          .catch((error) => {
             this.errorMessage = error.message;
-          });
+          }); */
       }
     },
     validUser() {
@@ -109,8 +122,8 @@ export default {
         this.passwordError = "Password is invalid. 🙈";
       }
       return false;
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -54,7 +54,7 @@ export default {
       const designer = JSON.parse(localStorage.designer);
       this.$data.designer = designer;
       const shortcode = this.$route.params.shortcode;
-      const POST_URL = `http://localhost:5000/api/posts/${shortcode}`;
+      const POST_URL = `http://localhost:5000/api/v1/posts/${shortcode}`;
       axios.get(POST_URL).then((response) => {
         if (response.status == 200) {
           this.$data.post = response.data;
@@ -67,7 +67,7 @@ export default {
           this.$data.parseDescription = this.$data.post.description;
           axios
             .get(
-              `http://localhost:5000/api/designers/${this.$data.post.author.id}`
+              `http://localhost:5000/api/v1/designers/${this.$data.post.author.id}`
             )
             .then((response) => {
               this.$data.author = response.data.username;
@@ -93,7 +93,7 @@ export default {
     },
     leaveLike() {
       axios
-        .post(`http://localhost:5000/api/posts/actions/${this.post._id}`, {
+        .post(`http://localhost:5000/api/v1/posts/actions/${this.post._id}`, {
           id: this.designer._id,
           method: "unlike",
         })
@@ -103,7 +103,7 @@ export default {
     },
     addLike() {
       axios
-        .post(`http://localhost:5000/api/posts/actions/${this.post._id}`, {
+        .post(`http://localhost:5000/api/v1/posts/actions/${this.post._id}`, {
           id: this.designer._id,
           method: "like",
         })

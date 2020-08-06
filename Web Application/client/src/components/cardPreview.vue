@@ -54,7 +54,7 @@ export default {
           this.liked = true;
         }
       });
-      axios.get(`http://localhost:5000/api/designers/${this.$props.post.author.id}`).then((response) => {
+      axios.get(`http://localhost:5000/api/v1/designers/${this.$props.post.author.id}`).then((response) => {
         this.$data.author = response.data.username;
       })
     } catch (error) {}
@@ -77,7 +77,7 @@ export default {
     leaveLike() {
       axios
         .post(
-          `http://localhost:5000/api/posts/actions/${this.$props.post._id}`,
+          `http://localhost:5000/api/v1/posts/actions/${this.$props.post._id}`,
           {
             id: this.designer._id,
             method: "unlike"
@@ -89,7 +89,7 @@ export default {
     },
     addLike() {
       axios
-        .post(`http://localhost:5000/api/posts/actions/${this.$props.post._id}`, {
+        .post(`http://localhost:5000/api/v1/posts/actions/${this.$props.post._id}`, {
           id: this.designer._id,
           method: "like"
         })

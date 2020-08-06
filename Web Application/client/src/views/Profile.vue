@@ -27,7 +27,10 @@
             id="username"
             name="username"
             v-model="findUser"
+            @keydown="searchByUsername(findUser)"
+            @keyup="searchByUsername(findUser)"
             placeholder="Find user..."
+            autocomplete="off"
           />
           <span @click="searchByUsername(findUser)">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20.31 20.31">
@@ -196,7 +199,7 @@ export default {
   },
   mounted() {
     const designer = JSON.parse(localStorage.designer);
-    const API_URL = `${HOST}/api/designers/username/${this.$route.params.username}`;
+    const API_URL = `${HOST}/api/v1/designers/username/${this.$route.params.username}`;
     axios.get(API_URL).then((response) => {
       this.$data.loading = false;
       if (response.data === "User not found") {
@@ -207,7 +210,7 @@ export default {
 
         this.$data.designerFollowers = this.$data.designer.edge_followers.followers;
         this.$data.designerFollowers.map((follower) => {
-          axios.get(`${HOST}/api/designers/${follower.id}`).then((response) => {
+          axios.get(`${HOST}/api/v1/designers/${follower.id}`).then((response) => {
             this.$data.followers.push(response.data);
           });
         });
@@ -218,7 +221,7 @@ export default {
         });
         this.$data.designer.edge_posts.posts.map((post) => {
           axios
-            .get(`http://localhost:5000/api/posts/id/${post.id}`)
+            .get(`http://localhost:5000/api/v1/posts/id/${post.id}`)
             .then((response) => {
               this.$data.posts.push(response.data);
             });
@@ -236,7 +239,7 @@ export default {
     followUser() {
       const username = this.$router.currentRoute.path.split("/")[2];
       this.$data.following = !this.$data.following;
-      const API_URL = `${HOST}/api/designers/profile/follow/`;
+      const API_URL = `${HOST}/api/v1/designers/profile/follow/`;
       const designer = JSON.parse(localStorage.designer);
       if (this.$data.following) {
         this.$data.designer.edge_followers.counter++;
@@ -276,7 +279,7 @@ export default {
     searchByUsername(username) {
       const designer = JSON.parse(localStorage.designer);
       if (username !== "") {
-        axios.get(`${HOST}/api/designers/find/${username}`).then((response) => {
+        axios.get(`${HOST}/api/v1/designers/find/${username}`).then((response) => {
           this.$data.searchResult = [];
           if (response.data == "Not found") {
             this.$data.userNotFound = true;
@@ -386,7 +389,7 @@ export default {
 
   .search-bar {
     width: 100%;
-    height: 2em;
+    height: 2.5em;
     box-shadow: 5px 5px 20px rgba($color: #000000, $alpha: 0.1);
     border-radius: 10px;
     overflow: hidden;

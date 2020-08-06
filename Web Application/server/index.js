@@ -13,12 +13,17 @@ const app = express();
 dotenv.config();
 
 // App setup
-const origins = [
-  process.env.CORS_ORIGIN_ACCESS,
-  "http://localhost:5000/",
-  "http://localhost:5000/",
-];
-app.use(cors());
+const ORIGINS = ["http://localhost:8080/", "https://bucket-design.vercel.app/"];
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (ORIGINS.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
+app.use(cors(corsOptions));
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(helmet());
@@ -34,8 +39,8 @@ app.get("/", express.static(path.join(__dirname, "./public")), (req, res) => {
   res.json({ message: "Welcome to my API! 🎉" });
 });
 
-app.use("/api/designers", designerRoutes);
-app.use("/api/posts", postRoutes);
+app.use("/api/v1/designers", designerRoutes);
+app.use("/api/v1/posts", postRoutes);
 app.use("/public", express.static("public"));
 
 // Send not found error

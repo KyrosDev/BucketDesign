@@ -12,22 +12,15 @@ const app = express();
 dotenv.config();
 
 // App setup
-
-const corsOpts = {
-  origin: "*",
-
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-
-  allowedHeaders: ["Content-Type"],
-};
-
-app.use(cors(corsOpts));
+app.use(cors());
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(middlewares.checkTokenSetUser);
 app.use(express.static("public"));
 app.use(helmet());
+/* 
+app.options("*", cors()); */
 
 // Routes
 const designerRoutes = require("./routes/designers.routes");

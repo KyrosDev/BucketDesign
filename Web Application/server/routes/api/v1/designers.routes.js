@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 
-const connection = require("../database/connection");
+const connection = require("../../../database/connection");
 const designers = connection.get("designers");
 
 designers.createIndex("email", { unique: true });

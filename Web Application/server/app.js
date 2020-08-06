@@ -5,7 +5,21 @@ const helmet = require("helmet");
 const dotenv = require("dotenv");
 const middlewares = require("./middlewares");
 const bodyParser = require("body-parser");
-const cors = require("cors");
+const mongoose = require("mongoose");
+
+const connection = mongoose.connect("mongodb://localhost/bucketdesign", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+});
+
+connection
+  .then(() => {
+    console.log("DB Connected! 🔥😎");
+  })
+  .catch((e) => {
+    console.log(e);
+  });
 
 // App
 const app = express();
@@ -14,7 +28,10 @@ dotenv.config();
 // App setup
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "POST, GET, OPTIONS, PUT, DELETE"
+  );
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, Content-Type, Accept, Authorization, X-Request-With"
@@ -27,12 +44,13 @@ app.use(bodyParser.json());
 app.use(middlewares.checkTokenSetUser);
 app.use(express.static("public"));
 app.use(helmet());
-/* 
-app.options("*", cors()); */
 
 // Routes
-const designerRoutes = require("./routes/designers.routes");
-const postRoutes = require("./routes/posts.routes");
+const designerRoutes_v1 = require("./routes/api/v1/designers.routes");
+const postRoutes_v1 = require("./routes/api/v1/posts.routes");
+
+const designerRoutes_v2 = require("./routes/api/v2/designers.routes");
+/* const postRoutes_v2 = require("./routes/api/v2/posts.routes"); */
 
 // Routers
 app.get("/", (req, res) => {
@@ -40,8 +58,10 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to my API! 🎉" });
 });
 
-app.use("/api/v1/designers", designerRoutes);
-app.use("/api/v1/posts", postRoutes);
+app.use("/api/v1/designers", designerRoutes_v1);
+app.use("/api/v1/posts", postRoutes_v1);
+app.use("/api/v2/designers", designerRoutes_v2);
+/* app.use("/api/v2/posts", postRoutes_v2); */
 app.use("/public", express.static("public"));
 
 app.use((req, res, next) => {

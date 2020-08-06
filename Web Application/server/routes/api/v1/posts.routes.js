@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 const Joi = require("@hapi/joi");
 
-const connection = require("../database/connection"); // Stable a DB Connection
+const connection = require("../../../database/connection"); // Stable a DB Connection
 const posts = connection.get("posts"); // Get Posts Table
 const designers = connection.get("designers"); // Get Designers Table
 
-const schema = require("../models/Post"); // Import Schema
+const schema = require("../../../models/Post"); // Import Schema
 
 // Create a random shortcode for every post with len (LEN).
 const randStr = (len) => {

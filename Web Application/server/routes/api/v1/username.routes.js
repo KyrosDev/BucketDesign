@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 
-const connection = require("../database/connection"); // Stable a DB Connection
+const connection = require("../../../database/connection"); // Stable a DB Connection
 const designers = connection.get("designers"); // Get Designers Table
 
 // Get user by username

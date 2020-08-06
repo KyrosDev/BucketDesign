@@ -4,12 +4,12 @@ const Joi = require("@hapi/joi");
 const bcrypt = require("bcryptjs");
 const router = Router();
 
-const middlewares = require("./middlewares/index"); // To create token and send errors
+const middlewares = require("../../middlewares"); // To create token and send errors
 
-const connection = require("../database/connection"); // Stabilate a DB Connection
+const connection = require("../../../database/connection"); // Stabilate a DB Connection
 const designers = connection.get("designers"); // Get Designers Table
 
-const schema = require("../models/Designer"); // Designer Schema
+const schema = require("../../../models/Designer"); // Designer Schema
 
 // SignUp - Register Route
 router.post("/signup", (req, res, next) => {

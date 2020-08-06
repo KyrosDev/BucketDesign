@@ -4,7 +4,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-const connection = require("../database/connection");
+const connection = require("../../../database/connection");
 const designers = connection.get("designers");
 
 const upload = multer({

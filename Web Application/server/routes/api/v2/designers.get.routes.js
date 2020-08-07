@@ -34,9 +34,8 @@ router.get("/email/:email", (req, res, next) => {
 // Get designer by him usernames
 router.get("/username/:username", (req, res, next) => {
   const { username } = req.params;
-  Model.findOne({ username: { $regex: username, $options: "i" } })
+  Model.find({ username: { $regex: username, $options: "i" } })
     .then((designers) => {
-      console.log(designers);
       if (designers) {
         res.json(designers);
       } else {

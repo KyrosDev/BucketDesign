@@ -50,7 +50,7 @@ const designerRoutes_v1 = require("./routes/api/v1/designers.routes");
 const postRoutes_v1 = require("./routes/api/v1/posts.routes");
 
 const designerRoutes_v2 = require("./routes/api/v2/designers.routes");
-/* const postRoutes_v2 = require("./routes/api/v2/posts.routes"); */
+const postRoutes_v2 = require("./routes/api/v2/posts.routes");
 
 // Routers
 app.get("/", (req, res) => {
@@ -61,7 +61,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/designers", designerRoutes_v1);
 app.use("/api/v1/posts", postRoutes_v1);
 app.use("/api/v2/designers", designerRoutes_v2);
-/* app.use("/api/v2/posts", postRoutes_v2); */
+app.use("/api/v2/posts", postRoutes_v2);
 app.use("/public", express.static("public"));
 
 app.use((req, res, next) => {

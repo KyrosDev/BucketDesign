@@ -11,6 +11,7 @@ router.get("/", (req, res, next) => {
     .catch((e) => next(e));
 });
 
+// Create a Designer
 router.post("/", (req, res, next) => {
   const designer = new Model(req.body);
   designer.validate((err) => {
@@ -49,15 +50,10 @@ router.delete("/id/:id", (req, res, next) => {
     .catch((e) => next(e));
 });
 
-router.put("/id/:id", (req, res, next) => {
-  const { id } = req.params;
-  Model.findOneAndUpdate({ _id: id }, { $set: req.body })
-    .then((updated) => {
-      res.json(updated);
-    })
-    .catch((e) => next(e));
-});
+// Edit profile by ID or EMAIL
+router.use("/put", require("./designers.put.routes"));
 
-router.use("/get", require('./designers.get.routes'));
+// Get Designer by Username, ID, Email
+router.use("/get", require("./designers.get.routes"));
 
 module.exports = router;

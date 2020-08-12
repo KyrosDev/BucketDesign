@@ -1,5 +1,9 @@
 <template>
-  <section>
+  <div v-if="loading" class="loader">
+    <div class="line icon1"></div>
+    <div class="line icon2"></div>
+  </div>
+  <section v-else>
     <div class="top">
       <p>Hi, designer!</p>
       <h1>Welcome back to BucketDesign.</h1>
@@ -36,7 +40,8 @@ const schema = Joi.object().keys({
   password: Joi.string().min(8).required(),
 });
 
-const LOGIN_URL = "http://localhost:5000/api/v2/auth/signin";
+const LOGIN_URL =
+  "https://bucketdesign-server.herokuapp.com/api/v2/auth/signin";
 
 export default {
   data: () => {
@@ -46,10 +51,12 @@ export default {
         email: "",
         password: "",
       },
+      loading: false,
     };
   },
   methods: {
     login() {
+      this.$data.loading = true;
       this.errorMessage = "";
       if (this.validUser()) {
         axios
@@ -71,6 +78,7 @@ export default {
         return true;
       }
       this.errorMessage = "Email or Password is invalid. 😬";
+      this.$data.loading = false;
       return false;
     },
   },

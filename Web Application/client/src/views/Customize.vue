@@ -34,7 +34,7 @@
 <script>
 import axios from "axios";
 
-const API_URL = `http://localhost:5000/api/v2/designers/put/email/${localStorage.user}/`;
+const API_URL = `https://bucketdesign-server.herokuapp.com/api/v2/designers/put/email/${localStorage.user}/`;
 
 import UploadImage from "../components/customize/uploadImage";
 import ChooseProfession from "../components/customize/chooseProfession";
@@ -82,7 +82,6 @@ export default {
           })
           .then((response) => {
             console.log(response.data);
-            localStorage.removeItem("designer");
             localStorage.designer = JSON.stringify(response.data);
           });
         this.$router.push("/app");

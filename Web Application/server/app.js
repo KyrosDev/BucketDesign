@@ -59,8 +59,7 @@ const postRoutes_v2 = require("./routes/api/v2/posts.routes");
 const authRoutes_v2 = require("./routes/api/v2/auth.routes");
 
 // Routers
-app.get("/", (req, res) => {
-  console.log(req.headers);
+app.get("/", (_, res) => {
   res.json({ message: "Welcome to my API! 🎉" });
 });
 

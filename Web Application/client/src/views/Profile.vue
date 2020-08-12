@@ -172,7 +172,7 @@ import Nav from "../components/PostNav";
 import BottomNav from "../components/bottomBar";
 import axios from "axios";
 
-const HOST = "http://localhost:5000";
+const HOST = "https://bucketdesign-server.herokuapp.com";
 
 export default {
   components: {
@@ -199,8 +199,9 @@ export default {
   },
   mounted() {
     const designer = JSON.parse(localStorage.designer);
-    const API_URL = `${HOST}/api/v1/designers/username/${this.$route.params.username}`;
+    const API_URL = `${HOST}/api/v2/designers/get/username/${this.$route.params.username}`;
     axios.get(API_URL).then((response) => {
+      console.log(response.data);
       this.$data.loading = false;
       if (response.data === "User not found") {
         this.$data.not_found = true;
@@ -210,7 +211,7 @@ export default {
 
         this.$data.designerFollowers = this.$data.designer.edge_followers.followers;
         this.$data.designerFollowers.map((follower) => {
-          axios.get(`${HOST}/api/v1/designers/${follower.id}`).then((response) => {
+          axios.get(`${HOST}/api/v2/designers/${follower.id}`).then((response) => {
             this.$data.followers.push(response.data);
           });
         });
@@ -221,7 +222,7 @@ export default {
         });
         this.$data.designer.edge_posts.posts.map((post) => {
           axios
-            .get(`http://localhost:5000/api/v1/posts/id/${post.id}`)
+            .get(`https://bucketdesign-server.herokuapp.com/api/v2/posts/id/${post.id}`)
             .then((response) => {
               this.$data.posts.push(response.data);
             });
@@ -239,7 +240,7 @@ export default {
     followUser() {
       const username = this.$router.currentRoute.path.split("/")[2];
       this.$data.following = !this.$data.following;
-      const API_URL = `${HOST}/api/v1/designers/profile/follow/`;
+      const API_URL = `${HOST}/api/v2/designers/profile/follow/`;
       const designer = JSON.parse(localStorage.designer);
       if (this.$data.following) {
         this.$data.designer.edge_followers.counter++;
@@ -248,7 +249,7 @@ export default {
           id: designer._id,
           username: designer.username,
           profession: designer.profession,
-          profile_picture: `http://localhost:5000/public/${designer.profile_picture}`,
+          profile_picture: `https://bucketdesign-server.herokuapp.com/public/${designer.profile_picture}`,
         });
       } else {
         const designer = JSON.parse(localStorage.designer);
@@ -279,7 +280,7 @@ export default {
     searchByUsername(username) {
       const designer = JSON.parse(localStorage.designer);
       if (username !== "") {
-        axios.get(`${HOST}/api/v1/designers/find/${username}`).then((response) => {
+        axios.get(`${HOST}/api/v2/designers/find/${username}`).then((response) => {
           this.$data.searchResult = [];
           if (response.data == "Not found") {
             this.$data.userNotFound = true;
@@ -312,25 +313,6 @@ export default {
   height: 100px;
   width: 50%;
   background-color: $main;
-}
-
-.loader {
-  width: 100vw;
-  height: 100vh;
-  background-color: $main;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .line {
-    position: absolute;
-    height: 100px;
-    width: 100px;
-    border-radius: 100px;
-    background: transparent;
-    border: 4px solid $white;
-    border-bottom: none;
-    animation: loading 3s infinite cubic-bezier(0.075, 0.82, 0.165, 1);
-  }
 }
 
 .out-clicker {
@@ -472,7 +454,7 @@ export default {
     .image-container {
       width: 40%;
       padding-top: 40%;
-      background: $main;
+      background: $white;
       border-radius: 0 0 40px 0;
       background-position: center;
       background-size: cover;

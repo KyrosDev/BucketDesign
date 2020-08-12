@@ -1,5 +1,9 @@
 <template>
-  <section v-if="!loading">
+  <div v-if="loading" class="loader">
+    <div class="line icon1"></div>
+    <div class="line icon2"></div>
+  </div>
+  <section v-else>
     <div class="top">
       <p>Hi, designer!</p>
       <h1>Welcome to BucketDesign.</h1>
@@ -31,7 +35,6 @@
       </div>
     </form>
   </section>
-  <div v-else>CARICAMENTO</div>
 </template>
 
 <script>
@@ -43,7 +46,8 @@ const schema = Joi.object().keys({
   password: Joi.string().min(8).required(),
 });
 
-const REGISTER_URL = "http://localhost:5000/api/v2/auth/signup";
+const REGISTER_URL =
+  "https://bucketdesign-server.herokuapp.com/api/v2/auth/signup";
 
 export default {
   data: () => {
@@ -70,8 +74,8 @@ export default {
     register() {
       this.emailError = "";
       this.passwordError = "";
+      this.loading = true;
       if (this.validUser()) {
-        this.loading = true;
         axios
           .post(REGISTER_URL, {
             email: this.$data.user.email,
@@ -101,6 +105,7 @@ export default {
       } else {
         this.passwordError = "Password is invalid. 🙈";
       }
+      this.$data.loading = false;
       return false;
     },
   },

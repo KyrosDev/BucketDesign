@@ -35,8 +35,7 @@ router.put("/email/:email", upload.single("file"), (req, res, next) => {
           )}`;
           fs.rename(tempPath, targetPath, (err) => {
             if (err) next(err, res);
-            console.log(targetPath);
-            const finalPath = `http://localhost:5000/${targetPath
+            const finalPath = `https://bucketdesign-server.herokuapp.com/${targetPath
               .split("/")
               .slice(2)
               .join("/")}`;
@@ -64,7 +63,7 @@ router.put("/email/:email", upload.single("file"), (req, res, next) => {
       },
       (err, updated) => {
         if (err) next(err);
-        res.json(updated);
+        else res.json(updated); 
       }
     );
   }

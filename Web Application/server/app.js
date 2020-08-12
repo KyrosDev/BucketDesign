@@ -7,11 +7,14 @@ const middlewares = require("./middlewares");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
-const connection = mongoose.connect("mongodb://localhost/bucketdesign", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-});
+const connection = mongoose.connect(
+  "mongodb+srv://root:voALSUMJkmRAOmpW@bucketdesign.09qrb.mongodb.net/bucketdesign?retryWrites=true&w=majority",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  }
+);
 
 connection
   .then(() => {

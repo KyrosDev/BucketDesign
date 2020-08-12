@@ -36,7 +36,7 @@ const schema = Joi.object().keys({
   password: Joi.string().min(8).required(),
 });
 
-const LOGIN_URL = "http://localhost:5000/api/v1/designers/auth/signin";
+const LOGIN_URL = "http://localhost:5000/api/v2/auth/signin";
 
 export default {
   data: () => {
@@ -53,10 +53,7 @@ export default {
       this.errorMessage = "";
       if (this.validUser()) {
         axios
-          .post(LOGIN_URL, {
-            email: this.$data.user.email,
-            password: this.$data.user.password,
-          })
+          .post(LOGIN_URL, this.$data.user)
           .then((res) => {
             localStorage.token = res.data.token;
             localStorage.user = res.data.email;
@@ -64,7 +61,7 @@ export default {
             this.$router.push("/app");
           })
           .catch((error) => {
-            this.errorMessage = error.message;
+            this.errorMessage = error.message.message;
           });
       }
     },

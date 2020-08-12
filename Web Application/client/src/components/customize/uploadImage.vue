@@ -28,7 +28,7 @@
 
 <script>
 import axios from "axios";
-const API_URL = `http://localhost:5000/api/v1/designers/profile/${localStorage.user}/picture`;
+const API_URL = `http://localhost:5000/api/v2/designers/put/email/${localStorage.user}`;
 
 export default {
   props: {
@@ -51,10 +51,8 @@ export default {
       const formData = new FormData();
       formData.append("file", this.file);
       axios
-        .post(API_URL, formData)
-        .then((response) => {
-          return;
-        })
+        .put(API_URL, formData)
+        .then((response) => console.log(response.data))
         .catch((e) => {
           console.log(e);
         });

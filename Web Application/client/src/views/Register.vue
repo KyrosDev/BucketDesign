@@ -43,8 +43,7 @@ const schema = Joi.object().keys({
   password: Joi.string().min(8).required(),
 });
 
-const REGISTER_URL =
-  "https://bucketdesign.herokuapp.com/api/v1/designers/auth/signup";
+const REGISTER_URL = "http://localhost:5000/api/v2/auth/signup";
 
 export default {
   data: () => {
@@ -72,23 +71,24 @@ export default {
       this.emailError = "";
       this.passwordError = "";
       if (this.validUser()) {
-        const body = {
-          email: this.user.email,
-          password: this.user.password,
-        };
         this.loading = true;
-        axios.post(REGISTER_URL, body).then(
-          (response) => {
-            this.$data.loading = false;
-            localStorage.token = result.token;
-            localStorage.user = result.email;
-            this.$router.push("/profile/customize");
-          },
-          (err) => {
-            this.$data.loading = false;
-            this.$data.error = err.message;
-          }
-        );
+        axios
+          .post(REGISTER_URL, {
+            email: this.$data.user.email,
+            password: this.$data.user.password,
+          })
+          .then(
+            (response) => {
+              this.$data.loading = false;
+              localStorage.token = response.data.token;
+              localStorage.user = response.data.email;
+              this.$router.push("/profile/customize");
+            },
+            (err) => {
+              this.$data.loading = false;
+              this.$data.error = err.message;
+            }
+          );
       }
     },
     validUser() {

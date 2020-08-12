@@ -206,7 +206,7 @@ export default {
         this.$data.not_found = true;
       } else {
         this.$data.designer = response.data;
-        this.$data.profile_picture = `${HOST}/public/${this.$data.designer.profile_picture}`;
+        this.$data.profile_picture = this.$data.designer.profile_picture;
 
         this.$data.designerFollowers = this.$data.designer.edge_followers.followers;
         this.$data.designerFollowers.map((follower) => {

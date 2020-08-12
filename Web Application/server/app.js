@@ -26,6 +26,8 @@ const app = express();
 dotenv.config();
 
 // App setup
+
+app.use(morgan("dev"));
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -38,7 +40,6 @@ app.use((req, res, next) => {
   );
   next();
 });
-app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(middlewares.checkTokenSetUser);
@@ -52,6 +53,8 @@ const postRoutes_v1 = require("./routes/api/v1/posts.routes");
 const designerRoutes_v2 = require("./routes/api/v2/designers.routes");
 const postRoutes_v2 = require("./routes/api/v2/posts.routes");
 
+const authRoutes_v2 = require("./routes/api/v2/auth.routes");
+
 // Routers
 app.get("/", (req, res) => {
   console.log(req.headers);
@@ -62,6 +65,9 @@ app.use("/api/v1/designers", designerRoutes_v1);
 app.use("/api/v1/posts", postRoutes_v1);
 app.use("/api/v2/designers", designerRoutes_v2);
 app.use("/api/v2/posts", postRoutes_v2);
+
+app.use("/api/v2/auth", authRoutes_v2);
+
 app.use("/public", express.static("public"));
 
 app.use((req, res, next) => {

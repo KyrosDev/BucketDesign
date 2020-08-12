@@ -1,7 +1,14 @@
 const { Router } = require("express");
 const router = Router();
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
-const Model = require("../../../models/Deisgner.mongoose");
+const upload = multer({
+  dest: "./public/",
+});
+
+const Model = require("../../../models/Designer.mongoose");
 
 router.put("/id/:id", (req, res, next) => {
   const { id } = req.params;
@@ -12,13 +19,55 @@ router.put("/id/:id", (req, res, next) => {
     .catch((e) => next(e));
 });
 
-router.put("/email/:email", (req, res, next) => {
+router.put("/email/:email", upload.single("file"), (req, res, next) => {
   const { email } = req.params;
-  Model.findOneAndUpdate({ email }, { $set: req.body })
-    .then((updated) => {
-      res.json(updated);
-    })
-    .catch((e) => next(e));
+  if (req.file) {
+    const tempPath = req.file.path;
+    const fileName = req.file.originalname;
+    Model.findOne({ email })
+      .then((designer) => {
+        if (designer) {
+          const pathName = `./public/${designer._id}`;
+          const isPathExists = fs.existsSync(pathName);
+          if (!isPathExists) fs.mkdirSync(pathName);
+          const targetPath = `${pathName}/profilePicture.${path.extname(
+            fileName
+          )}`;
+          fs.rename(tempPath, targetPath, (err) => {
+            if (err) next(err, res);
+            console.log(targetPath);
+            const finalPath = `http://localhost:5000/${targetPath
+              .split("/")
+              .slice(2)
+              .join("/")}`;
+            const newDesigner = designer;
+            newDesigner.profile_picture = finalPath;
+            Model.findOneAndUpdate(
+              { _id: designer._id },
+              {
+                $set: newDesigner,
+              },
+              (err, updated) => {
+                if (err) next(e);
+                res.json(updated);
+              }
+            );
+          });
+        }
+      })
+      .catch((e) => next(e));
+  } else {
+    Model.findOneAndUpdate(
+      { email },
+      {
+        $set: req.body,
+      },
+      (err, updated) => {
+        if (err) next(err);
+        res.json(updated);
+      }
+    );
+  }
 });
 
 module.exports = router;

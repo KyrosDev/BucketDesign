@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 
-const Model = require("../../../models/Deisgner.mongoose");
+const Model = require("../../../models/Designer.mongoose");
 
 router.get("/", (req, res, next) => {
   Model.find()

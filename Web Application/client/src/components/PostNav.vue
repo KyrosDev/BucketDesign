@@ -20,7 +20,7 @@
           class="unselectable"
           :style="'background-image: url(' + profileURL + ');'"
         />
-        <span v-else  class="logout">
+        <span v-else class="logout">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewport="0 0 24 24">
             <path fill="none" d="M0 0h24v24H0z" />
             <path
@@ -44,7 +44,7 @@ export default {
   mounted() {
     try {
       const designer = JSON.parse(localStorage.designer);
-      const profile_picture = `http://localhost:5000/public/${designer.profile_picture}`;
+      const profile_picture = designer.profile_picture;
       if (this.$router.currentRoute.path.includes(designer.username)) {
         this.$data.settings = true;
       } else {

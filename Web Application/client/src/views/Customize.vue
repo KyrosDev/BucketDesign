@@ -34,7 +34,7 @@
 <script>
 import axios from "axios";
 
-const API_URL = `http://localhost:5000/api/v1/designers/profile/${localStorage.user}/informations/`;
+const API_URL = `http://localhost:5000/api/v2/designers/put/email/${localStorage.user}/`;
 
 import UploadImage from "../components/customize/uploadImage";
 import ChooseProfession from "../components/customize/chooseProfession";
@@ -76,11 +76,13 @@ export default {
       }
       if (this.currentIndex == 3) {
         axios
-          .post(API_URL, {
+          .put(API_URL, {
             username: this.username,
             biography: this.bio,
           })
           .then((response) => {
+            console.log(response.data);
+            localStorage.removeItem("designer");
             localStorage.designer = JSON.stringify(response.data);
           });
         this.$router.push("/app");

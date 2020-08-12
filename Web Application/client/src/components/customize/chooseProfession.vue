@@ -20,7 +20,7 @@
 
 <script>
 import axios from "axios";
-const API_URL = `http://localhost:5000/api/v1/designers/profile/${localStorage.user}/profession`;
+const API_URL = `http://localhost:5000/api/v2/designers/put/email/${localStorage.user}`;
 
 export default {
   props: {
@@ -71,8 +71,11 @@ export default {
   },
   methods: {
     setUpProfession(profession) {
-      axios.post(API_URL, {
-        profession,
+      axios.put(API_URL, {
+        profession: {
+          name: profession.name,
+          id: profession.shortcode
+        },
       });
       this.$props.callback();
     },

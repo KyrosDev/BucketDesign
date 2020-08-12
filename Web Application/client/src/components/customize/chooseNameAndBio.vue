@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent method="post">
+  <form @submit.prevent>
     <label for="username">Username:</label>
     <input @change="setUsernameC" v-model="username" type="text" name="username" id="username" />
     <label for="bio">Biography:</label>

@@ -2,7 +2,6 @@ const { Router } = require("express");
 const router = Router();
 
 const Model = require("../../../models/Post.mongoose");
-const app = require("../../../app");
 
 router.get("/", (req, res, next) => {
   Model.find()

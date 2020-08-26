@@ -3,7 +3,7 @@ const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const dotenv = require("dotenv").config();
-const middlewares = require("./middlewares");
+const middlewares = require("./src/middlewares");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
@@ -49,13 +49,15 @@ app.use(express.static("public"));
 app.use(helmet());
 
 // Routes
-const designerRoutes_v1 = require("./routes/api/v1/designers.routes");
-const postRoutes_v1 = require("./routes/api/v1/posts.routes");
+const designerRoutes_v1 = require("./src/routes/api/v1/designers.routes");
+const postRoutes_v1 = require("./src/routes/api/v1/posts.routes");
 
-const designerRoutes_v2 = require("./routes/api/v2/designers.routes");
-const postRoutes_v2 = require("./routes/api/v2/posts.routes");
+const designerRoutes_v2 = require("./src/routes/api/v2/designers.routes");
+const postRoutes_v2 = require("./src/routes/api/v2/posts.routes");
+const chatroomRoutes_v2 = require("./src/routes/api/v2/chatrooms.routes");
+const messageRoutes_v2 = require("./src/routes/api/v2/messages.routes");
 
-const authRoutes_v2 = require("./routes/api/v2/auth.routes");
+const authRoutes_v2 = require("./src/routes/api/v2/auth.routes");
 
 // Routers
 app.get("/", (_, res) => {
@@ -66,10 +68,12 @@ app.use("/api/v1/designers", designerRoutes_v1);
 app.use("/api/v1/posts", postRoutes_v1);
 app.use("/api/v2/designers", designerRoutes_v2);
 app.use("/api/v2/posts", postRoutes_v2);
+app.use("/api/v2/chatrooms", chatroomRoutes_v2);
+app.use("/api/v2/messages", messageRoutes_v2);
 
 app.use("/api/v2/auth", authRoutes_v2);
 
-app.use("/public", express.static("public"));
+app.use("/public", express.static("src/public"));
 
 app.use((req, res, next) => {
   res.status(404); // Set status code to 404 Not Found

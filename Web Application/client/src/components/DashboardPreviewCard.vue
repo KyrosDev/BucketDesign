@@ -40,6 +40,7 @@ export default {
   padding: 40px;
   max-height: 200px;
   margin-right: 40px;
+  margin-bottom: 40px;
   transition: 2s cubic-bezier(0.075, 0.82, 0.165, 1);
   min-width: 340px;
   cursor: pointer;

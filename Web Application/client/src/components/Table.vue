@@ -1,17 +1,20 @@
 <template>
   <div class="main">
-    <h1>{{title}}</h1>
+    <h1>{{title}}<span>.</span></h1>
     <Chart v-if="datacollection" :chart-data="datacollection" />
+    <DesignersTable />
   </div>
 </template>
 
 <script>
 import Chart from "./Chart";
 import Labels from "@/assets/json/ChartLabels.json";
+import DesignersTable from "@/components/DesignersTable.vue";
 
 export default {
   components: {
     Chart,
+    DesignersTable,
   },
   props: {
     title: String,
@@ -44,4 +47,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/variables.scss";
+@import "@/assets/scss/mainLayout.scss";
+@import "@/assets/scss/animations.scss";
+@import "@/assets/scss/utils.scss";
+
+h1 {
+  span {
+    color: $main;
+  }
+  margin-bottom: 40px;
+  font-size: 3em;
+}
 </style>

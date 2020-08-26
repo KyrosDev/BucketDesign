@@ -49,6 +49,7 @@ export default {
   justify-content: center;
   align-items: center;
   background: rgba($color: #000000, $alpha: 0.7);
+  z-index: 999;
 
   .container {
     width: 450px;

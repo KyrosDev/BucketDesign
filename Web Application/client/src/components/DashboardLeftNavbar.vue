@@ -93,7 +93,7 @@
         </span>
         <p>Helper</p>
       </li>
-      <li @click="expanded = !expanded">
+      <li @click="() => {expanded = !expanded; decrease()}">
         <span class="icon" :class="expanded ? 'rotated' : ''">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
             <path fill="none" d="M0 0h24v24H0z" />
@@ -111,6 +111,7 @@ export default {
   name: "DashboardNavbar",
   props: {
     callback: Function,
+    decrease: Function,
   },
   data: () => {
     return {
@@ -154,6 +155,12 @@ export default {
       expanded: true,
     };
   },
+  mounted() {
+    try {
+      const dash = JSON.parse(localStorage.dashboard);
+      this.$data.expanded = dash.expanded;
+    } catch (e) {}
+  },
   methods: {
     expand() {
       this.expanded = !this.expanded;
@@ -181,6 +188,7 @@ export default {
   width: 80px;
   height: 100vh;
   background: $main;
+  position: fixed;
   border-radius: 0 20px 20px 0;
   box-shadow: 0 10px 60px rgba($color: $main, $alpha: 0.5);
   z-index: 10;

@@ -1,11 +1,14 @@
 <template>
-  <div class="container">
-    <DashboardNavbar :callback="setQuery" />
-    <div class="content">
-      <div class="main" v-for="(c, index) in components" :key="index">
-        <transition name="fade" mode="in-out">
-          <component v-if="c.name === currentIndex" :is="c.component" v-bind="c.props" />
-        </transition>
+  <div class="wrap">
+    <DashboardTopNavbar />
+    <div class="container">
+      <DashboardLeftNavbar :decrease="setDimension" :callback="setQuery" />
+      <div :class="!expanded ? 'wrapper' : 'wrapper extended'">
+        <div class="main" v-for="(c, index) in components" :key="index">
+          <transition name="fade" mode="in-out">
+            <component v-if="c.name === currentIndex" :is="c.component" v-bind="c.props" />
+          </transition>
+        </div>
       </div>
     </div>
   </div>
@@ -13,12 +16,13 @@
 
 <script>
 import DesignersTable from "@/components/DesignersTable";
-import DashboardNavbar from "@/components/DashboardNavbar";
+import DashboardLeftNavbar from "@/components/DashboardLeftNavbar";
+import DashboardTopNavbar from "@/components/DashboardTopNavbar";
 import Table from "@/components/Table.vue";
 import Default from "@/components/DefaultDashboard";
 
 export default {
-  components: { Default, DashboardNavbar },
+  components: { Default, DashboardLeftNavbar, DashboardTopNavbar },
   data() {
     return {
       components: [
@@ -56,6 +60,7 @@ export default {
         },
       ],
       currentIndex: "default",
+      expanded: true,
     };
   },
   name: "Dashboard",
@@ -63,9 +68,19 @@ export default {
     this.setView();
   },
   mounted() {
+    try {
+      const dash = JSON.parse(localStorage.dashboard);
+      this.$data.expanded = dash.expanded;
+    } catch (e) {}
     this.setView();
   },
   methods: {
+    setDimension() {
+      this.$data.expanded = !this.$data.expanded;
+      localStorage.dashboard = JSON.stringify({
+        expanded: this.$data.expanded,
+      });
+    },
     setQuery(id) {
       if (id) {
         this.$router
@@ -110,10 +125,18 @@ export default {
 .container {
   display: flex;
   flex-direction: row;
-  .content {
+  .wrapper {
+    transition: 0.3s;
     padding: 40px;
+    margin-top: 80px;
+    width: calc(100% - 80px);
+    margin-left: 80px;
     display: flex;
     flex-direction: column;
+  }
+  .wrapper.extended {
+    width: calc(100% - 200px);
+    margin-left: 200px;
   }
 }
 </style>

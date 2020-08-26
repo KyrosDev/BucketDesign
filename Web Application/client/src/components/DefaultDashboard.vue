@@ -1,30 +1,71 @@
 <template>
-  <div class="container">
-    <Card
-      v-for="counter in counters"
-      :key="counter.icon"
-      :title="counter.title"
-      :info="counter.info"
-      :icon="counter.icon"
-      :iconColor="counter.color"
-      :callback="() => cardActionOnClick(counter.id)"
-    />
+  <div class="default-content">
+    <h1>
+      Dashboard
+      <span>.</span>
+    </h1>
+    <div class="wrapper">
+      <Chart class="chart" :chart-data="datacollection" />
+      <div class="cards-wrapper">
+        <Card
+          v-for="counter in counters"
+          :key="counter.icon"
+          :title="counter.title"
+          :info="counter.info"
+          :icon="counter.icon"
+          :iconColor="counter.color"
+          :callback="() => cardActionOnClick(counter.id)"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Card from "@/components/DashboardPreviewCard";
+import Chart from "@/components/Chart";
 import axios from "axios";
+import Labels from "@/assets/json/ChartLabels.json";
 
 export default {
   components: {
     Card,
+    Chart,
   },
   props: {
     cardActionOnClick: Function,
   },
   data() {
     return {
+      datacollection: {
+        labels: Labels,
+        datasets: [
+          {
+            label: "New Designers",
+            fill: false,
+            borderColor: "red",
+            borderWidth: 2,
+            hoverBackgroundColor: "red",
+            data: [0, 200, 20, 50, 20, 50, 100, 0, 346, 23, 61, 42, 23],
+          },
+          {
+            label: "New Posts",
+            fill: false,
+            borderColor: "blue",
+            hoverBackgroundColor: "blue",
+            borderWidth: 2,
+            data: [10, 63, 31, 13, 62, 84, 53, 0, 96, 36, 41, 12, 23],
+          },
+          {
+            label: "New Messages",
+            fill: false,
+            borderColor: "orange",
+            hoverBackgroundColor: "orange",
+            borderWidth: 2,
+            data: [48, 412, 20, 14, 20, 5, 100, 30, 1462, 4, 61, 531, 2],
+          },
+        ],
+      },
       counters: [
         {
           title: "Total Designers",
@@ -55,6 +96,7 @@ export default {
   },
   mounted() {
     this.getDesigners();
+    this.getMessages();
   },
   methods: {
     getDesigners() {
@@ -63,9 +105,47 @@ export default {
         this.$data.counters[0].info = response.data.length;
       });
     },
+    getMessages() {
+      const API_URL = "http://localhost:5000/api/v2/messages";
+      axios.get(API_URL).then((response) => {
+        this.$data.counters[2].info = response.data.length;
+      });
+    },
   },
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+@import "@/assets/scss/variables.scss";
+@import "@/assets/scss/mainLayout.scss";
+@import "@/assets/scss/animations.scss";
+@import "@/assets/scss/utils.scss";
+
+.default-content {
+  width: 100%;
+  h1 {
+    span {
+      color: $main;
+    }
+    margin-bottom: 40px;
+    font-size: 3em;
+  }
+
+  .wrapper {
+    width: 100%;
+
+    .chart {
+      margin-bottom: 40px;
+      background: white;
+      padding: 40px;
+      border-radius: 30px;
+    }
+
+    .cards-wrapper {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+}
 </style>

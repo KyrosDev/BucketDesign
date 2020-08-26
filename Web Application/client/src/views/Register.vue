@@ -113,7 +113,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/scss/variabless.scss";
+@import "../assets/scss/variables.scss";
 @import "../assets/scss/animations.scss";
 
 .top {

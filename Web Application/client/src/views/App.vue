@@ -45,7 +45,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../assets/scss/animations.scss";
-@import "../assets/scss/variabless.scss";
+@import "../assets/scss/variables.scss";
 @import "../assets/scss/mainLayout.scss";
 
 ul {

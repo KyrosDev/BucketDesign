@@ -1,10 +1,25 @@
 <template>
   <div id="app">
     <transition name="fade" mode="out-in">
-      <router-view :key="$route.path"/>
+      <router-view :key="$route.path" />
     </transition>
   </div>
 </template>
+
+<script>
+const socket = io("http://localhost:5000");
+
+export default {
+  mounted() {
+    socket.on("get-message", (message) => console.log(message));
+  },
+  methods: {
+    send() {
+      socket.emit("send-message", "How are you?");
+    },
+  },
+};
+</script>
 
 <style>
 @import "./assets/scss/animations.scss";

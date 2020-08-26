@@ -198,40 +198,45 @@ export default {
     };
   },
   mounted() {
-    const designer = JSON.parse(localStorage.designer);
-    const API_URL = `${HOST}/api/v2/designers/get/username/${this.$route.params.username}`;
-    axios.get(API_URL).then((response) => {
-      console.log(response.data);
-      this.$data.loading = false;
-      if (response.data === "User not found") {
-        this.$data.not_found = true;
-      } else {
-        this.$data.designer = response.data;
-        this.$data.profile_picture = this.$data.designer.profile_picture;
+    try {
+      const designer = JSON.parse(localStorage.designer);
+      const API_URL = `${HOST}/api/v2/designers/get/username/${this.$route.params.username}`;
+      axios.get(API_URL).then((response) => {
+        this.$data.loading = false;
+        if (response.data === "User not found") {
+          this.$data.not_found = true;
+        } else {
+          this.$data.designer = response.data;
+          this.$data.profile_picture = this.$data.designer.profile_picture;
 
-        this.$data.designerFollowers = this.$data.designer.edge_followers.followers;
-        this.$data.designerFollowers.map((follower) => {
-          axios.get(`${HOST}/api/v2/designers/${follower.id}`).then((response) => {
-            this.$data.followers.push(response.data);
+          this.$data.designerFollowers = this.$data.designer.edge_followers.followers;
+          this.$data.designerFollowers.map((follower) => {
+            axios
+              .get(`${HOST}/api/v2/designers/${follower.id}`)
+              .then((response) => {
+                this.$data.followers.push(response.data);
+              });
           });
-        });
-        this.$data.designer.edge_followers.followers.map((user) => {
-          if (user.id == designer._id) {
-            this.$data.following = true;
-          }
-        });
-        this.$data.designer.edge_posts.posts.map((post) => {
-          axios
-            .get(`https://bucketdesign-server.herokuapp.com/api/v2/posts/id/${post.id}`)
-            .then((response) => {
-              this.$data.posts.push(response.data);
-            });
-        });
+          this.$data.designer.edge_followers.followers.map((user) => {
+            if (user.id == designer._id) {
+              this.$data.following = true;
+            }
+          });
+          this.$data.designer.edge_posts.posts.map((post) => {
+            axios
+              .get(
+                `https://bucketdesign-server.herokuapp.com/api/v2/posts/id/${post.id}`
+              )
+              .then((response) => {
+                this.$data.posts.push(response.data);
+              });
+          });
+        }
+      });
+      if (this.$router.currentRoute.path.includes(designer.username)) {
+        this.$data.follow = false;
       }
-    });
-    if (this.$router.currentRoute.path.includes(designer.username)) {
-      this.$data.follow = false;
-    }
+    } catch (e) {}
   },
   methods: {
     viewDetails(shortcode) {
@@ -280,20 +285,22 @@ export default {
     searchByUsername(username) {
       const designer = JSON.parse(localStorage.designer);
       if (username !== "") {
-        axios.get(`${HOST}/api/v2/designers/find/${username}`).then((response) => {
-          this.$data.searchResult = [];
-          if (response.data == "Not found") {
-            this.$data.userNotFound = true;
-          } else {
-            response.data.map((user) => {
-              if (user.username !== designer.username) {
-                this.$data.searchResult.push(user);
-              }
-            });
-            this.$data.userNotFound = false;
-            this.$data.searched = true;
-          }
-        });
+        axios
+          .get(`${HOST}/api/v2/designers/find/${username}`)
+          .then((response) => {
+            this.$data.searchResult = [];
+            if (response.data == "Not found") {
+              this.$data.userNotFound = true;
+            } else {
+              response.data.map((user) => {
+                if (user.username !== designer.username) {
+                  this.$data.searchResult.push(user);
+                }
+              });
+              this.$data.userNotFound = false;
+              this.$data.searched = true;
+            }
+          });
       } else {
         this.$data.searched = false;
         this.$data.userNotFound = false;
@@ -306,7 +313,7 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/scss/mainLayout.scss";
 @import "@/assets/scss/animations.scss";
-@import "@/assets/scss/variabless.scss";
+@import "@/assets/scss/variables.scss";
 @import "@/assets/scss/utils.scss";
 
 .colored-background {

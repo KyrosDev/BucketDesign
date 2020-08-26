@@ -2,18 +2,27 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Main from "../views/Main.vue";
 import App from "../views/App.vue";
+import Null from "../App.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import Customize from "../views/Customize.vue";
 import Details from "../views/Details.vue";
 import Profile from "../views/Profile.vue";
 import Logout from "../views/Logout.vue";
+import Dashboard from "../views/Dashboard.vue";
 import axios from "axios";
 
 Vue.use(VueRouter);
 
-function loggedInRedirectDashboard(to, from, next) {
+function loggedInRedirectApp(to, from, next) {
   if (localStorage.token) {
+    const API_URL = `http://localhost:5000/api/v1/designers/token/verify/${localStorage.token}`;
+    axios.get(API_URL).then((response) => {
+      if (response.data.message == "invalid token") {
+        localStorage.clear();
+        next();
+      }
+    });
     next("/app");
   } else {
     next();
@@ -39,19 +48,19 @@ const routes = [
   {
     path: "/",
     name: "landing",
-    component: Main,
+    component: Null,
   },
   {
     path: "/login",
     name: "login",
     component: Login,
-    beforeEnter: loggedInRedirectDashboard,
+    beforeEnter: loggedInRedirectApp,
   },
   {
     path: "/register",
     name: "register",
     component: Register,
-    beforeEnter: loggedInRedirectDashboard,
+    beforeEnter: loggedInRedirectApp,
   },
   {
     path: "/app",
@@ -79,6 +88,14 @@ const routes = [
     path: "/logout",
     component: Logout,
     name: "logout",
+  },
+  {
+    path: "/admin/dashboard",
+    component: Dashboard,
+    name: "admin-dashboard",
+    query: {
+      display: String,
+    },
   },
 ];
 

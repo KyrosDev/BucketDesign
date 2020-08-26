@@ -2,13 +2,13 @@
 const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
-const dotenv = require("dotenv");
+const dotenv = require("dotenv").config();
 const middlewares = require("./middlewares");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const connection = mongoose.connect(
-  "mongodb+srv://root:voALSUMJkmRAOmpW@bucketdesign.09qrb.mongodb.net/bucketdesign?retryWrites=true&w=majority",
+  process.env.MONGO_URI,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -26,7 +26,6 @@ connection
 
 // App
 const app = express();
-dotenv.config();
 
 // App setup
 

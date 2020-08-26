@@ -1,48 +1,63 @@
 <template>
   <nav class="bottom-nav">
-    <ul>
-      <li v-for="route in routes" :key="route.index">
-        <span
-          @click="setRoute(route)"
-          :class="index == route.index ? 'active' : 'unactive'"
-          v-html="route.html"
-        ></span>
-      </li>
-      <!-- <li>
-        <a @click="index = 1" :class="index == 1 ? 'active' : ''">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20.31 20.31">
-            <g id="Layer_2" data-name="Layer 2">
-              <g id="Layer_1-2" data-name="Layer 1">
-                <path
-                  d="M16,14.62l4.28,4.28L18.9,20.31,14.62,16A9,9,0,1,1,16,14.62Zm-2-.74a7,7,0,1,0-.14.14Zm-3.84-8.7a2,2,0,1,0,1.64,3.64,2,2,0,0,0,1-1,4,4,0,1,1-5-2.64A4,4,0,0,1,10.18,5.18Z"
-                />
-              </g>
-            </g>
-          </svg>
-          <div class="dot"></div>
-        </a>
-      </li>
-      <li>
-        <a @click="index = 2" :class="index == 2 ? 'active' : ''">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-            <g id="Layer_2" data-name="Layer 2">
-              <g id="Layer_1-2" data-name="Layer 1">
-                <path
-                  d="M5.29,18.82,0,20l1.18-5.29a10,10,0,1,1,4.11,4.11Zm.29-2.11.65.35a8,8,0,1,0-3.29-3.29l.35.65-.66,3ZM5,10H7a3,3,0,0,0,6,0h2A5,5,0,0,1,5,10Z"
-                />
-              </g>
-            </g>
-          </svg>
-          <div class="dot"></div>
-        </a>
-      </li>-->
-    </ul>
-    <button>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="45" height="45">
-        <path fill="none" d="M0 0h24v24H0z" />
-        <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z" />
-      </svg>
-    </button>
+    <!-- <div :class="clicked ? 'clkd opened' : 'clkd'">
+            <ul>
+              <li>
+                <h1>
+                  <span class="icon-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+                      <title>image_icon</title>
+                      <g id="Layer_2" data-name="Layer 2">
+                        <g id="Layer_1-2" data-name="Layer 1">
+                          <path
+                            d="M2,8.1l2-2,5.5,5.5L13,8.1l3,3V2H2Zm0,2.83V16H5.1l3-3L4,8.93ZM7.93,16H16V13.93l-3-3ZM1,0H17a1,1,0,0,1,1,1V17a1,1,0,0,1-1,1H1a1,1,0,0,1-1-1V1A1,1,0,0,1,1,0ZM12.5,7A1.5,1.5,0,1,1,14,5.5,1.5,1.5,0,0,1,12.5,7Z"
+                          />
+                        </g>
+                      </g>
+                    </svg>
+                  </span>
+                  Image
+                </h1>
+                <p>Upload a PNG or a JPG</p>
+              </li>
+              <li>
+                <h1>
+                  <span class="icon-container">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 22"
+                      width="24"
+                      height="22"
+                    >
+                      <path fill="none" d="M0 0h24v24H0z" />
+                      <path
+                        d="M2 3.993A1 1 0 0 1 2.992 3h18.016c.548 0 .992.445.992.993v16.014a1 1 0 0 1-.992.993H2.992A.993.993 0 0 1 2 20.007V3.993zM8 5v14h8V5H8zM4 5v2h2V5H4zm14 0v2h2V5h-2zM4 9v2h2V9H4zm14 0v2h2V9h-2zM4 13v2h2v-2H4zm14 0v2h2v-2h-2zM4 17v2h2v-2H4zm14 0v2h2v-2h-2z"
+                      />
+                    </svg>
+                  </span>
+                  Video
+                </h1>
+                <p>Upload a GIF or an MP4</p>
+              </li>
+            </ul>
+    </div>-->
+    <div class="container">
+      <ul class="routes">
+        <li v-for="route in routes" :key="route.index">
+          <span
+            @click="setRoute(route)"
+            :class="index == route.index ? 'active' : 'unactive'"
+            v-html="route.html"
+          ></span>
+        </li>
+      </ul>
+      <button @click="clicked = !clicked">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="45" height="45">
+          <path fill="none" d="M0 0h24v24H0z" />
+          <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z" />
+        </svg>
+      </button>
+    </div>
   </nav>
 </template>
 
@@ -50,6 +65,7 @@
 export default {
   data: () => {
     return {
+      clicked: false,
       index: 0,
       routes: [
         {
@@ -107,21 +123,84 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../assets/scss/variabless.scss";
+@import "../assets/scss/variables.scss";
 @import "../assets/scss/animations.scss";
 @import "../assets/scss/mainLayout.scss";
 @import "../assets/scss/utils.scss";
 
-.bottom-nav {
+.clkd {
+  width: 45%;
+  background: $white;
+  box-shadow: 10px 0 40px rgba($color: #000000, $alpha: 0.05);
+  padding: 10px;
+  border-radius: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.2s;
+  position: absolute;
+  right: 7%;
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    li {
+      margin-bottom: 10px;
+      display: columns;
+      padding: 10px;
+      border-radius: 10px;
+      background: $white;
+      transition: all 0.5s;
+      h1 {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        transition: all 0.5s;
+      }
+      .icon-container {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        fill: $main;
+        transition: all 0.5s;
+      }
+      p {
+        font-weight: 300;
+        margin-top: 5px;
+        color: $black;
+        transition: all 0.5s;
+      }
+
+      &:hover {
+        background: $main;
+        box-shadow: 0 0 30px rgba($color: #000000, $alpha: 0.05);
+        p,
+        h1 {
+          color: $white;
+        }
+        span {
+          fill: $white;
+        }
+      }
+    }
+  }
+  &.opened {
+    pointer-events: all;
+    opacity: 1;
+  }
+}
+
+.bottom-nav .container {
+  position: fixed;
+  z-index: 9999;
   width: 100%;
   height: 80px;
-  position: fixed;
   bottom: 0;
   background: $white;
   border-radius: 30px 30px 0 0;
   display: flex;
   align-items: center;
-  z-index: 9999;
 
   button {
     border: none;
@@ -141,7 +220,7 @@ export default {
     }
   }
 
-  ul {
+  ul.routes {
     padding: 0;
     margin: 0;
     margin-right: 20px;

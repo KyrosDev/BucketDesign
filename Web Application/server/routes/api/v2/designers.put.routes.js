@@ -46,11 +46,10 @@ router.put("/email/:email", upload.single("file"), (req, res, next) => {
               {
                 $set: newDesigner,
               },
-              (err, updated) => {
+              (err, _) => {
                 if (err) next(e);
-                res.json(updated);
               }
-            );
+            ).then((doc) => res.json(doc));
           });
         }
       })
@@ -63,7 +62,7 @@ router.put("/email/:email", upload.single("file"), (req, res, next) => {
       },
       (err, updated) => {
         if (err) next(err);
-        else res.json(updated); 
+        else res.json(updated);
       }
     );
   }

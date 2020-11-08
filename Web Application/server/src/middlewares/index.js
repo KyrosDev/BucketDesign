@@ -1,36 +1,18 @@
 const jwt = require("jsonwebtoken");
 
-function checkTokenSetUser(req, res, next) {
-  const authHeader = req.get("authorization");
-  if (authHeader) {
-    const token = authHeader.split(" ")[1];
-    if (token) {
-      jwt.verify(token, process.env.SECRET_TOKEN, (error, user) => {
-        if (error) {
-          console.log(error);
-        }
-        req.user = user;
-        next();
-      });
-    } else {
-      next();
-    }
-  } else {
-    next();
-  }
+function isAdmin(req, res, next) {
+  const secret = req.header("X-Admin-Secret");
+  if (secret === process.env.ADMIN_SECRET) return next();
+  return next({ status: 401, message: "Not-Allowed. You need to be and admin to see the content of this route." });
 }
 
-function isLoggedIn(req, res, next) {
-  if (req.user) {
-    next();
-  } else {
-    const error = new Error("🚫 Un-Authorized 🚫");
-    res.status(401);
-    next(error);
-  }
+function canCreate(req, res, next) {
+  const user = req.header("Authorization");
+  if (user) return next()
+  return next({ status: 400, message: "Authentication is required! Log in and try again" });
 }
 
 module.exports = {
-  checkTokenSetUser,
-  isLoggedIn,
+  isAdmin,
+  canCreate,
 };

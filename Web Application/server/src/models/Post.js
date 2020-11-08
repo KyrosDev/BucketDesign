@@ -1,52 +1,114 @@
-const Joi = require("@hapi/joi");
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const schema = Joi.object().keys({
-  title: Joi.string().max(30).required(), // This is my post
-  description: Joi.string().max(1500).optional(), // This is my description
-  shortcode: Joi.string().alphanum().required(), // This is a random string
-  author: Joi.object()
-    .keys({
-      id: Joi.string().alphanum().required(), // Author ID
-    })
-    .required(),
-  previewURL: Joi.string().required(), // Image to show on hompage
-  likes: Joi.object({
-    counter: Joi.number().required().default(0), // 1 Like
-    likes: Joi.array()
-      .items(
-        Joi.object({
-          id: Joi.string().required(), // Designer's ID
-        })
-      )
-      .required(),
-  })
-    .optional()
-    .default({
-      counter: 0,
-      likes: [],
-    }), // Set value as default
-  comments: Joi.object({
-    counter: Joi.number().required().default(0), // 1 Comment
-    comments: Joi.array()
-      .items(
-        Joi.object({
-          id: Joi.string().required(), // Comment ID
-        })
-      )
-      .required(),
-  })
-    .optional()
-    .default({
-      counter: 0,
-      comments: [],
-    }), // Set value as default
-  attachments: Joi.array()
-    .items({
-      imageURL: Joi.string().required(), // More image URLs
-    })
-    .optional(),
-  createdAt: Joi.date().timestamp("javascript").required(), // Created At Date
-  deleted: Joi.bool().default(false), //! If post was deleted, turn it into true. But DON'T delete post.
-});
+const PostSchema = new Schema(
+  {
+    title: { type: String, required: true },
+    description: { type: String, maxlength: 1500 },
+    author: {
+      type: Object({
+        username: {
+          type: String,
+          required: true,
+        },
+        profile_picture: {
+          type: String,
+          required: true,
+        },
+        _id: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+        },
+      }),
+      required: true
+    },
+    hashtags: [
+      {
+        name: {
+          type: String,
+          enum: [
+            "UI Design",
+            "UX Design",
+            "Product Industrial Design",
+            "Graphic Design",
+            "Animation Design",
+            "Motion Design",
+            "Architectural Design",
+            "Fashion Design",
+            "Design",
+          ],
+          default: "Design",
+        },
+        code: {
+          type: String,
+          enum: ["uid", "uxd", "pid", "gd", "ad", "md", "ad", "fd", "d"],
+          default: "d",
+        },
+      },
+    ],
+    shortcode: {
+      type: String,
+      required: true,
+      minlength: 8,
+    },
+    previewURL: {
+      type: String,
+      required: true,
+    },
+    attachments: {
+      counter: {
+        type: Number,
+        default: 0,
+      },
+      media: {
+        type: Array,
+      },
+    },
+    edge_comments: {
+      counter: { type: Number, default: 0 },
+      comments: {
+        type: Array,
+      },
+    },
+    edge_likes: {
+      counter: { type: Number, default: 0 },
+      likes: {
+        type: Array,
+      },
+    },
+    edge_reports: {
+      counter: { type: Number, default: 0 },
+      reports: [
+        {
+          reason: {
+            type: String,
+            enum: [
+              "Nudity or Sexual activity",
+              "Hate speech or symbols",
+              "Violence or Dangerous organizations",
+              "Sale of illegal or regulated goods",
+              "Bullying or Harassment",
+              "Intellectual property violation",
+              "Suicide, self-injuring or eating disorders",
+              "Scam or fraud",
+              "False informations",
+            ],
+            reportedAt: {
+              type: Date,
+              default: Date.now,
+            },
+          },
+        },
+      ],
+    },
+    deleted: {
+      isDeleted: { type: Boolean, default: false },
+      deletedAt: { type: Date, default: null },
+    },
+  },
+  { timestamps: true }
+);
 
-module.exports = schema;
+const Post = mongoose.model("Post", PostSchema);
+
+module.exports = Post;

@@ -2,13 +2,14 @@
 const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
-const dotenv = require("dotenv").config();
 const middlewares = require("./src/middlewares");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
+require("dotenv").config();
+
 const connection = mongoose.connect(
-  process.env.MONGO_URI,
+  "mongodb://localhost:27017/bucketdesign",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -34,44 +35,30 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "POST, GET, OPTIONS, PUT, DELETE"
+    "POST, GET"
   );
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "Origin, Content-Type, Accept, Authorization, X-Request-With"
+    "Content-Type, Authorization, X-Admin-Token"
   );
   next();
 });
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(middlewares.checkTokenSetUser);
 app.use(express.static("public"));
 app.use(helmet());
 
 // Routes
-const designerRoutes_v1 = require("./src/routes/api/v1/designers.routes");
-const postRoutes_v1 = require("./src/routes/api/v1/posts.routes");
-
-const designerRoutes_v2 = require("./src/routes/api/v2/designers.routes");
-const postRoutes_v2 = require("./src/routes/api/v2/posts.routes");
-const chatroomRoutes_v2 = require("./src/routes/api/v2/chatrooms.routes");
-const messageRoutes_v2 = require("./src/routes/api/v2/messages.routes");
-
-const authRoutes_v2 = require("./src/routes/api/v2/auth.routes");
+const designer = require("./src/routes/api/designer.routes");
+const post = require("./src/routes/api/post.routes");
 
 // Routers
 app.get("/", (_, res) => {
   res.json({ message: "Welcome to my API! 🎉" });
 });
 
-app.use("/api/v1/designers", designerRoutes_v1);
-app.use("/api/v1/posts", postRoutes_v1);
-app.use("/api/v2/designers", designerRoutes_v2);
-app.use("/api/v2/posts", postRoutes_v2);
-app.use("/api/v2/chatrooms", chatroomRoutes_v2);
-app.use("/api/v2/messages", messageRoutes_v2);
-
-app.use("/api/v2/auth", authRoutes_v2);
+app.use("/api/designers", designer);
+app.use("/api/posts", post);
 
 app.use("/public", express.static("src/public"));
 
@@ -82,11 +69,15 @@ app.use((req, res, next) => {
 }); // Use middlewares
 
 app.use((err, req, res, next) => {
-  res.status(res.statusCode || 500); // Set status code to currentStatus or 500
+  res.status(err.status || 500); // Set status code to currentStatus or 500
   res.json({
     message: err.message,
     stack: process.env.NODE_ENV === "production" ? "🥮" : err.stack,
   }); // Send message
 }); // Use middlewares
 
-module.exports = app;
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on: 'http://localhost:${PORT}/' ✨🪐.`)
+});

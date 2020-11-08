@@ -12,12 +12,9 @@ async function register(body) {
 }
 
 async function login(body) {
-    let result = null;
-    const designer = new Designer(body);
-    try {
-        result = await designer.save();
-    } catch (e) {
-        return e;
+    const designer = await Designer.findOne({email: body.email});
+    if (designer) {
+        
     }
-    return result;
+    return "User not found";
 }

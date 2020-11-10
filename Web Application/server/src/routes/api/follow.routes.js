@@ -12,6 +12,7 @@ router.post("/follow", authenticate, async (req, res, next) => {
     const designer = req.body;
     const { user_id } = req.query;
     const result = await controller.follow(designer, user_id);
+    console.log(result);
     if (result.status) {
         next(result);
     } else {

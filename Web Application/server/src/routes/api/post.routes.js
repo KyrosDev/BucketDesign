@@ -1,9 +1,9 @@
 const router = require("express").Router();
-const middleware = require("../../middlewares");
+const { authenticate, checkToken } = require("../../middlewares/index");
 const controller = require("../../controllers/post");
 const designer = require("../../controllers/designer");
 
-router.get("/", async (req, res, next) => {
+router.get("/", authenticate, async (req, res, next) => {
     const { id, author_id, author_username, shortcode, tag, type } = req.query;
     let result = null;
     if (author_id) result = await controller.getByAuthorID(author_id);
@@ -12,18 +12,16 @@ router.get("/", async (req, res, next) => {
     if (shortcode) result = await controller.getByShortcode(shortcode);
     if (tag) result = await controller.getByTag(tag);
     if (type) result = await controller.getByType(type);
-    if (result)
-
-    
-    
-    
-    
-    
-    
-    ({ status: 400, message: result.message });
+    res.json(result);
 });
 
-router.get("/getFeed", middleware.checkToken, async (req, res, next) => {
+router.post("/create", checkToken, async (req, res, next) => {
+    const { designer, body } = req.body;
+    const result = await controller.createPost(designer, body);
+    res.json(result);
+});
+
+router.get("/getFeed", authenticate, async (req, res, next) => {
     const { token } = req.body;
     const user = await designer.getById(token._id);
     const result = await controller.getFeed(user.edge_follows.follows);

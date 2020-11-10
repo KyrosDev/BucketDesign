@@ -14,14 +14,14 @@ async function getPosts() {
 }
 
 async function getByAuthorID(_id) {
-    const result = await Post.find().select({ author: { _id } });
+    const result = await Post.find({ designer: { _id } });
     if (result)
         return result;
     return null;
 }
 
 async function getByAuthorUsername(username) {
-    const result = await Post.find().select({ author: { username } });
+    const result = await Post.find({ $where: `this.designer.username === '${username}'` });
     if (result)
         return result;
     return null;
@@ -35,7 +35,7 @@ async function getByShortcode(shortcode) {
 }
 
 async function getByType(type) {
-    const result = await Post.find({}).select({ informations: { type } });
+    const result = await Post.find({ $where: `this.informations.type === '${type}'` });
     if (result)
         return result;
     return null;
@@ -50,13 +50,14 @@ async function getById(id) {
 }
 
 async function getByTag(tag) {
-    const result = await Post.find({}).select({ hastags: hastags.contains(tag) });
+    const result = await Post.find({ $where: `this.hashtags.indexOf('${tag}') !== -1` });
     if (result)
         return result;
     return null;
 }
 
-async function createPost(body) {
+async function createPost(designer, body) {
+    body.designer = designer;
     body.shortcode = generateRandomShortcode();
     const post = await new Post(body);
     let valid = null;
@@ -71,7 +72,7 @@ async function createPost(body) {
 function getFeed(follows) {
     let result = null;
     follows.map(async (follow) => {
-        result = await Post.find({}).select({ author: { _id: follow } });
+        result = await Post.find({ designer: { _id: follow } });
     });
     return result;
 }

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const likeSchema = new Schema({
-    author: {
+    designer: {
         type: Object({
             username: String,
             id: mongoose.Schema.Types.ObjectId,
@@ -12,7 +12,7 @@ const likeSchema = new Schema({
     },
     post_id: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
+        required: false,
     },
     comment_id: {
         type: mongoose.Schema.Types.ObjectId,

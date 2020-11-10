@@ -23,22 +23,20 @@ const PostSchema = new Schema(
       required: true
     },
     informations: {
-      type: Object({
-        type: {
-          type: String,
-          enum: [
-            "video",
-            "gif",
-            "image",
-          ],
-          default: "image",
-          required: true,
-        },
-        meta: {
-          type: String,
-          required: true,
-        },
-      }),
+      "type": {
+        type: String,
+        enum: [
+          "video",
+          "gif",
+          "image",
+        ],
+        default: "image",
+        required: true,
+      },
+      meta: {
+        type: String,
+        required: true,
+      },
     },
     hashtags: [
       {
@@ -83,17 +81,13 @@ const PostSchema = new Schema(
         default: [],
       },
     },
-    edge_comments: {
-      counter: { type: Number, default: 0 },
-      comments: {
-        type: Array,
-      },
+    comments_counter: {
+      type: Number,
+      default: 0,
     },
-    edge_likes: {
-      counter: { type: Number, default: 0 },
-      likes: {
-        type: Array,
-      },
+    likes_counter: {
+      type: Number,
+      default: 0,
     },
     edge_reports: {
       counter: { type: Number, default: 0 },

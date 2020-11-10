@@ -1,5 +1,4 @@
 const auth = require("../controllers/auth");
-const jwt = require("jsonwebtoken");
 const designerController = require("../controllers/designer");
 
 function isAdmin(req, res, next) {
@@ -18,11 +17,9 @@ async function authenticate(req, res, next) {
   const token = req.headers.authorization;
   if (token) {
     const designer = await designerController.getByToken(token);
-    if (designer.status) return next(designer);
     const body = {
       username: designer.username,
       _id: designer._id,
-      profile_picture: designer.profile_picture,
     }
     req.body = body;
     return next();
@@ -35,8 +32,8 @@ async function checkToken(req, res, next) {
   if (token) {
     const result = await auth.checkValidUser(token);
     if (result) {
-      const validToken = jwt.decode(token);
-      req.body = { token: validToken };
+      const designer = await designerController.getByToken(token);
+      req.body = { body: req.body, designer: { username: designer.username, _id: designer._id, } };
       return next();
     }
     return next({ status: 401, message: "The token is invalid" })

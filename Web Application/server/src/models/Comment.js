@@ -11,12 +11,20 @@ const commentSchema = new Schema({
         type: Array,
         default: [],
     },
+    likes_counter: {
+        type: Number,
+        default: 0,
+    },
     designer: {
         type: Object({
             username: String,
             profile_picture: String,
             id: mongoose.Schema.Types.ObjectId,
         }),
+        required: true,
+    },
+    post_id: {
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
     }
 }, { timestamps: true, });

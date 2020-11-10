@@ -3,11 +3,14 @@
     <Nav />
     <div class="container">
       <div class="top">
-        <h1 class="header">Discover the world’s <br /> top designers & creatives.</h1>
+        <h1 class="header">
+          Discover the world’s <br />
+          top designers & creatives.
+        </h1>
       </div>
       <ul>
         <li v-for="post in posts" :key="post._id">
-          <Card v-bind:post="post" />
+          <Card :post="post" />
         </li>
       </ul>
     </div>
@@ -21,25 +24,34 @@ import BottomBar from "../components/bottomBar";
 import Card from "../components/cardPreview";
 import axios from "axios";
 
-const POSTS_URL = "http://localhost:5000/api/v2/posts/";
+const POSTS_URL = "http://localhost:5000/api/posts/getFeed?from=";
 
 export default {
   name: "Home",
   components: {
     Nav,
     BottomBar,
-    Card
+    Card,
   },
   data: () => {
     return {
-      posts: []
+      posts: [],
     };
   },
-  mounted() {
-    axios.get(POSTS_URL).then(response => {
-      this.posts = response.data;
-    });
-  }
+  async mounted() {
+    const result = await axios.get(
+      POSTS_URL + JSON.parse(localStorage.getItem("designer")).username
+    );
+    this.getPosts();
+  },
+  methods: {
+    async getPosts() {
+      const result = await axios.get("http://localhost:5000/api/posts/all", {
+        headers: { "X-Admin-Secret": "asdasd" },
+      });
+      if (!result.data.status) this.posts = result.data;
+    },
+  },
 };
 </script>
 

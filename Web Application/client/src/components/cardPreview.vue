@@ -9,8 +9,8 @@
       <span class="type"></span>
     </div>
     <div class="info">
-      <h3 v-if="author !== null" class="truncate-text unselectable">
-        <span @click="viewProfile(author)">{{ author }}</span>
+      <h3 v-if="post.author.username !== null" class="truncate-text unselectable">
+        <span @click="viewProfile(post.author.username)">{{ post.author.username }}</span>
         - {{ post.title }}
       </h3>
       <div class="likes unselectable" @click="like">
@@ -18,7 +18,9 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 18.48">
             <g id="Layer_2" data-name="Layer 2">
               <g id="Layer_1-2" data-name="Layer 1">
-                <path d="M10,1.53A6,6,0,0,1,18.48,10L10,18.48,1.52,10A6,6,0,0,1,10,1.53Z" />
+                <path
+                  d="M10,1.53A6,6,0,0,1,18.48,10L10,18.48,1.52,10A6,6,0,0,1,10,1.53Z"
+                />
               </g>
             </g>
           </svg>
@@ -54,9 +56,6 @@ export default {
           this.liked = true;
         }
       });
-      axios.get(`http://localhost:5000/api/v2/designers/${this.$props.post.author.id}`).then((response) => {
-        this.$data.author = response.data.username;
-      })
     } catch (error) {}
   },
   methods: {
@@ -80,7 +79,7 @@ export default {
           `http://localhost:5000/api/v1/posts/actions/${this.$props.post._id}`,
           {
             id: this.designer._id,
-            method: "unlike"
+            method: "unlike",
           }
         )
         .then((response) => {
@@ -89,10 +88,13 @@ export default {
     },
     addLike() {
       axios
-        .post(`http://localhost:5000/api/v1/posts/actions/${this.$props.post._id}`, {
-          id: this.designer._id,
-          method: "like"
-        })
+        .post(
+          `http://localhost:5000/api/v1/posts/actions/${this.$props.post._id}`,
+          {
+            id: this.designer._id,
+            method: "like",
+          }
+        )
         .then((response) => {
           return response;
         });

@@ -7,23 +7,11 @@ const commentSchema = new Schema({
         max: 500,
         required: true,
     },
-    likes: {
-        type: Object({
-            counter: {
-                type: Number,
-                default: 0,
-            },
-            users: {
-                type: Array,
-                default: [],
-            }
-        }),
-    },
     responses: {
         type: Array,
         default: [],
     },
-    author: {
+    designer: {
         type: Object({
             username: String,
             profile_picture: String,

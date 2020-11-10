@@ -2,7 +2,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
-const middlewares = require("./src/middlewares");
+const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
@@ -25,13 +25,11 @@ connection
     console.log(e);
   });
 
-// App
 const app = express();
 
 // App setup
-
 app.use(morgan("dev"));
-app.use((req, res, next) => {
+app.use((_, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -39,26 +37,33 @@ app.use((req, res, next) => {
   );
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, X-Admin-Token"
+    "Content-Type, Authorization, X-Admin-Secret"
   );
   next();
 });
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(express.static("public"));
 app.use(helmet());
 
 // Routes
 const designer = require("./src/routes/api/designer.routes");
 const post = require("./src/routes/api/post.routes");
+const like = require("./src/routes/api/like.routes");
+const follow = require("./src/routes/api/follow.routes");
+const auth = require("./src/routes/api/auth");
 
 // Routers
 app.get("/", (_, res) => {
   res.json({ message: "Welcome to my API! 🎉" });
 });
 
+app.use("/api/", follow);
 app.use("/api/designers", designer);
+app.use("/api/likes", like);
 app.use("/api/posts", post);
+app.use("/api/auth", auth);
 
 app.use("/public", express.static("src/public"));
 
@@ -69,8 +74,9 @@ app.use((req, res, next) => {
 }); // Use middlewares
 
 app.use((err, req, res, next) => {
-  res.status(err.status || 500); // Set status code to currentStatus or 500
+  res.status(200); // Set status code to currentStatus or 500
   res.json({
+    status: err.status,
     message: err.message,
     stack: process.env.NODE_ENV === "production" ? "🥮" : err.stack,
   }); // Send message

@@ -5,7 +5,7 @@ const PostSchema = new Schema(
   {
     title: { type: String, required: true },
     description: { type: String, maxlength: 1500 },
-    author: {
+    designer: {
       type: Object({
         username: {
           type: String,
@@ -21,6 +21,24 @@ const PostSchema = new Schema(
         },
       }),
       required: true
+    },
+    informations: {
+      type: Object({
+        type: {
+          type: String,
+          enum: [
+            "video",
+            "gif",
+            "image",
+          ],
+          default: "image",
+          required: true,
+        },
+        meta: {
+          type: String,
+          required: true,
+        },
+      }),
     },
     hashtags: [
       {
@@ -62,6 +80,7 @@ const PostSchema = new Schema(
       },
       media: {
         type: Array,
+        default: [],
       },
     },
     edge_comments: {
@@ -95,7 +114,7 @@ const PostSchema = new Schema(
             ],
             reportedAt: {
               type: Date,
-              default: Date.now,
+              default: Date.now(),
             },
           },
         },

@@ -14,31 +14,39 @@ import axios from "axios";
 
 Vue.use(VueRouter);
 
-function loggedInRedirectApp(to, from, next) {
+async function loggedInRedirectApp(to, from, next) {
   if (localStorage.token) {
-    const API_URL = `http://localhost:5000/api/v1/designers/token/verify/${localStorage.token}`;
-    axios.get(API_URL).then((response) => {
-      if (response.data.message == "invalid token") {
-        localStorage.clear();
-        next();
+    const API_URL = `http://localhost:5000/api/auth/authenticate/`;
+    const result = await axios.get(API_URL, {
+      headers: {
+        Authorization: localStorage.token
       }
     });
-    next("/app");
+    if (result.data.status == 401) {
+      localStorage.clear();
+      next();
+    } else {
+      next("/app");
+    }
   } else {
     next();
   }
 }
 
-function isLoggedIn(to, from, next) {
+async function isLoggedIn(to, from, next) {
   if (localStorage.token) {
-    const API_URL = `http://localhost:5000/api/v1/designers/token/verify/${localStorage.token}`;
-    axios.get(API_URL).then((response) => {
-      if (response.data.message == "invalid token") {
-        localStorage.clear();
-        next("/login");
+    const API_URL = `http://localhost:5000/api/auth/authenticate/`;
+    const result = await axios.get(API_URL, {
+      headers: {
+        Authorization: localStorage.token
       }
     });
-    next();
+    if (result.data.status == 401) {
+      localStorage.clear();
+      next("/login");
+    } else {
+      next();
+    }
   } else {
     next("/login");
   }

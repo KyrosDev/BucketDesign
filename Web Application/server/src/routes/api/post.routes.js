@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const middleware = require("../../middlewares");
 const controller = require("../../controllers/post");
+const designer = require("../../controllers/designer");
 
 router.get("/", async (req, res, next) => {
     const { id, author_id, author_username, shortcode, tag, type } = req.query;
@@ -12,22 +13,21 @@ router.get("/", async (req, res, next) => {
     if (tag) result = await controller.getByTag(tag);
     if (type) result = await controller.getByType(type);
     if (result)
-        res.json(result);
-    else next({ status: 404, message: "Post not found" });
+
+    
+    
+    
+    
+    
+    
+    ({ status: 400, message: result.message });
 });
 
-router.get("/all", middleware.isAdmin, async (req, res, next) => {
-    const result = await controller.getPosts();
+router.get("/getFeed", middleware.checkToken, async (req, res, next) => {
+    const { token } = req.body;
+    const user = await designer.getById(token._id);
+    const result = await controller.getFeed(user.edge_follows.follows);
     res.json(result);
-});
-
-router.post("/create/", middleware.canCreate, async (req, res, next) => {
-    const body = req.body;
-    const result = await controller.createPost(body);
-    if (!result.errors)
-        res.json(result);
-    else
-        next({ status: 400, message: result.message });
 });
 
 module.exports = router;

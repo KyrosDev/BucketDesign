@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const likeSchema = new Schema({
-    author: {
+const followerSchema = new Schema({
+    designer: {
         type: Object({
             username: String,
             id: mongoose.Schema.Types.ObjectId,
@@ -10,16 +10,12 @@ const likeSchema = new Schema({
         }),
         required: true,
     },
-    post_id: {
+    follow_id: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
-    comment_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: false,
-    }
 }, { timestamps: true });
 
-const Like = mongoose.model("Like", likeSchema);
+const Follow = mongoose.model("Follower", followerSchema);
 
-module.exports = Like;
+module.exports = Follow;

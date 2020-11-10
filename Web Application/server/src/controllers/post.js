@@ -13,25 +13,15 @@ async function getPosts() {
     return result;
 }
 
-async function getByAuthorID(id) {
-    let result = [];
-    const posts = await Post.find();
-    posts.map(post => {
-        if (post.author._id === id)
-            result.push(post);
-    });
+async function getByAuthorID(_id) {
+    const result = await Post.find().select({ author: { _id } });
     if (result)
         return result;
     return null;
 }
 
 async function getByAuthorUsername(username) {
-    let result = [];
-    const posts = await Post.find();
-    posts.map(post => {
-        if (post.author.username === username)
-            result.push(post);
-    });
+    const result = await Post.find().select({ author: { username } });
     if (result)
         return result;
     return null;
@@ -45,7 +35,7 @@ async function getByShortcode(shortcode) {
 }
 
 async function getByType(type) {
-    const result = await Post.find({ informations: { type } });
+    const result = await Post.find({}).select({ informations: { type } });
     if (result)
         return result;
     return null;
@@ -60,7 +50,7 @@ async function getById(id) {
 }
 
 async function getByTag(tag) {
-    const result = await Post.find({ hashtags: $where(value => value.code == tag) });
+    const result = await Post.find({}).select({ hastags: hastags.contains(tag) });
     if (result)
         return result;
     return null;
@@ -78,6 +68,14 @@ async function createPost(body) {
     return valid;
 }
 
+function getFeed(follows) {
+    let result = null;
+    follows.map(async (follow) => {
+        result = await Post.find({}).select({ author: { _id: follow } });
+    });
+    return result;
+}
+
 module.exports = {
     getPosts,
     getByAuthorID,
@@ -86,5 +84,6 @@ module.exports = {
     getByTag,
     getByType,
     getByShortcode,
+    getFeed,
     createPost,
 }

@@ -20,6 +20,11 @@ async function getByEmail(email) {
     return result;
 }
 
+async function getByToken(token) {
+    const result = await Designer.findOne({ token });
+    return result;
+}
+
 async function getByProfession(id) {
     let result = [];
     const designers = await Designer.find();
@@ -36,4 +41,5 @@ module.exports = {
     getById,
     getByProfession,
     getByEmail,
+    getByToken,
 };

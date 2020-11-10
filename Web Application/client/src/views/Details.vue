@@ -2,23 +2,29 @@
   <div class="container">
     <Nav />
     <BottomNav />
-    <div class="content">
-      <h4 class="author" v-if="author !== null">
-        <span @click="viewProfile(author)">{{ author }}</span>
+    <div class="content" v-if="post">
+      <h4 class="author">
+        <span @click="viewProfile(post.author.username)">{{
+          post.author.username
+        }}</span>
         - {{ post.createdAt | luxon }}
       </h4>
-      <h1 class="title">{{ post !== null ? post.title : "" }}</h1>
+      <h1 class="title">{{ post.title }}</h1>
       <div
         class="image-container unselectable"
         v-on:dblclick="like"
-        v-bind:style="post !== null ? 'background-image: url(' + post.previewURL + ');' : ''"
+        v-bind:style="
+          post !== null ? 'background-image: url(' + post.previewURL + ');' : ''
+        "
       ></div>
       <div class="likes unselectable" @click="like">
         <span :class="liked ? 'liked' : ''">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 18.48">
             <g id="Layer_2" data-name="Layer 2">
               <g id="Layer_1-2" data-name="Layer 1">
-                <path d="M10,1.53A6,6,0,0,1,18.48,10L10,18.48,1.52,10A6,6,0,0,1,10,1.53Z" />
+                <path
+                  d="M10,1.53A6,6,0,0,1,18.48,10L10,18.48,1.52,10A6,6,0,0,1,10,1.53Z"
+                />
               </g>
             </g>
           </svg>
@@ -26,7 +32,9 @@
         {{ likeCounter }}
       </div>
       <p class="description">
-        <span v-html="parseDescription !== null ? parseDescription : null"></span>
+        <span
+          v-html="parseDescription !== null ? parseDescription : null"
+        ></span>
       </p>
     </div>
   </div>
@@ -46,7 +54,6 @@ export default {
       liked: false,
       likeCounter: 0,
       designer: {},
-      author: null,
     };
   },
   mounted() {
@@ -54,24 +61,11 @@ export default {
       const designer = JSON.parse(localStorage.designer);
       this.$data.designer = designer;
       const shortcode = this.$route.params.shortcode;
-      const POST_URL = `http://localhost:5000/api/v1/posts/${shortcode}`;
+      const POST_URL = `http://localhost:5000/api/posts?shortcode=${shortcode}`;
       axios.get(POST_URL).then((response) => {
         if (response.status == 200) {
           this.$data.post = response.data;
-          this.$data.likeCounter = this.$data.post.likes.counter;
-          this.$data.post.likes.likes.forEach((item) => {
-            if (item.id === designer._id) {
-              this.$data.liked = true;
-            }
-          });
           this.$data.parseDescription = this.$data.post.description;
-          axios
-            .get(
-              `http://localhost:5000/api/v1/designers/${this.$data.post.author.id}`
-            )
-            .then((response) => {
-              this.$data.author = response.data.username;
-            });
         }
       });
     } catch (e) {}

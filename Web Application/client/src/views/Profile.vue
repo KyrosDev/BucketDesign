@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loading" class="loader">
+  <div v-if="!designer" class="loader">
     <div class="line icon1"></div>
     <div class="line icon2"></div>
   </div>
@@ -15,7 +15,12 @@
             <span>.</span>
           </p>
           <div @click="closeFollowersModal" class="close">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+            >
               <path fill="none" d="M0 0h24v24H0z" />
               <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z" />
             </svg>
@@ -53,7 +58,9 @@
           >
             <div
               class="image-container"
-              :style="'background-image: url(' + follower.profile_picture + ');'"
+              :style="
+                'background-image: url(' + follower.profile_picture + ');'
+              "
             ></div>
             <div class="informations">
               <p class="username">{{ follower.username }}</p>
@@ -69,7 +76,9 @@
           >
             <div
               class="image-container"
-              :style="'background-image: url(' + follower.profile_picture + ');'"
+              :style="
+                'background-image: url(' + follower.profile_picture + ');'
+              "
             ></div>
             <div class="informations">
               <p class="username">{{ follower.username }}</p>
@@ -84,10 +93,12 @@
     </transition>
     <div class="content">
       <div class="header">
-        <div class="image-container" :style="'background-image: url(' + profile_picture + ');'"></div>
+        <div
+          class="image-container"
+          :style="'background-image: url(' + profile_picture + ');'"
+        ></div>
         <div class="informations">
           <h1 class="username">{{ designer.username }}</h1>
-          <h3 class="profession">{{ designer.profession.name }}</h3>
           <p class="biography">{{ designer.biography }}</p>
         </div>
       </div>
@@ -128,7 +139,7 @@
         @click="followUser"
         :class="following ? 'follow following' : 'follow unfollowing'"
       >
-        <p>{{ following ? 'Following' : 'Follow' }}</p>
+        <p>{{ following ? "Following" : "Follow" }}</p>
       </div>
       <div class="posts">
         <h1 class="title">
@@ -136,15 +147,27 @@
           <span>.</span>
         </h1>
         <ul class="posts-container">
-          <li v-for="post in posts" @click="viewDetails(post.shortcode)" :key="post._id">
-            <div class="image-container" :style="'background-image: url(' + post.previewURL + ');'">
+          <li
+            v-for="post in posts"
+            @click="viewDetails(post.shortcode)"
+            :key="post._id"
+          >
+            <div
+              class="image-container"
+              :style="'background-image: url(' + post.previewURL + ');'"
+            >
               <div class="hover">
                 <span>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 18.48">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 18.48"
+                  >
                     <title>heart_fill_icon</title>
                     <g id="Layer_2" data-name="Layer 2">
                       <g id="Layer_1-2" data-name="Layer 1">
-                        <path d="M10,1.53A6,6,0,0,1,18.48,10L10,18.48,1.52,10A6,6,0,0,1,10,1.53Z" />
+                        <path
+                          d="M10,1.53A6,6,0,0,1,18.48,10L10,18.48,1.52,10A6,6,0,0,1,10,1.53Z"
+                        />
                       </g>
                     </g>
                   </svg>
@@ -172,7 +195,7 @@ import Nav from "../components/PostNav";
 import BottomNav from "../components/bottomBar";
 import axios from "axios";
 
-const HOST = "https://bucketdesign-server.herokuapp.com";
+const API_URL = "http://localhost:5000/api/designers?username=";
 
 export default {
   components: {
@@ -197,45 +220,14 @@ export default {
       userNotFound: false,
     };
   },
-  mounted() {
+  async mounted() {
     try {
       const designer = JSON.parse(localStorage.designer);
-      const API_URL = `${HOST}/api/v2/designers/get/username/${this.$route.params.username}`;
-      axios.get(API_URL).then((response) => {
-        this.$data.loading = false;
-        if (response.data === "User not found") {
-          this.$data.not_found = true;
-        } else {
-          this.$data.designer = response.data;
-          this.$data.profile_picture = this.$data.designer.profile_picture;
-
-          this.$data.designerFollowers = this.$data.designer.edge_followers.followers;
-          this.$data.designerFollowers.map((follower) => {
-            axios
-              .get(`${HOST}/api/v2/designers/${follower.id}`)
-              .then((response) => {
-                this.$data.followers.push(response.data);
-              });
-          });
-          this.$data.designer.edge_followers.followers.map((user) => {
-            if (user.id == designer._id) {
-              this.$data.following = true;
-            }
-          });
-          this.$data.designer.edge_posts.posts.map((post) => {
-            axios
-              .get(
-                `https://bucketdesign-server.herokuapp.com/api/v2/posts/id/${post.id}`
-              )
-              .then((response) => {
-                this.$data.posts.push(response.data);
-              });
-          });
-        }
-      });
-      if (this.$router.currentRoute.path.includes(designer.username)) {
-        this.$data.follow = false;
-      }
+      const result = await axios.get(API_URL + this.$route.params.username);
+      delete result.data.token;
+      delete result.data.password;
+      this.designer = result.data;
+      console.log(this.designer);
     } catch (e) {}
   },
   methods: {

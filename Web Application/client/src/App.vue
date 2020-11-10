@@ -7,18 +7,7 @@
 </template>
 
 <script>
-const socket = io("http://localhost:5000");
-
-export default {
-  mounted() {
-    socket.on("get-message", (message) => console.log(message));
-  },
-  methods: {
-    send() {
-      socket.emit("send-message", "How are you?");
-    },
-  },
-};
+export default {};
 </script>
 
 <style>

@@ -19,4 +19,10 @@ router.get("/all", middleware.isAdmin, async (req, res, next) => {
     res.json(result);
 });
 
+router.get("/token/:token", async (req, res, next) => {
+    const { token } = req.params;
+    const result = await controller.getByToken(token);
+    res.json(result);
+});
+
 module.exports = router;

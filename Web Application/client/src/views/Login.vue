@@ -11,11 +11,23 @@
     <form @submit.prevent="login">
       <div class="form-group">
         <label for="email">Email</label>
-        <input v-model="user.email" type="email" name="email" id="email" required />
+        <input
+          v-model="user.email"
+          type="email"
+          name="email"
+          id="email"
+          required
+        />
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input v-model="user.password" type="password" name="password" id="password" required />
+        <input
+          v-model="user.password"
+          type="password"
+          name="password"
+          id="password"
+          required
+        />
 
         <transition name="slide-fade">
           <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
@@ -40,8 +52,7 @@ const schema = Joi.object().keys({
   password: Joi.string().min(8).required(),
 });
 
-const LOGIN_URL =
-  "https://bucketdesign-server.herokuapp.com/api/v2/auth/signin";
+const LOGIN_URL = "http://localhost:5000/api/auth/login";
 
 export default {
   data: () => {
@@ -64,7 +75,7 @@ export default {
           .then((res) => {
             localStorage.token = res.data.token;
             localStorage.user = res.data.email;
-            localStorage.designer = JSON.stringify(res.data.designer);
+            localStorage.designer = JSON.stringify(res.data);
             this.$router.push("/app");
           })
           .catch((error) => {

@@ -4,6 +4,10 @@ const Schema = mongoose.Schema;
 const DesignerSchema = new Schema(
   {
     email: { type: String, required: true },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
     password: {
       type: String,
       minlength: 8,
@@ -21,28 +25,23 @@ const DesignerSchema = new Schema(
     },
     profile_picture: {
       type: String,
+      required: true,
     },
     biography: {
       type: String,
       maxlength: 250,
     },
-    edge_posts: {
-      counter: { type: Number, default: 0 },
-      posts: {
-        type: Array,
-      },
+    posts_counter: {
+      type: Number,
+      default: 0,
     },
-    edge_follows: {
-      counter: { type: Number, default: 0 },
-      follows: {
-        type: Array,
-      },
+    following_counter: {
+      type: Number,
+      default: 0,
     },
-    edge_followers: {
-      counter: { type: Number, default: 0 },
-      followers: {
-        type: Array,
-      },
+    followers_counter: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true }

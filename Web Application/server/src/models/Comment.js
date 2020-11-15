@@ -7,18 +7,12 @@ const commentSchema = new Schema({
         max: 500,
         required: true,
     },
-    responses: {
-        type: Array,
-        default: [],
-    },
     likes_counter: {
         type: Number,
         default: 0,
     },
     designer: {
         type: Object({
-            username: String,
-            profile_picture: String,
             id: mongoose.Schema.Types.ObjectId,
         }),
         required: true,
@@ -26,6 +20,9 @@ const commentSchema = new Schema({
     post_id: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
+    },
+    comment_id: {
+        type: mongoose.Schema.Types.ObjectId,
     }
 }, { timestamps: true, });
 

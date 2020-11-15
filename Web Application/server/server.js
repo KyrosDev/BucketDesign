@@ -48,6 +48,7 @@ app.use(express.static("public"));
 app.use(helmet());
 
 // Routes
+const root = require("./src/routes/root");
 const designer = require("./src/routes/api/designer.routes");
 const post = require("./src/routes/api/post.routes");
 const like = require("./src/routes/api/like.routes");
@@ -56,10 +57,7 @@ const comment = require("./src/routes/api/comment.routes");
 const auth = require("./src/routes/api/auth");
 
 // Routers
-app.get("/", (_, res) => {
-  res.json({ message: "Welcome to my API! 🎉" });
-});
-
+app.use("/", root);
 app.use("/api/", follow);
 app.use("/api/designers", designer);
 app.use("/api/likes", like);

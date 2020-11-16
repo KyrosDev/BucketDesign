@@ -2,13 +2,13 @@
   <nav>
     <ul>
       <li>
-        <p v-if="username !== ''">Hi, {{ username }}</p>
+        <p v-if="username !== ''" @click="goProfile">Hi, {{ username }}</p>
       </li>
       <li>
         <div
           @click="goProfile"
           class="unselectable"
-          :style="'background-image: url(' + profileURL + ');'"
+          :style="'background-image: url(' + profile_picture + ');'"
           alt="Profile Picture"
         />
       </li>
@@ -22,17 +22,14 @@ import axios from "axios";
 export default {
   data: () => {
     return {
-      profileURL: null,
+      profile_picture: null,
       username: "",
     };
   },
   mounted() {
-    try {
-      const designer = JSON.parse(localStorage.designer);
-      this.$data.username = designer.username;
-      const profile_picture = designer.profile_picture;
-      this.$data.profileURL = profile_picture;
-    } catch (error) {}
+    const profile = JSON.parse(localStorage.designer);
+    this.$data.username = profile.username;
+    this.$data.profile_picture = profile.profile_picture;
   },
   methods: {
     goProfile() {
@@ -60,6 +57,7 @@ nav {
   border-radius: 0 0 40px 40px;
   padding: 30px 30px;
   z-index: 9999;
+  box-shadow: 10px 0 30px rgba($color: $main, $alpha: 0.5);
   ul {
     display: flex;
     flex-wrap: nowrap;

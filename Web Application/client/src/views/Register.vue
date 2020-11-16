@@ -4,36 +4,52 @@
     <div class="line icon2"></div>
   </div>
   <section v-else>
-    <div class="top">
-      <p>Hi, designer!</p>
-      <h1>Welcome to BucketDesign.</h1>
-    </div>
-    <form @submit.prevent="register">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input v-model="user.email" type="email" name="email" id="email" required />
-        <transition name="slide-fade">
-          <p v-if="emailError" class="error">{{ emailError }}</p>
-        </transition>
+    <div class="wrapper">
+      <div class="top">
+        <p>Hi, designer!</p>
+        <h1>Welcome to BucketDesign.</h1>
       </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input v-model="user.password" type="password" name="password" id="password" required />
-        <p
-          class="pass-length"
-          :class="user.password.length >= 8 ? 'good' : null"
-        >Length: {{ user.password.length }} / 8</p>
-        <transition name="slide-fade">
-          <p v-if="passwordError" class="error">{{ passwordError }}</p>
-        </transition>
-      </div>
-      <button type="submit" class="button-primary">Register</button>
+      <form @submit.prevent="register">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            v-model="user.email"
+            type="email"
+            name="email"
+            id="email"
+            required
+          />
+          <transition name="slide-fade">
+            <p v-if="emailError" class="error">{{ emailError }}</p>
+          </transition>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            v-model="user.password"
+            type="password"
+            name="password"
+            id="password"
+            required
+          />
+          <p
+            class="pass-length"
+            :class="user.password.length >= 8 ? 'good' : null"
+          >
+            Length: {{ user.password.length }} / 8
+          </p>
+          <transition name="slide-fade">
+            <p v-if="passwordError" class="error">{{ passwordError }}</p>
+          </transition>
+        </div>
+        <button type="submit" class="button-primary">Register</button>
 
-      <div class="register">
-        <p>Already have an account?</p>
-        <router-link to="login">Sign in</router-link>
-      </div>
-    </form>
+        <div class="register">
+          <p>Already have an account?</p>
+          <router-link to="login">Sign in</router-link>
+        </div>
+      </form>
+    </div>
   </section>
 </template>
 
@@ -84,9 +100,12 @@ export default {
           .then(
             (response) => {
               this.$data.loading = false;
-              localStorage.token = response.data.token;
-              localStorage.user = response.data.email;
-              this.$router.push("/profile/customize");
+              this.$cookies.set(
+                "__bucketdesign_access_token",
+                response.data.token,
+                { expires: "1d" }
+              );
+              this.$router.push("/login");
             },
             (err) => {
               this.$data.loading = false;
@@ -216,5 +235,47 @@ form {
   padding: 10px 20px;
   border-radius: 6px;
   margin: 10px 0 0 0;
+}
+
+@media screen and (min-width: $tablet) {
+  section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    .wrapper {
+      width: 100%;
+      height: 60%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      @media screen and (min-width: $desktop) {
+        height: 60%;
+      }
+    }
+    .top {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 70%;
+      height: 50%;
+      border-radius: 40px;
+      padding-bottom: -60px;
+
+      @media screen and (min-width: $desktop) {
+        width: 600px;
+      }
+    }
+    form {
+      width: 60%;
+
+      @media screen and (min-width: $desktop) {
+        width: 550px;
+      }
+    }
+  }
 }
 </style>

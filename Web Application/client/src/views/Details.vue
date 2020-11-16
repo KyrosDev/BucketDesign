@@ -4,8 +4,8 @@
     <BottomNav />
     <div class="content" v-if="post">
       <h4 class="author">
-        <span @click="viewProfile(post.author.username)">{{
-          post.author.username
+        <span @click="viewProfile(designer.username)">{{
+          designer.username
         }}</span>
         - {{ post.createdAt | luxon }}
       </h4>
@@ -16,7 +16,9 @@
         v-bind:style="
           post !== null ? 'background-image: url(' + post.previewURL + ');' : ''
         "
-      ></div>
+      >
+        <img :src="post.previewURL" alt="" />
+      </div>
       <div class="likes unselectable" @click="like">
         <span :class="liked ? 'liked' : ''">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 18.48">
@@ -53,24 +55,37 @@ export default {
       parseDescription: null,
       liked: false,
       likeCounter: 0,
-      designer: {},
+      designer: null,
     };
   },
   mounted() {
-    try {
-      const designer = JSON.parse(localStorage.designer);
-      this.$data.designer = designer;
-      const shortcode = this.$route.params.shortcode;
-      const POST_URL = `http://localhost:5000/api/posts?shortcode=${shortcode}`;
-      axios.get(POST_URL).then((response) => {
-        if (response.status == 200) {
-          this.$data.post = response.data;
-          this.$data.parseDescription = this.$data.post.description;
-        }
-      });
-    } catch (e) {}
+    this.getPost();
   },
   methods: {
+    async getPost() {
+      const shortcode = this.$route.params.shortcode;
+      const API_URL = `http://localhost:5000/api/posts?shortcode=${shortcode}`;
+      const response = await axios.get(API_URL, {
+        headers: {
+          Authorization: this.$cookies.get("__bucketdesign_access_token"),
+        },
+      });
+      if (!response.data.status_code) {
+        this.post = response.data;
+        this.getAuthor();
+      }
+    },
+    async getAuthor() {
+      const API_URL = `http://localhost:5000/api/designers?id=${this.post.designer._id}`;
+      const response = await axios.get(API_URL, {
+        headers: {
+          Authorization: this.$cookies.get("__bucketdesign_access_token"),
+        },
+      });
+      if (!response.data.status_code) {
+        this.designer = response.data;
+      }
+    },
     like() {
       if (this.liked) {
         if (this.likeCounter <= 0) {
@@ -125,10 +140,25 @@ export default {
 .content {
   padding: 0 20px;
   padding-top: 120px;
+  @media screen and (min-width: $tablet) {
+    padding: 0 100px;
+    padding-top: 160px;
+  }
+  @media screen and (min-width: $desktop) {
+    padding: 0 350px;
+    padding-top: 160px;
+  }
+  @media screen and (min-width: $big-desktop) {
+    padding: 0 650px;
+    padding-top: 160px;
+  }
   .author {
     font-weight: 300;
     font-size: 1em;
     margin-bottom: 10px;
+    span {
+      cursor: pointer;
+    }
   }
   .title {
     font-weight: 400;
@@ -139,7 +169,6 @@ export default {
   .image-container {
     margin-top: 10px;
     width: 100%;
-    padding-top: 56.25%;
     position: relative;
     overflow: hidden;
     margin-bottom: 10px;
@@ -148,6 +177,9 @@ export default {
     background-size: cover;
     cursor: pointer;
     background-repeat: no-repeat;
+    img {
+      width: 100%;
+    }
   }
 
   .likes {

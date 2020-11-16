@@ -1,7 +1,7 @@
 $main: #6065e9;
 $red: #ff6262;
-$green: #7DD654;
-$yellow: #FFD029;
+$green: #7dd654;
+$yellow: #ffd029;
 $gray: #b8b8b8;
 $black: #000000;
 $white: #ffffff;
@@ -9,3 +9,7 @@ $unselectedSvg: #c0c0c0;
 @mixin shadow() {
   box-shadow: 0 10px 20px rgba(96, 101, 233, 0.25);
 }
+
+$tablet: 768px;
+$desktop: 1280px;
+$big-desktop: 1920px;

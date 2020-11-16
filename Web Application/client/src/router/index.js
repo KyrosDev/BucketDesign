@@ -15,14 +15,21 @@ import axios from "axios";
 Vue.use(VueRouter);
 
 async function loggedInRedirectApp(to, from, next) {
-  if (localStorage.token) {
+  const cookie = document.cookie.split("=");
+  let token = null;
+  if (cookie.length > 0) {
+    const value = cookie.indexOf("__bucketdesign_access_token") + 1;
+    token = cookie[value];
+  }
+  if (token.length > 0) {
     const API_URL = `http://localhost:5000/api/auth/authenticate/`;
     const result = await axios.get(API_URL, {
       headers: {
-        Authorization: localStorage.token
+        Authorization: token
       }
     });
-    if (result.data.status == 401) {
+    if (result.data.status_code == 401) {
+      document.cookie = "";
       localStorage.clear();
       next();
     } else {
@@ -34,14 +41,21 @@ async function loggedInRedirectApp(to, from, next) {
 }
 
 async function isLoggedIn(to, from, next) {
-  if (localStorage.token) {
+  const cookie = document.cookie.split("=");
+  let token = null;
+  if (cookie.length > 0) {
+    const value = cookie.indexOf("__bucketdesign_access_token") + 1;
+    token = cookie[value];
+  }
+  if (token.length > 0) {
     const API_URL = `http://localhost:5000/api/auth/authenticate/`;
     const result = await axios.get(API_URL, {
       headers: {
-        Authorization: localStorage.token
+        Authorization: token
       }
     });
-    if (result.data.status == 401) {
+    if (result.data.status_code == 401) {
+      document.cookie = "";
       localStorage.clear();
       next("/login");
     } else {
@@ -56,7 +70,8 @@ const routes = [
   {
     path: "/",
     name: "landing",
-    component: Null,
+    component: null,
+    beforeEnter: isLoggedIn,
   },
   {
     path: "/login",
@@ -83,12 +98,12 @@ const routes = [
     beforeEnter: isLoggedIn,
   },
   {
-    path: "/post/:shortcode",
+    path: "/p/:shortcode",
     component: Details,
     name: "details",
   },
   {
-    path: "/designer/:username",
+    path: "/:username",
     component: Profile,
     name: "profile",
   },

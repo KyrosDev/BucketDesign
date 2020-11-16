@@ -95,7 +95,7 @@
       <div class="header">
         <div
           class="image-container"
-          :style="'background-image: url(' + profile_picture + ');'"
+          :style="'background-image: url(' + designer.profile_picture + ');'"
         ></div>
         <div class="informations">
           <h1 class="username">{{ designer.username }}</h1>
@@ -116,7 +116,7 @@
               </g>
             </svg>
           </span>
-          <p>{{ designer.edge_followers.counter }} followers.</p>
+          <p>{{ designer.followers_counter }} followers.</p>
         </div>
         <div class="counter posts">
           <span class="counter_icon">
@@ -131,7 +131,7 @@
               </g>
             </svg>
           </span>
-          <p>{{ designer.edge_posts.counter }} shots.</p>
+          <p>{{ designer.posts_counter }} shots.</p>
         </div>
       </div>
       <div
@@ -172,7 +172,7 @@
                     </g>
                   </svg>
                 </span>
-                <p>{{ post.likes.counter }}</p>
+                <p>{{ post.likes_counter }}</p>
               </div>
             </div>
           </li>

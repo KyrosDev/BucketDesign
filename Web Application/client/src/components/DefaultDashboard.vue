@@ -1,15 +1,14 @@
 <template>
   <div class="default-content">
     <h1>
-      Dashboard
-      <span>.</span>
+      Dashboard<span>.</span>
     </h1>
     <div class="wrapper">
       <Chart class="chart" :chart-data="datacollection" />
       <div class="cards-wrapper">
         <Card
           v-for="counter in counters"
-          :key="counter.icon"
+          :key="counter.title"
           :title="counter.title"
           :info="counter.info"
           :icon="counter.icon"
@@ -100,10 +99,12 @@ export default {
   },
   methods: {
     getDesigners() {
-      const API_URL = "http://localhost:5000/api/v2/designers";
-      axios.get(API_URL).then((response) => {
-        this.$data.counters[0].info = response.data.length;
-      });
+      const API_URL = "http://localhost:5000/api/designers/all";
+      axios
+        .get(API_URL, { headers: { "X-Admin-Secret": "asdasd" } })
+        .then((response) => {
+          this.$data.counters[0].info = response.data.length;
+        });
     },
     getMessages() {
       const API_URL = "http://localhost:5000/api/v2/messages";
@@ -123,6 +124,7 @@ export default {
 
 .default-content {
   width: 100%;
+  padding: 0 20%;
   h1 {
     span {
       color: $main;
@@ -145,6 +147,7 @@ export default {
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
+      justify-content: space-between;
     }
   }
 }

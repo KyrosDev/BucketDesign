@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { authenticate, checkToken } = require("../../middlewares/index");
+const { authenticate, checkToken, isAdmin } = require("../../middlewares/index");
 const controller = require("../../controllers/post");
 const designer = require("../../controllers/designer");
 
@@ -25,6 +25,11 @@ router.get("/getFeed", authenticate, async (req, res, next) => {
     const { token } = req.body;
     const user = await designer.getById(token._id);
     const result = await controller.getFeed(user.edge_follows.follows);
+    res.json(result);
+});
+
+router.get("/all", isAdmin, async (req, res, next) => {
+    const result = await controller.getPosts();
     res.json(result);
 });
 

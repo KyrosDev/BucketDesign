@@ -1,46 +1,5 @@
 <template>
   <nav class="bottom-nav">
-    <!-- <div :class="clicked ? 'clkd opened' : 'clkd'">
-            <ul>
-              <li>
-                <h1>
-                  <span class="icon-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
-                      <title>image_icon</title>
-                      <g id="Layer_2" data-name="Layer 2">
-                        <g id="Layer_1-2" data-name="Layer 1">
-                          <path
-                            d="M2,8.1l2-2,5.5,5.5L13,8.1l3,3V2H2Zm0,2.83V16H5.1l3-3L4,8.93ZM7.93,16H16V13.93l-3-3ZM1,0H17a1,1,0,0,1,1,1V17a1,1,0,0,1-1,1H1a1,1,0,0,1-1-1V1A1,1,0,0,1,1,0ZM12.5,7A1.5,1.5,0,1,1,14,5.5,1.5,1.5,0,0,1,12.5,7Z"
-                          />
-                        </g>
-                      </g>
-                    </svg>
-                  </span>
-                  Image
-                </h1>
-                <p>Upload a PNG or a JPG</p>
-              </li>
-              <li>
-                <h1>
-                  <span class="icon-container">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 22"
-                      width="24"
-                      height="22"
-                    >
-                      <path fill="none" d="M0 0h24v24H0z" />
-                      <path
-                        d="M2 3.993A1 1 0 0 1 2.992 3h18.016c.548 0 .992.445.992.993v16.014a1 1 0 0 1-.992.993H2.992A.993.993 0 0 1 2 20.007V3.993zM8 5v14h8V5H8zM4 5v2h2V5H4zm14 0v2h2V5h-2zM4 9v2h2V9H4zm14 0v2h2V9h-2zM4 13v2h2v-2H4zm14 0v2h2v-2h-2zM4 17v2h2v-2H4zm14 0v2h2v-2h-2z"
-                      />
-                    </svg>
-                  </span>
-                  Video
-                </h1>
-                <p>Upload a GIF or an MP4</p>
-              </li>
-            </ul>
-    </div>-->
     <div class="container">
       <ul class="routes">
         <li v-for="route in routes" :key="route.index">
@@ -52,7 +11,12 @@
         </li>
       </ul>
       <button @click="clicked = !clicked">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="45" height="45">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="45"
+          height="45"
+        >
           <path fill="none" d="M0 0h24v24H0z" />
           <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z" />
         </svg>
@@ -191,75 +155,85 @@ export default {
   }
 }
 
-.bottom-nav .container {
-  position: fixed;
-  z-index: 9999;
-  width: 100%;
-  height: 80px;
-  bottom: 0;
-  background: $white;
-  border-radius: 30px 30px 0 0;
-  display: flex;
-  align-items: center;
-
-  button {
-    border: none;
-    outline: none;
-    background: $main;
-    margin: 0;
+nav {
+  .container {
+    position: fixed;
+    z-index: 9999;
+    width: 100%;
+    height: 80px;
+    bottom: 0;
+    background: $white;
+    border-radius: 30px 30px 0 0;
     display: flex;
-    justify-items: center;
     align-items: center;
-    padding: 15px;
-    border-radius: 25px;
-    margin-bottom: 50px;
-    cursor: pointer;
-    @include shadow();
-    svg {
-      fill: $white;
+
+    @media screen and (min-width: $tablet) {
+      width: 400px;
+      border-radius: 30px;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
     }
-  }
 
-  ul.routes {
-    padding: 0;
-    margin: 0;
-    margin-right: 20px;
-    list-style: none;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
-    width: 70%;
-    li {
-      transition: 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+    button {
+      border: none;
+      outline: none;
+      background: $main;
+      margin: 0;
       display: flex;
-      justify-content: center;
-      flex-direction: column;
+      justify-items: center;
       align-items: center;
-      width: 30px;
-      height: 30px;
+      padding: 15px;
+      border-radius: 25px;
+      margin-bottom: 50px;
       cursor: pointer;
-      span {
+      @include shadow();
+      svg {
+        fill: $white;
+      }
+    }
+
+    ul.routes {
+      padding: 0;
+      margin: 0;
+      margin-right: 20px;
+      list-style: none;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-around;
+      width: 70%;
+      li {
         transition: 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
-        height: 100%;
-        svg {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        span {
+          transition: 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
           height: 100%;
-          fill: $unselectedSvg;
+          svg {
+            height: 100%;
+            fill: $unselectedSvg;
+          }
         }
       }
-    }
-    .active {
-      transform: translateY(-5px);
-      svg {
-        fill: $main;
-        margin-bottom: 5px;
-      }
-      .dot {
-        width: 5px;
-        height: 5px;
-        margin: 0 auto;
-        border-radius: 100px;
-        background-color: $main;
+      .active {
+        transform: translateY(-5px);
+        svg {
+          fill: $main;
+          margin-bottom: 5px;
+        }
+        .dot {
+          width: 5px;
+          height: 5px;
+          margin: 0 auto;
+          border-radius: 100px;
+          background-color: $main;
+        }
       }
     }
   }

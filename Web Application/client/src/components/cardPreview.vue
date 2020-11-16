@@ -2,18 +2,26 @@
   <div class="card">
     <div
       class="image-container unselectable"
-      v-on:dblclick="like"
       @click="viewDetails"
       :style="'background-image: url(' + post.previewURL + ')'"
     >
       <span class="type"></span>
     </div>
     <div class="info">
-      <h3 v-if="post.author.username !== null" class="truncate-text unselectable">
-        <span @click="viewProfile(post.author.username)">{{ post.author.username }}</span>
-        - {{ post.title }}
+      <h3 v-if="designer.username !== null" class="truncate-text unselectable">
+        <div class="container">
+          <div
+            @click="viewProfile(designer.username)"
+            class="profile_picture"
+            :style="'background: url(' + designer.profile_picture + ');'"
+          ></div>
+          <span @click="viewProfile(designer.username)">{{
+            designer.username
+          }}</span>
+          - {{ post.title }}
+        </div>
       </h3>
-      <div class="likes unselectable" @click="like">
+      <div class="likes unselectable">
         <span :class="liked ? 'liked' : ''">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 18.48">
             <g id="Layer_2" data-name="Layer 2">
@@ -33,6 +41,7 @@
 
 <script>
 import axios from "axios";
+//v-on:dblclick="like"
 
 export default {
   props: {
@@ -47,61 +56,24 @@ export default {
     };
   },
   mounted() {
-    try {
-      const designer = JSON.parse(localStorage.designer);
-      this.designer = designer;
-      this.likeCounter = this.$props.post.likes.counter;
-      this.$props.post.likes.likes.forEach((item) => {
-        if (item.id === this.designer._id) {
-          this.liked = true;
-        }
-      });
-    } catch (error) {}
+    this.getAuthor();
   },
   methods: {
-    like() {
-      if (this.liked) {
-        if (this.likeCounter <= 0) {
-          this.likeCounter = 0;
-        }
-        this.likeCounter--;
-        this.liked = false;
-        this.leaveLike();
-      } else {
-        this.liked = true;
-        this.likeCounter++;
-        this.addLike();
+    async getAuthor() {
+      const API_URL = `http://localhost:5000/api/designers?id=${this.$props.post.designer._id}`;
+      const response = await axios.get(API_URL, {
+        headers: {
+          Authorization: this.$cookies.get("__bucketdesign_access_token"),
+        },
+      });
+      if (response.data.status_code) {
+        return;
       }
-    },
-    leaveLike() {
-      axios
-        .post(
-          `http://localhost:5000/api/v1/posts/actions/${this.$props.post._id}`,
-          {
-            id: this.designer._id,
-            method: "unlike",
-          }
-        )
-        .then((response) => {
-          return response;
-        });
-    },
-    addLike() {
-      axios
-        .post(
-          `http://localhost:5000/api/v1/posts/actions/${this.$props.post._id}`,
-          {
-            id: this.designer._id,
-            method: "like",
-          }
-        )
-        .then((response) => {
-          return response;
-        });
+      this.designer = response.data;
     },
     viewDetails() {
       const shortcode = this.$props.post.shortcode;
-      this.$router.push(`post/${shortcode}`);
+      this.$router.push(`p/${shortcode}`);
     },
     viewProfile(username) {
       this.$router.push({
@@ -174,6 +146,22 @@ export default {
         animation-name: like;
         animation-duration: 1s;
         animation-iteration-count: infinite;
+      }
+    }
+
+    .container {
+      height: 30px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      .profile_picture {
+        width: 30px;
+        height: 30px;
+        border-radius: 30px;
+        padding: 0;
+        margin-right: 10px;
+        background-position: center;
+        background-size: cover;
       }
     }
   }

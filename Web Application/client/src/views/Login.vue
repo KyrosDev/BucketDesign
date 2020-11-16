@@ -4,42 +4,44 @@
     <div class="line icon2"></div>
   </div>
   <section v-else>
-    <div class="top">
-      <p>Hi, designer!</p>
-      <h1>Welcome back to BucketDesign.</h1>
-    </div>
-    <form @submit.prevent="login">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          v-model="user.email"
-          type="email"
-          name="email"
-          id="email"
-          required
-        />
+    <div class="wrapper">
+      <div class="top">
+        <p>Hi, designer!</p>
+        <h1>Welcome back to BucketDesign.</h1>
       </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          v-model="user.password"
-          type="password"
-          name="password"
-          id="password"
-          required
-        />
+      <form @submit.prevent="login">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            v-model="user.email"
+            type="email"
+            name="email"
+            id="email"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            v-model="user.password"
+            type="password"
+            name="password"
+            id="password"
+            required
+          />
 
-        <transition name="slide-fade">
-          <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-        </transition>
-        <a class="flat-button">Forgot Password?</a>
-      </div>
-      <button type="submit" class="button-primary">Sign in</button>
-      <div class="register">
-        <p>Haven't got an account?</p>
-        <router-link to="register">Register now</router-link>
-      </div>
-    </form>
+          <transition name="slide-fade">
+            <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+          </transition>
+          <a class="flat-button">Forgot Password?</a>
+        </div>
+        <button type="submit" class="button-primary">Sign in</button>
+        <div class="register">
+          <p>Haven't got an account?</p>
+          <router-link to="register">Register now</router-link>
+        </div>
+      </form>
+    </div>
   </section>
 </template>
 
@@ -73,8 +75,13 @@ export default {
         axios
           .post(LOGIN_URL, this.$data.user)
           .then((res) => {
-            localStorage.token = res.data.token;
-            localStorage.user = res.data.email;
+            this.$cookies.set("__bucketdesign_access_token", res.data.token, {
+              expires: "1d",
+            });
+            delete res.data.token;
+            delete res.data.password;
+            delete res.data.__v;
+            delete res.data._id;
             localStorage.designer = JSON.stringify(res.data);
             this.$router.push("/app");
           })
@@ -189,5 +196,47 @@ form {
   padding: 10px 20px;
   border-radius: 6px;
   margin: 10px 0 0 0;
+}
+
+@media screen and (min-width: $tablet) {
+  section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    .wrapper {
+      width: 100%;
+      height: 60%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      @media screen and (min-width: $desktop) {
+        height: 60%;
+      }
+    }
+    .top {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 70%;
+      height: 50%;
+      border-radius: 40px;
+      padding-bottom: -60px;
+
+      @media screen and (min-width: $desktop) {
+        width: 600px;
+      }
+    }
+    form {
+      width: 60%;
+
+      @media screen and (min-width: $desktop) {
+        width: 550px;
+      }
+    }
+  }
 }
 </style>

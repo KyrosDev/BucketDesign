@@ -83,8 +83,6 @@ export default {
 @import "../assets/scss/variables.scss";
 @import "../assets/scss/mainLayout.scss";
 
-$gaps: 20px;
-
 ul {
   padding: 0;
   margin: 0;
@@ -110,7 +108,10 @@ ul {
       gap: 30px;
       grid-template-columns:
         calc(20% - 30px)
-        calc(20% - 30px) calc(20% - 30px) calc(20% - 30px) calc(20% - 30px);
+        calc(20% - 30px)
+        calc(20% - 30px)
+        calc(20% - 30px)
+        calc(20% - 30px);
     }
 
     li {

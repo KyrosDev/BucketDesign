@@ -65,7 +65,7 @@ app.use("/api/posts", post);
 app.use("/api/comments", comment);
 app.use("/api/auth", auth);
 
-app.use("/public", express.static("src/public"));
+app.use("/public", express.static("public"));
 
 app.use((req, res, next) => {
   res.status(404); // Set status code to 404 Not Found
@@ -85,5 +85,5 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on: 'http://localhost:${PORT}/' ✨🪐.`)
+  console.log(`Server running on: 'http://localhost:${PORT}/' ✨🪐.`);
 });

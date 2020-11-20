@@ -102,8 +102,7 @@ export default {
     margin-bottom: 10px;
     border-radius: 10px;
     background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+    background-size: contain;
   }
   .info {
     display: flex;

@@ -83,7 +83,7 @@ export default {
             delete res.data.__v;
             delete res.data._id;
             localStorage.designer = JSON.stringify(res.data);
-            this.$router.push("/app");
+            this.$router.push({ path: "/app" }).catch();
           })
           .catch((error) => {
             this.errorMessage = error.message.message;
